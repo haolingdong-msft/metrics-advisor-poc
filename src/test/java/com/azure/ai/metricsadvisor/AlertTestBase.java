@@ -21,21 +21,20 @@ public abstract class AlertTestBase extends MetricsAdvisorClientTestBase {
     public static final String ALERT_CONFIG_ID = "1c1575d8-b09e-40c3-a3c0-d459c64d8382";
 
     // Pre-configured test resource.
-    static class ListAlertsInput {
-        static final ListAlertsInput INSTANCE = new ListAlertsInput();
-        final OffsetDateTime startTime = OffsetDateTime.parse("2021-10-10T00:00:00Z");
-        final OffsetDateTime endTime = OffsetDateTime.parse("2021-10-21T00:00:00Z");
-        final AlertQueryTimeMode timeMode = AlertQueryTimeMode.ANOMALY_TIME;
-        final ListAlertOptions options = new ListAlertOptions()
+    public static class ListAlertsInput {
+        public static final ListAlertsInput INSTANCE = new ListAlertsInput();
+        public final OffsetDateTime startTime = OffsetDateTime.parse("2021-10-10T00:00:00Z");
+        public final OffsetDateTime endTime = OffsetDateTime.parse("2021-10-21T00:00:00Z");
+        public final AlertQueryTimeMode timeMode = AlertQueryTimeMode.fromString("test");
+        public final ListAlertOptions options = new ListAlertOptions()
             .setAlertQueryTimeMode(timeMode)
             .setMaxPageSize(10);
-
-        final String alertConfigurationId = ALERT_CONFIG_ID;
+        public final String alertConfigurationId = ALERT_CONFIG_ID;
     }
 
-    protected static class ListAlertsOutput {
-        static final ListAlertsOutput INSTANCE = new ListAlertsOutput();
-        final int expectedAlerts = 11;
+    public static class ListAlertsOutput {
+        public static final ListAlertsOutput INSTANCE = new ListAlertsOutput();
+        public final int expectedAlerts = 11;
     }
 
     protected void assertAlertOutput(AnomalyAlert anomalyAlert) {

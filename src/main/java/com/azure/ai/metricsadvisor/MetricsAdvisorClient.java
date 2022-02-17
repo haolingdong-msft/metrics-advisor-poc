@@ -11,7 +11,6 @@ import com.azure.core.annotation.ReturnType;
 import com.azure.core.annotation.ServiceClient;
 import com.azure.core.annotation.ServiceMethod;
 import com.azure.core.exception.HttpResponseException;
-import com.azure.core.http.rest.PagedFlux;
 import com.azure.core.http.rest.PagedIterable;
 import com.azure.core.http.rest.RequestOptions;
 import com.azure.core.http.rest.Response;
@@ -19,7 +18,6 @@ import com.azure.core.util.BinaryData;
 import com.azure.core.util.Context;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-
 import java.time.OffsetDateTime;
 
 /** Initializes a new instance of the synchronous MetricsAdvisorClient type. */
@@ -327,6 +325,39 @@ public final class MetricsAdvisorClient {
         return this.serviceClient.getAlertsByAnomalyAlertingConfiguration(configurationId, body, requestOptions);
     }
 
+    @ServiceMethod(returns = ReturnType.COLLECTION)
+    public PagedIterable<AnomalyAlert> listAlerts(
+            String alertConfigurationId,
+            OffsetDateTime startTime,
+            OffsetDateTime endTime,
+            ListAlertOptions options,
+            Context context) {
+        RequestOptions requestOptions = new RequestOptions();
+        if (options.getMaxPageSize() != null) {
+            requestOptions.addQueryParam("$maxpagesize", options.getMaxPageSize().toString());
+        }
+        if (options.getSkip() != null) {
+            requestOptions.addQueryParam("$skip", options.getSkip().toString());
+        }
+        ObjectNode objectNode = JsonNodeFactory.instance.objectNode();
+        if (startTime != null) {
+            objectNode.put("startTime", startTime.toString());
+        }
+        if (endTime != null) {
+            objectNode.put("endTime", endTime.toString());
+        }
+        if (options != null && options.getTimeMode() != null) {
+            objectNode.put("timeMode", options.getTimeMode().toString());
+        }
+        if (context != null) {
+            requestOptions.setContext(context);
+        }
+        BinaryData body = BinaryData.fromString(objectNode.toString());
+        PagedIterable<BinaryData> response =
+                this.getAlertsByAnomalyAlertingConfiguration(alertConfigurationId, body, requestOptions);
+        return response.mapPage(binaryData -> binaryData.toObject(AnomalyAlert.class));
+    }
+
     /**
      * Query anomalies under a specific alert.
      *
@@ -368,41 +399,9 @@ public final class MetricsAdvisorClient {
      * @param configurationId anomaly alerting configuration unique id.
      * @param alertId alert id.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @param none
      * @throws HttpResponseException thrown if the request is rejected by server.
      * @return the paginated response with {@link PagedIterable}.
      */
-
-    @ServiceMethod(returns = ReturnType.COLLECTION)
-    public PagedIterable<AnomalyAlert> listAlerts(
-        String alertConfigurationId, OffsetDateTime startTime, OffsetDateTime endTime, ListAlertOptions options, Context context) {
-        RequestOptions requestOptions = new RequestOptions();
-        if (options.getMaxPageSize() != null) {
-            requestOptions.addQueryParam("$maxpagesize", options.getMaxPageSize().toString());
-        }
-        if (options.getSkip() != null) {
-            requestOptions.addQueryParam("$skip", options.getSkip().toString());
-        }
-        ObjectNode objectNode = JsonNodeFactory.instance.objectNode();
-        if (startTime != null) {
-            objectNode.put("startTime", startTime.toString());
-        }
-        if (endTime != null) {
-            objectNode.put("endTime", endTime.toString());
-        }
-        if (options != null && options.getTimeMode() != null) {
-            objectNode.put("timeMode", options.getTimeMode().toString());
-        }
-        if(context != null) {
-            requestOptions.setContext(context);
-        }
-        BinaryData body = BinaryData.fromString(objectNode.toString());
-        PagedIterable<BinaryData> response =
-            this.getAlertsByAnomalyAlertingConfiguration(alertConfigurationId, body, requestOptions);
-        return response.mapPage(
-            binaryData -> binaryData.toObject(AnomalyAlert.class));
-    }
-
     @Generated
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<BinaryData> getAnomaliesFromAlertByAnomalyAlertingConfiguration(

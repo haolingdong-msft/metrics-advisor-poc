@@ -17,18 +17,14 @@ import com.azure.core.http.rest.Response;
 import com.azure.core.util.BinaryData;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import java.time.OffsetDateTime;
 import reactor.core.publisher.Mono;
 
-import java.time.OffsetDateTime;
-
-/**
- * Initializes a new instance of the asynchronous MetricsAdvisorClient type.
- */
+/** Initializes a new instance of the asynchronous MetricsAdvisorClient type. */
 @ServiceClient(builder = MetricsAdvisorClientBuilder.class, isAsync = true)
 public final class MetricsAdvisorAsyncClient {
 
-    @Generated
-    private final MetricsAdvisorClientImpl serviceClient;
+    @Generated private final MetricsAdvisorClientImpl serviceClient;
 
     /**
      * Initializes an instance of MetricsAdvisorClient client.
@@ -56,8 +52,8 @@ public final class MetricsAdvisorAsyncClient {
      * }</pre>
      *
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @return latest usage stats along with {@link Response} on successful completion of {@link Mono}.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return latest usage stats along with {@link Response} on successful completion of {@link Mono}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
@@ -120,14 +116,14 @@ public final class MetricsAdvisorAsyncClient {
      * }</pre>
      *
      * @param configurationId anomaly alerting configuration unique id.
-     * @param requestOptions  The options to configure the HTTP request before HTTP client sends it.
-     * @return the response body along with {@link Response} on successful completion of {@link Mono}.
+     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the response body along with {@link Response} on successful completion of {@link Mono}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Response<BinaryData>> getAnomalyAlertingConfigurationWithResponse(
-        String configurationId, RequestOptions requestOptions) {
+            String configurationId, RequestOptions requestOptions) {
         return this.serviceClient.getAnomalyAlertingConfigurationWithResponseAsync(configurationId, requestOptions);
     }
 
@@ -185,31 +181,31 @@ public final class MetricsAdvisorAsyncClient {
      * }</pre>
      *
      * @param configurationId anomaly alerting configuration unique id.
-     * @param body            anomaly alerting configuration.
-     * @param requestOptions  The options to configure the HTTP request before HTTP client sends it.
-     * @return the {@link Response} on successful completion of {@link Mono}.
+     * @param body anomaly alerting configuration.
+     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Response<Void>> updateAnomalyAlertingConfigurationWithResponse(
-        String configurationId, BinaryData body, RequestOptions requestOptions) {
+            String configurationId, BinaryData body, RequestOptions requestOptions) {
         return this.serviceClient.updateAnomalyAlertingConfigurationWithResponseAsync(
-            configurationId, body, requestOptions);
+                configurationId, body, requestOptions);
     }
 
     /**
      * Delete anomaly alerting configuration.
      *
      * @param configurationId anomaly alerting configuration unique id.
-     * @param requestOptions  The options to configure the HTTP request before HTTP client sends it.
-     * @return the {@link Response} on successful completion of {@link Mono}.
+     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Response<Void>> deleteAnomalyAlertingConfigurationWithResponse(
-        String configurationId, RequestOptions requestOptions) {
+            String configurationId, RequestOptions requestOptions) {
         return this.serviceClient.deleteAnomalyAlertingConfigurationWithResponseAsync(configurationId, requestOptions);
     }
 
@@ -267,15 +263,15 @@ public final class MetricsAdvisorAsyncClient {
      * }
      * }</pre>
      *
-     * @param body           anomaly alerting configuration.
+     * @param body anomaly alerting configuration.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @return the {@link Response} on successful completion of {@link Mono}.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Response<Void>> createAnomalyAlertingConfigurationWithResponse(
-        BinaryData body, RequestOptions requestOptions) {
+            BinaryData body, RequestOptions requestOptions) {
         return this.serviceClient.createAnomalyAlertingConfigurationWithResponseAsync(body, requestOptions);
     }
 
@@ -318,21 +314,21 @@ public final class MetricsAdvisorAsyncClient {
      * }</pre>
      *
      * @param configurationId anomaly alerting configuration unique id.
-     * @param body            query alerting result request.
-     * @param requestOptions  The options to configure the HTTP request before HTTP client sends it.
-     * @return the paginated response with {@link PagedFlux}.
+     * @param body query alerting result request.
+     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the paginated response with {@link PagedFlux}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedFlux<BinaryData> getAlertsByAnomalyAlertingConfiguration(
-        String configurationId, BinaryData body, RequestOptions requestOptions) {
+            String configurationId, BinaryData body, RequestOptions requestOptions) {
         return this.serviceClient.getAlertsByAnomalyAlertingConfigurationAsync(configurationId, body, requestOptions);
     }
 
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedFlux<AnomalyAlert> listAlerts(
-        String alertConfigurationId, OffsetDateTime startTime, OffsetDateTime endTime, ListAlertOptions options) {
+            String alertConfigurationId, OffsetDateTime startTime, OffsetDateTime endTime, ListAlertOptions options) {
         RequestOptions requestOptions = new RequestOptions();
         if (options.getMaxPageSize() != null) {
             requestOptions.addQueryParam("$maxpagesize", options.getMaxPageSize().toString());
@@ -352,9 +348,8 @@ public final class MetricsAdvisorAsyncClient {
         }
         BinaryData body = BinaryData.fromString(objectNode.toString());
         PagedFlux<BinaryData> response =
-            this.getAlertsByAnomalyAlertingConfiguration(alertConfigurationId, body, requestOptions);
-        return response.mapPage(
-            binaryData -> binaryData.toObject(AnomalyAlert.class));
+                this.getAlertsByAnomalyAlertingConfiguration(alertConfigurationId, body, requestOptions);
+        return response.mapPage(binaryData -> binaryData.toObject(AnomalyAlert.class));
     }
 
     /**
@@ -396,17 +391,17 @@ public final class MetricsAdvisorAsyncClient {
      * }</pre>
      *
      * @param configurationId anomaly alerting configuration unique id.
-     * @param alertId         alert id.
-     * @param requestOptions  The options to configure the HTTP request before HTTP client sends it.
-     * @return the paginated response with {@link PagedFlux}.
+     * @param alertId alert id.
+     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the paginated response with {@link PagedFlux}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedFlux<BinaryData> getAnomaliesFromAlertByAnomalyAlertingConfiguration(
-        String configurationId, String alertId, RequestOptions requestOptions) {
+            String configurationId, String alertId, RequestOptions requestOptions) {
         return this.serviceClient.getAnomaliesFromAlertByAnomalyAlertingConfigurationAsync(
-            configurationId, alertId, requestOptions);
+                configurationId, alertId, requestOptions);
     }
 
     /**
@@ -450,17 +445,17 @@ public final class MetricsAdvisorAsyncClient {
      * }</pre>
      *
      * @param configurationId anomaly alerting configuration unique id.
-     * @param alertId         alert id.
-     * @param requestOptions  The options to configure the HTTP request before HTTP client sends it.
-     * @return the paginated response with {@link PagedFlux}.
+     * @param alertId alert id.
+     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the paginated response with {@link PagedFlux}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedFlux<BinaryData> getIncidentsFromAlertByAnomalyAlertingConfiguration(
-        String configurationId, String alertId, RequestOptions requestOptions) {
+            String configurationId, String alertId, RequestOptions requestOptions) {
         return this.serviceClient.getIncidentsFromAlertByAnomalyAlertingConfigurationAsync(
-            configurationId, alertId, requestOptions);
+                configurationId, alertId, requestOptions);
     }
 
     /**
@@ -528,14 +523,14 @@ public final class MetricsAdvisorAsyncClient {
      * }</pre>
      *
      * @param configurationId anomaly detection configuration unique id.
-     * @param requestOptions  The options to configure the HTTP request before HTTP client sends it.
-     * @return the response body along with {@link Response} on successful completion of {@link Mono}.
+     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the response body along with {@link Response} on successful completion of {@link Mono}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Response<BinaryData>> getAnomalyDetectionConfigurationWithResponse(
-        String configurationId, RequestOptions requestOptions) {
+            String configurationId, RequestOptions requestOptions) {
         return this.serviceClient.getAnomalyDetectionConfigurationWithResponseAsync(configurationId, requestOptions);
     }
 
@@ -602,31 +597,31 @@ public final class MetricsAdvisorAsyncClient {
      * }</pre>
      *
      * @param configurationId anomaly detection configuration unique id.
-     * @param body            anomaly detection configuration.
-     * @param requestOptions  The options to configure the HTTP request before HTTP client sends it.
-     * @return the {@link Response} on successful completion of {@link Mono}.
+     * @param body anomaly detection configuration.
+     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Response<Void>> updateAnomalyDetectionConfigurationWithResponse(
-        String configurationId, BinaryData body, RequestOptions requestOptions) {
+            String configurationId, BinaryData body, RequestOptions requestOptions) {
         return this.serviceClient.updateAnomalyDetectionConfigurationWithResponseAsync(
-            configurationId, body, requestOptions);
+                configurationId, body, requestOptions);
     }
 
     /**
      * Delete anomaly detection configuration.
      *
      * @param configurationId anomaly detection configuration unique id.
-     * @param requestOptions  The options to configure the HTTP request before HTTP client sends it.
-     * @return the {@link Response} on successful completion of {@link Mono}.
+     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Response<Void>> deleteAnomalyDetectionConfigurationWithResponse(
-        String configurationId, RequestOptions requestOptions) {
+            String configurationId, RequestOptions requestOptions) {
         return this.serviceClient.deleteAnomalyDetectionConfigurationWithResponseAsync(configurationId, requestOptions);
     }
 
@@ -694,15 +689,15 @@ public final class MetricsAdvisorAsyncClient {
      * }
      * }</pre>
      *
-     * @param body           anomaly detection configuration.
+     * @param body anomaly detection configuration.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @return the {@link Response} on successful completion of {@link Mono}.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Response<Void>> createAnomalyDetectionConfigurationWithResponse(
-        BinaryData body, RequestOptions requestOptions) {
+            BinaryData body, RequestOptions requestOptions) {
         return this.serviceClient.createAnomalyDetectionConfigurationWithResponseAsync(body, requestOptions);
     }
 
@@ -765,16 +760,16 @@ public final class MetricsAdvisorAsyncClient {
      * }</pre>
      *
      * @param configurationId anomaly detection configuration unique id.
-     * @param requestOptions  The options to configure the HTTP request before HTTP client sends it.
-     * @return the response body along with {@link Response} on successful completion of {@link Mono}.
+     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the response body along with {@link Response} on successful completion of {@link Mono}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Response<BinaryData>> getAnomalyAlertingConfigurationsByAnomalyDetectionConfigurationWithResponse(
-        String configurationId, RequestOptions requestOptions) {
+            String configurationId, RequestOptions requestOptions) {
         return this.serviceClient.getAnomalyAlertingConfigurationsByAnomalyDetectionConfigurationWithResponseAsync(
-            configurationId, requestOptions);
+                configurationId, requestOptions);
     }
 
     /**
@@ -834,17 +829,17 @@ public final class MetricsAdvisorAsyncClient {
      * }</pre>
      *
      * @param configurationId anomaly detection configuration unique id.
-     * @param body            query series detection result request.
-     * @param requestOptions  The options to configure the HTTP request before HTTP client sends it.
-     * @return the response body along with {@link Response} on successful completion of {@link Mono}.
+     * @param body query series detection result request.
+     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the response body along with {@link Response} on successful completion of {@link Mono}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Response<BinaryData>> getSeriesByAnomalyDetectionConfigurationWithResponse(
-        String configurationId, BinaryData body, RequestOptions requestOptions) {
+            String configurationId, BinaryData body, RequestOptions requestOptions) {
         return this.serviceClient.getSeriesByAnomalyDetectionConfigurationWithResponseAsync(
-            configurationId, body, requestOptions);
+                configurationId, body, requestOptions);
     }
 
     /**
@@ -908,17 +903,17 @@ public final class MetricsAdvisorAsyncClient {
      * }</pre>
      *
      * @param configurationId anomaly detection configuration unique id.
-     * @param body            query detection anomaly result request.
-     * @param requestOptions  The options to configure the HTTP request before HTTP client sends it.
-     * @return the paginated response with {@link PagedFlux}.
+     * @param body query detection anomaly result request.
+     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the paginated response with {@link PagedFlux}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedFlux<BinaryData> getAnomaliesByAnomalyDetectionConfiguration(
-        String configurationId, BinaryData body, RequestOptions requestOptions) {
+            String configurationId, BinaryData body, RequestOptions requestOptions) {
         return this.serviceClient.getAnomaliesByAnomalyDetectionConfigurationAsync(
-            configurationId, body, requestOptions);
+                configurationId, body, requestOptions);
     }
 
     /**
@@ -960,17 +955,17 @@ public final class MetricsAdvisorAsyncClient {
      * }</pre>
      *
      * @param configurationId anomaly detection configuration unique id.
-     * @param body            query dimension values request.
-     * @param requestOptions  The options to configure the HTTP request before HTTP client sends it.
-     * @return the paginated response with {@link PagedFlux}.
+     * @param body query dimension values request.
+     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the paginated response with {@link PagedFlux}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedFlux<BinaryData> getDimensionOfAnomaliesByAnomalyDetectionConfiguration(
-        String configurationId, BinaryData body, RequestOptions requestOptions) {
+            String configurationId, BinaryData body, RequestOptions requestOptions) {
         return this.serviceClient.getDimensionOfAnomaliesByAnomalyDetectionConfigurationAsync(
-            configurationId, body, requestOptions);
+                configurationId, body, requestOptions);
     }
 
     /**
@@ -1031,17 +1026,17 @@ public final class MetricsAdvisorAsyncClient {
      * }</pre>
      *
      * @param configurationId anomaly detection configuration unique id.
-     * @param body            query detection incident result request.
-     * @param requestOptions  The options to configure the HTTP request before HTTP client sends it.
-     * @return the paginated response with {@link PagedFlux}.
+     * @param body query detection incident result request.
+     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the paginated response with {@link PagedFlux}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedFlux<BinaryData> getIncidentsByAnomalyDetectionConfiguration(
-        String configurationId, BinaryData body, RequestOptions requestOptions) {
+            String configurationId, BinaryData body, RequestOptions requestOptions) {
         return this.serviceClient.getIncidentsByAnomalyDetectionConfigurationAsync(
-            configurationId, body, requestOptions);
+                configurationId, body, requestOptions);
     }
 
     /**
@@ -1085,16 +1080,16 @@ public final class MetricsAdvisorAsyncClient {
      * }</pre>
      *
      * @param configurationId anomaly detection configuration unique id.
-     * @param requestOptions  The options to configure the HTTP request before HTTP client sends it.
-     * @return the paginated response with {@link PagedFlux}.
+     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the paginated response with {@link PagedFlux}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedFlux<BinaryData> getIncidentsByAnomalyDetectionConfigurationNextPages(
-        String configurationId, RequestOptions requestOptions) {
+            String configurationId, RequestOptions requestOptions) {
         return this.serviceClient.getIncidentsByAnomalyDetectionConfigurationNextPagesAsync(
-            configurationId, requestOptions);
+                configurationId, requestOptions);
     }
 
     /**
@@ -1122,17 +1117,17 @@ public final class MetricsAdvisorAsyncClient {
      * }</pre>
      *
      * @param configurationId anomaly detection configuration unique id.
-     * @param incidentId      incident id.
-     * @param requestOptions  The options to configure the HTTP request before HTTP client sends it.
-     * @return the response body along with {@link Response} on successful completion of {@link Mono}.
+     * @param incidentId incident id.
+     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the response body along with {@link Response} on successful completion of {@link Mono}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Response<BinaryData>> getRootCauseOfIncidentByAnomalyDetectionConfigurationWithResponse(
-        String configurationId, String incidentId, RequestOptions requestOptions) {
+            String configurationId, String incidentId, RequestOptions requestOptions) {
         return this.serviceClient.getRootCauseOfIncidentByAnomalyDetectionConfigurationWithResponseAsync(
-            configurationId, incidentId, requestOptions);
+                configurationId, incidentId, requestOptions);
     }
 
     /**
@@ -1148,10 +1143,10 @@ public final class MetricsAdvisorAsyncClient {
      * }
      * }</pre>
      *
-     * @param body           Create data source credential request.
+     * @param body Create data source credential request.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @return the {@link Response} on successful completion of {@link Mono}.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
@@ -1187,8 +1182,8 @@ public final class MetricsAdvisorAsyncClient {
      * }</pre>
      *
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @return the paginated response with {@link PagedFlux}.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the paginated response with {@link PagedFlux}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.COLLECTION)
@@ -1208,26 +1203,26 @@ public final class MetricsAdvisorAsyncClient {
      * }
      * }</pre>
      *
-     * @param credentialId   Data source credential unique ID.
-     * @param body           Update data source credential request.
+     * @param credentialId Data source credential unique ID.
+     * @param body Update data source credential request.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @return the {@link Response} on successful completion of {@link Mono}.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Response<Void>> updateCredentialWithResponse(
-        String credentialId, BinaryData body, RequestOptions requestOptions) {
+            String credentialId, BinaryData body, RequestOptions requestOptions) {
         return this.serviceClient.updateCredentialWithResponseAsync(credentialId, body, requestOptions);
     }
 
     /**
      * Delete a data source credential.
      *
-     * @param credentialId   Data source credential unique ID.
+     * @param credentialId Data source credential unique ID.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @return the {@link Response} on successful completion of {@link Mono}.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
@@ -1248,10 +1243,10 @@ public final class MetricsAdvisorAsyncClient {
      * }
      * }</pre>
      *
-     * @param credentialId   Data source credential unique ID.
+     * @param credentialId Data source credential unique ID.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @return a data source credential along with {@link Response} on successful completion of {@link Mono}.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return a data source credential along with {@link Response} on successful completion of {@link Mono}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
@@ -1336,8 +1331,8 @@ public final class MetricsAdvisorAsyncClient {
      * }</pre>
      *
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @return the paginated response with {@link PagedFlux}.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the paginated response with {@link PagedFlux}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.COLLECTION)
@@ -1402,10 +1397,10 @@ public final class MetricsAdvisorAsyncClient {
      * }
      * }</pre>
      *
-     * @param body           parameters to create a data feed.
+     * @param body parameters to create a data feed.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @return the {@link Response} on successful completion of {@link Mono}.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
@@ -1470,10 +1465,10 @@ public final class MetricsAdvisorAsyncClient {
      * }
      * }</pre>
      *
-     * @param dataFeedId     The data feed unique id.
+     * @param dataFeedId The data feed unique id.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @return a data feed by its id along with {@link Response} on successful completion of {@link Mono}.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return a data feed by its id along with {@link Response} on successful completion of {@link Mono}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
@@ -1518,26 +1513,26 @@ public final class MetricsAdvisorAsyncClient {
      * }
      * }</pre>
      *
-     * @param dataFeedId     The data feed unique id.
-     * @param body           parameters to update a data feed.
+     * @param dataFeedId The data feed unique id.
+     * @param body parameters to update a data feed.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @return the {@link Response} on successful completion of {@link Mono}.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Response<Void>> updateDataFeedWithResponse(
-        String dataFeedId, BinaryData body, RequestOptions requestOptions) {
+            String dataFeedId, BinaryData body, RequestOptions requestOptions) {
         return this.serviceClient.updateDataFeedWithResponseAsync(dataFeedId, body, requestOptions);
     }
 
     /**
      * Delete a data feed.
      *
-     * @param dataFeedId     The data feed unique id.
+     * @param dataFeedId The data feed unique id.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @return the {@link Response} on successful completion of {@link Mono}.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
@@ -1564,10 +1559,10 @@ public final class MetricsAdvisorAsyncClient {
      * }
      * }</pre>
      *
-     * @param feedbackId     the unique feedback ID.
+     * @param feedbackId the unique feedback ID.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @return a metric feedback by its id along with {@link Response} on successful completion of {@link Mono}.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return a metric feedback by its id along with {@link Response} on successful completion of {@link Mono}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
@@ -1625,10 +1620,10 @@ public final class MetricsAdvisorAsyncClient {
      * }
      * }</pre>
      *
-     * @param body           metric feedback filter.
+     * @param body metric feedback filter.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @return the paginated response with {@link PagedFlux}.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the paginated response with {@link PagedFlux}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.COLLECTION)
@@ -1655,10 +1650,10 @@ public final class MetricsAdvisorAsyncClient {
      * }
      * }</pre>
      *
-     * @param body           metric feedback.
+     * @param body metric feedback.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @return the {@link Response} on successful completion of {@link Mono}.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
@@ -1699,8 +1694,8 @@ public final class MetricsAdvisorAsyncClient {
      * }</pre>
      *
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @return the paginated response with {@link PagedFlux}.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the paginated response with {@link PagedFlux}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.COLLECTION)
@@ -1725,10 +1720,10 @@ public final class MetricsAdvisorAsyncClient {
      * }
      * }</pre>
      *
-     * @param body           Create hook request.
+     * @param body Create hook request.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @return the {@link Response} on successful completion of {@link Mono}.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
@@ -1753,10 +1748,10 @@ public final class MetricsAdvisorAsyncClient {
      * }
      * }</pre>
      *
-     * @param hookId         Hook unique ID.
+     * @param hookId Hook unique ID.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @return a hook by its id along with {@link Response} on successful completion of {@link Mono}.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return a hook by its id along with {@link Response} on successful completion of {@link Mono}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
@@ -1780,11 +1775,11 @@ public final class MetricsAdvisorAsyncClient {
      * }
      * }</pre>
      *
-     * @param hookId         Hook unique ID.
-     * @param body           Update hook request.
+     * @param hookId Hook unique ID.
+     * @param body Update hook request.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @return the {@link Response} on successful completion of {@link Mono}.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
@@ -1795,10 +1790,10 @@ public final class MetricsAdvisorAsyncClient {
     /**
      * Delete a hook.
      *
-     * @param hookId         Hook unique ID.
+     * @param hookId Hook unique ID.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @return the {@link Response} on successful completion of {@link Mono}.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
@@ -1842,16 +1837,16 @@ public final class MetricsAdvisorAsyncClient {
      * }
      * }</pre>
      *
-     * @param dataFeedId     The data feed unique id.
-     * @param body           The query time range.
+     * @param dataFeedId The data feed unique id.
+     * @param body The query time range.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @return data ingestion status by data feed as paginated response with {@link PagedFlux}.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return data ingestion status by data feed as paginated response with {@link PagedFlux}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedFlux<BinaryData> getDataFeedIngestionStatus(
-        String dataFeedId, BinaryData body, RequestOptions requestOptions) {
+            String dataFeedId, BinaryData body, RequestOptions requestOptions) {
         return this.serviceClient.getDataFeedIngestionStatusAsync(dataFeedId, body, requestOptions);
     }
 
@@ -1867,16 +1862,16 @@ public final class MetricsAdvisorAsyncClient {
      * }
      * }</pre>
      *
-     * @param dataFeedId     The data feed unique id.
-     * @param body           The backfill time range.
+     * @param dataFeedId The data feed unique id.
+     * @param body The backfill time range.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @return the {@link Response} on successful completion of {@link Mono}.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Response<Void>> resetDataFeedIngestionStatusWithResponse(
-        String dataFeedId, BinaryData body, RequestOptions requestOptions) {
+            String dataFeedId, BinaryData body, RequestOptions requestOptions) {
         return this.serviceClient.resetDataFeedIngestionStatusWithResponseAsync(dataFeedId, body, requestOptions);
     }
 
@@ -1892,16 +1887,16 @@ public final class MetricsAdvisorAsyncClient {
      * }
      * }</pre>
      *
-     * @param dataFeedId     The data feed unique id.
+     * @param dataFeedId The data feed unique id.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @return data last success ingestion job timestamp by data feed along with {@link Response} on successful
-     * completion of {@link Mono}.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return data last success ingestion job timestamp by data feed along with {@link Response} on successful
+     *     completion of {@link Mono}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Response<BinaryData>> getIngestionProgressWithResponse(
-        String dataFeedId, RequestOptions requestOptions) {
+            String dataFeedId, RequestOptions requestOptions) {
         return this.serviceClient.getIngestionProgressWithResponseAsync(dataFeedId, requestOptions);
     }
 
@@ -1945,16 +1940,16 @@ public final class MetricsAdvisorAsyncClient {
      * }
      * }</pre>
      *
-     * @param metricId       metric unique id.
-     * @param body           query time series data condition.
+     * @param metricId metric unique id.
+     * @param body query time series data condition.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @return time series data from metric along with {@link Response} on successful completion of {@link Mono}.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return time series data from metric along with {@link Response} on successful completion of {@link Mono}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Response<BinaryData>> getMetricDataWithResponse(
-        String metricId, BinaryData body, RequestOptions requestOptions) {
+            String metricId, BinaryData body, RequestOptions requestOptions) {
         return this.serviceClient.getMetricDataWithResponseAsync(metricId, body, requestOptions);
     }
 
@@ -1999,11 +1994,11 @@ public final class MetricsAdvisorAsyncClient {
      * }
      * }</pre>
      *
-     * @param metricId       metric unique id.
-     * @param body           filter to query series.
+     * @param metricId metric unique id.
+     * @param body filter to query series.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @return the paginated response with {@link PagedFlux}.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the paginated response with {@link PagedFlux}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.COLLECTION)
@@ -2043,11 +2038,11 @@ public final class MetricsAdvisorAsyncClient {
      * }
      * }</pre>
      *
-     * @param metricId       metric unique id.
-     * @param body           query dimension option.
+     * @param metricId metric unique id.
+     * @param body query dimension option.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @return the paginated response with {@link PagedFlux}.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the paginated response with {@link PagedFlux}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.COLLECTION)
@@ -2123,15 +2118,15 @@ public final class MetricsAdvisorAsyncClient {
      * }
      * }</pre>
      *
-     * @param metricId       metric unique id.
+     * @param metricId metric unique id.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @return the response body along with {@link Response} on successful completion of {@link Mono}.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the response body along with {@link Response} on successful completion of {@link Mono}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Response<BinaryData>> getAnomalyDetectionConfigurationsByMetricWithResponse(
-        String metricId, RequestOptions requestOptions) {
+            String metricId, RequestOptions requestOptions) {
         return this.serviceClient.getAnomalyDetectionConfigurationsByMetricWithResponseAsync(metricId, requestOptions);
     }
 
@@ -2171,16 +2166,16 @@ public final class MetricsAdvisorAsyncClient {
      * }
      * }</pre>
      *
-     * @param metricId       metric unique id.
-     * @param body           query options.
+     * @param metricId metric unique id.
+     * @param body query options.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @return the paginated response with {@link PagedFlux}.
      * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the paginated response with {@link PagedFlux}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedFlux<BinaryData> getEnrichmentStatusByMetric(
-        String metricId, BinaryData body, RequestOptions requestOptions) {
+            String metricId, BinaryData body, RequestOptions requestOptions) {
         return this.serviceClient.getEnrichmentStatusByMetricAsync(metricId, body, requestOptions);
     }
 }

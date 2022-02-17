@@ -5,6 +5,7 @@ package com.azure.ai.metricsadvisor;
 
 import com.azure.ai.metricsadvisor.MetricsAdvisorClientBuilder;
 import com.azure.ai.metricsadvisor.MetricsAdvisorServiceVersion;
+import com.azure.ai.metricsadvisor.models.MetricsAdvisorKeyCredential;
 import com.azure.core.credential.AccessToken;
 import com.azure.core.http.HttpClient;
 import com.azure.core.http.policy.HttpLogDetailLevel;
@@ -34,7 +35,7 @@ public abstract class MetricsAdvisorClientTestBase extends TestBase {
             .addPolicy(interceptorManager.getRecordPolicy());
 
         if (getTestMode() == TestMode.PLAYBACK) {
-            builder.credential(request -> Mono.just(new AccessToken("this_is_a_token", OffsetDateTime.MAX)));
+            builder.credential(new MetricsAdvisorKeyCredential("subscription_key", "api_key"));
         } else {
             builder.credential(new DefaultAzureCredentialBuilder().build());
         }
