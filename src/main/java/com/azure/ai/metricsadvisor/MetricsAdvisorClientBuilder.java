@@ -41,6 +41,11 @@ public final class MetricsAdvisorClientBuilder {
 
     @Generated private static final String SDK_VERSION = "version";
 
+    static final String OCP_APIM_SUBSCRIPTION_KEY = "Ocp-Apim-Subscription-Key";
+    
+    static final String API_KEY = "x-api-key";
+
+
     @Generated
     private static final String[] DEFAULT_SCOPES = new String[] {"https://cognitiveservices.azure.com/.default"};
 
@@ -271,6 +276,10 @@ public final class MetricsAdvisorClientBuilder {
         policies.add(new CookiePolicy());
         if (tokenCredential != null) {
             policies.add(new BearerTokenAuthenticationPolicy(tokenCredential, DEFAULT_SCOPES));
+        } else if (!CoreUtils.isNullOrEmpty(metricsAdvisorKeyCredential.getKeys().getSubscriptionKey())
+                || !CoreUtils.isNullOrEmpty(metricsAdvisorKeyCredential.getKeys().getApiKey())) {
+            headers.set(OCP_APIM_SUBSCRIPTION_KEY, metricsAdvisorKeyCredential.getKeys().getSubscriptionKey());
+            headers.set(API_KEY, metricsAdvisorKeyCredential.getKeys().getApiKey());
         }
         policies.addAll(
                 this.pipelinePolicies.stream()
