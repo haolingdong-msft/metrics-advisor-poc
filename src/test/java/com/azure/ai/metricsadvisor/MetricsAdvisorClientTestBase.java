@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-package com.azure.ai.metricsadvisor.util;
+package com.azure.ai.metricsadvisor;
 
 import com.azure.ai.metricsadvisor.MetricsAdvisorClientBuilder;
 import com.azure.ai.metricsadvisor.MetricsAdvisorServiceVersion;

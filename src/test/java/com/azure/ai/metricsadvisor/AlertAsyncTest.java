@@ -4,7 +4,6 @@
 package com.azure.ai.metricsadvisor;
 
 import com.azure.ai.metricsadvisor.models.AnomalyAlert;
-import com.azure.ai.metricsadvisor.util.AlertTestBase;
 import com.azure.core.http.HttpClient;
 import com.azure.core.http.rest.PagedFlux;
 import com.azure.core.test.TestBase;
@@ -48,9 +47,6 @@ public final class AlertAsyncTest extends AlertTestBase {
 
         Assertions.assertNotNull(alertsFlux);
 
-        List<AnomalyAlert> alerts = alertsFlux.toStream().collect(Collectors.toList());
-
-        System.out.println(alerts);
         StepVerifier.create(alertsFlux)
             .assertNext(alert -> assertAlertOutput(alert))
             .expectNextCount(ListAlertsOutput.INSTANCE.expectedAlerts - 1)

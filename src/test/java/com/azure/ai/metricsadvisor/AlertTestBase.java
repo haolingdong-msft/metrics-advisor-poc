@@ -1,9 +1,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-package com.azure.ai.metricsadvisor.util;
+package com.azure.ai.metricsadvisor;
 
-import com.azure.ai.metricsadvisor.MetricsAdvisorServiceVersion;
 import com.azure.ai.metricsadvisor.models.AlertQueryTimeMode;
 import com.azure.ai.metricsadvisor.models.AnomalyAlert;
 import com.azure.ai.metricsadvisor.models.ListAlertOptions;
@@ -22,24 +21,21 @@ public abstract class AlertTestBase extends MetricsAdvisorClientTestBase {
     public static final String ALERT_CONFIG_ID = "1c1575d8-b09e-40c3-a3c0-d459c64d8382";
 
     // Pre-configured test resource.
-    public static class ListAlertsInput {
-        public static final ListAlertsInput INSTANCE = new ListAlertsInput();
-        public final OffsetDateTime startTime = OffsetDateTime.parse("2021-10-10T00:00:00Z");
-        public final OffsetDateTime endTime = OffsetDateTime.parse("2021-10-21T00:00:00Z");
-        public final AlertQueryTimeMode timeMode = AlertQueryTimeMode.ANOMALY_TIME;
-        public final ListAlertOptions options = new ListAlertOptions()
+    static class ListAlertsInput {
+        static final ListAlertsInput INSTANCE = new ListAlertsInput();
+        final OffsetDateTime startTime = OffsetDateTime.parse("2021-10-10T00:00:00Z");
+        final OffsetDateTime endTime = OffsetDateTime.parse("2021-10-21T00:00:00Z");
+        final AlertQueryTimeMode timeMode = AlertQueryTimeMode.ANOMALY_TIME;
+        final ListAlertOptions options = new ListAlertOptions()
             .setAlertQueryTimeMode(timeMode)
             .setMaxPageSize(10);
 
-        //        static {
-//            System.out.println(INSTANCE.timeMode);
-//        }
-        public final String alertConfigurationId = ALERT_CONFIG_ID;
+        final String alertConfigurationId = ALERT_CONFIG_ID;
     }
 
     protected static class ListAlertsOutput {
-        public static final ListAlertsOutput INSTANCE = new ListAlertsOutput();
-        public final int expectedAlerts = 11;
+        static final ListAlertsOutput INSTANCE = new ListAlertsOutput();
+        final int expectedAlerts = 11;
     }
 
     protected void assertAlertOutput(AnomalyAlert anomalyAlert) {
