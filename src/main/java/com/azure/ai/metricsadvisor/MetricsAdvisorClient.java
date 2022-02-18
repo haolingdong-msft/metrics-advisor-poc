@@ -19,6 +19,7 @@ import com.azure.core.util.Context;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.time.OffsetDateTime;
+import java.util.Objects;
 
 /** Initializes a new instance of the synchronous MetricsAdvisorClient type. */
 @ServiceClient(builder = MetricsAdvisorClientBuilder.class)
@@ -332,6 +333,11 @@ public final class MetricsAdvisorClient {
             OffsetDateTime endTime,
             ListAlertOptions options,
             Context context) {
+
+        Objects.requireNonNull(alertConfigurationId, "'alertConfigurationId' is required.");
+        Objects.requireNonNull(startTime, "'startTime' is required.");
+        Objects.requireNonNull(endTime, "'endTime' is required.");
+
         RequestOptions requestOptions = new RequestOptions();
         if (options.getMaxPageSize() != null) {
             requestOptions.addQueryParam("$maxpagesize", options.getMaxPageSize().toString());

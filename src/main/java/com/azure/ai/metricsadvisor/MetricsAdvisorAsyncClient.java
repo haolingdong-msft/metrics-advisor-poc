@@ -18,6 +18,8 @@ import com.azure.core.util.BinaryData;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.time.OffsetDateTime;
+import java.util.Objects;
+
 import reactor.core.publisher.Mono;
 
 /** Initializes a new instance of the asynchronous MetricsAdvisorClient type. */
@@ -329,6 +331,11 @@ public final class MetricsAdvisorAsyncClient {
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedFlux<AnomalyAlert> listAlerts(
             String alertConfigurationId, OffsetDateTime startTime, OffsetDateTime endTime, ListAlertOptions options) {
+
+        Objects.requireNonNull(alertConfigurationId, "'alertConfigurationId' is required.");
+        Objects.requireNonNull(startTime, "'startTime' is required.");
+        Objects.requireNonNull(endTime, "'endTime' is required.");
+
         RequestOptions requestOptions = new RequestOptions();
         if (options.getMaxPageSize() != null) {
             requestOptions.addQueryParam("$maxpagesize", options.getMaxPageSize().toString());

@@ -42,7 +42,7 @@ public final class MetricsAdvisorClientBuilder {
     @Generated private static final String SDK_VERSION = "version";
 
     static final String OCP_APIM_SUBSCRIPTION_KEY = "Ocp-Apim-Subscription-Key";
-    
+
     static final String API_KEY = "x-api-key";
 
 
@@ -247,7 +247,6 @@ public final class MetricsAdvisorClientBuilder {
         return client;
     }
 
-    @Generated
     private HttpPipeline createHttpPipeline() {
         Configuration buildConfiguration =
                 (configuration == null) ? Configuration.getGlobalConfiguration() : configuration;
@@ -264,9 +263,6 @@ public final class MetricsAdvisorClientBuilder {
         policies.add(new UserAgentPolicy(applicationId, clientName, clientVersion, buildConfiguration));
         HttpHeaders headers = new HttpHeaders();
         clientOptions.getHeaders().forEach(header -> headers.set(header.getName(), header.getValue()));
-        if (headers.getSize() > 0) {
-            policies.add(new AddHeadersPolicy(headers));
-        }
         policies.addAll(
                 this.pipelinePolicies.stream()
                         .filter(p -> p.getPipelinePosition() == HttpPipelinePosition.PER_CALL)
@@ -280,6 +276,9 @@ public final class MetricsAdvisorClientBuilder {
                 || !CoreUtils.isNullOrEmpty(metricsAdvisorKeyCredential.getKeys().getApiKey())) {
             headers.set(OCP_APIM_SUBSCRIPTION_KEY, metricsAdvisorKeyCredential.getKeys().getSubscriptionKey());
             headers.set(API_KEY, metricsAdvisorKeyCredential.getKeys().getApiKey());
+        }
+        if (headers.getSize() > 0) {
+            policies.add(new AddHeadersPolicy(headers));
         }
         policies.addAll(
                 this.pipelinePolicies.stream()
