@@ -147,8 +147,8 @@ public final class MetricsAdvisorClientImpl {
                 Context context);
 
         @Patch("/alert/anomaly/configurations/{configurationId}")
-        @ExpectedResponses({204})
-        Mono<Response<Void>> updateAnomalyAlertingConfiguration(
+        @ExpectedResponses({200})
+        Mono<Response<BinaryData>> updateAnomalyAlertingConfiguration(
                 @HostParam("endpoint") String endpoint,
                 @PathParam("configurationId") String configurationId,
                 @BodyParam("application/merge-patch+json") BinaryData body,
@@ -207,8 +207,8 @@ public final class MetricsAdvisorClientImpl {
                 Context context);
 
         @Patch("/enrichment/anomalyDetection/configurations/{configurationId}")
-        @ExpectedResponses({204})
-        Mono<Response<Void>> updateAnomalyDetectionConfiguration(
+        @ExpectedResponses({200})
+        Mono<Response<BinaryData>> updateAnomalyDetectionConfiguration(
                 @HostParam("endpoint") String endpoint,
                 @PathParam("configurationId") String configurationId,
                 @BodyParam("application/merge-patch+json") BinaryData body,
@@ -306,8 +306,8 @@ public final class MetricsAdvisorClientImpl {
                 @HostParam("endpoint") String endpoint, RequestOptions requestOptions, Context context);
 
         @Patch("/credentials/{credentialId}")
-        @ExpectedResponses({204})
-        Mono<Response<Void>> updateCredential(
+        @ExpectedResponses({200})
+        Mono<Response<BinaryData>> updateCredential(
                 @HostParam("endpoint") String endpoint,
                 @PathParam("credentialId") String credentialId,
                 @BodyParam("application/merge-patch+json") BinaryData body,
@@ -353,7 +353,7 @@ public final class MetricsAdvisorClientImpl {
 
         @Patch("/dataFeeds/{dataFeedId}")
         @ExpectedResponses({200})
-        Mono<Response<Void>> updateDataFeed(
+        Mono<Response<BinaryData>> updateDataFeed(
                 @HostParam("endpoint") String endpoint,
                 @PathParam("dataFeedId") String dataFeedId,
                 @BodyParam("application/merge-patch+json") BinaryData body,
@@ -414,8 +414,8 @@ public final class MetricsAdvisorClientImpl {
                 Context context);
 
         @Patch("/hooks/{hookId}")
-        @ExpectedResponses({204})
-        Mono<Response<Void>> updateHook(
+        @ExpectedResponses({200})
+        Mono<Response<BinaryData>> updateHook(
                 @HostParam("endpoint") String endpoint,
                 @PathParam("hookId") String hookId,
                 @BodyParam("application/merge-patch+json") BinaryData body,
@@ -590,6 +590,14 @@ public final class MetricsAdvisorClientImpl {
 
         @Get("{nextLink}")
         @ExpectedResponses({200})
+        Mono<Response<BinaryData>> getAnomalyAlertingConfigurationsByAnomalyDetectionConfigurationNext(
+                @PathParam(value = "nextLink", encoded = true) String nextLink,
+                @HostParam("endpoint") String endpoint,
+                RequestOptions requestOptions,
+                Context context);
+
+        @Get("{nextLink}")
+        @ExpectedResponses({200})
         Mono<Response<BinaryData>> getIncidentsByAnomalyDetectionConfigurationNext(
                 @PathParam(value = "nextLink", encoded = true) String nextLink,
                 @HostParam("endpoint") String endpoint,
@@ -623,6 +631,14 @@ public final class MetricsAdvisorClientImpl {
         @Get("{nextLink}")
         @ExpectedResponses({200})
         Mono<Response<BinaryData>> listHooksNext(
+                @PathParam(value = "nextLink", encoded = true) String nextLink,
+                @HostParam("endpoint") String endpoint,
+                RequestOptions requestOptions,
+                Context context);
+
+        @Get("{nextLink}")
+        @ExpectedResponses({200})
+        Mono<Response<BinaryData>> getAnomalyDetectionConfigurationsByMetricNext(
                 @PathParam(value = "nextLink", encoded = true) String nextLink,
                 @HostParam("endpoint") String endpoint,
                 RequestOptions requestOptions,
@@ -956,14 +972,65 @@ public final class MetricsAdvisorClientImpl {
      * }
      * }</pre>
      *
+     * <p><strong>Response Body Schema</strong>
+     *
+     * <pre>{@code
+     * {
+     *     anomalyAlertingConfigurationId: String
+     *     name: String
+     *     description: String
+     *     crossMetricsOperator: String(AND/OR/XOR)
+     *     splitAlertByDimensions: [
+     *         String
+     *     ]
+     *     hookIds: [
+     *         String
+     *     ]
+     *     metricAlertingConfigurations: [
+     *         {
+     *             anomalyDetectionConfigurationId: String
+     *             anomalyScopeType: String(All/Dimension/TopN)
+     *             negationOperation: Boolean
+     *             dimensionAnomalyScope: {
+     *                 dimension: {
+     *                     String: String
+     *                 }
+     *             }
+     *             topNAnomalyScope: {
+     *                 top: int
+     *                 period: int
+     *                 minTopCount: int
+     *             }
+     *             severityFilter: {
+     *                 minAlertSeverity: String(Low/Medium/High)
+     *                 maxAlertSeverity: String(Low/Medium/High)
+     *             }
+     *             snoozeFilter: {
+     *                 autoSnooze: int
+     *                 snoozeScope: String(Metric/Series)
+     *                 onlyForSuccessive: boolean
+     *             }
+     *             valueFilter: {
+     *                 lower: Double
+     *                 upper: Double
+     *                 direction: String(Both/Down/Up)
+     *                 type: String(Value/Mean)
+     *                 metricId: String
+     *                 triggerForMissing: Boolean
+     *             }
+     *         }
+     *     ]
+     * }
+     * }</pre>
+     *
      * @param configurationId anomaly alerting configuration unique id.
      * @param body anomaly alerting configuration.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
      * @throws HttpResponseException thrown if the request is rejected by server.
-     * @return the {@link Response} on successful completion of {@link Mono}.
+     * @return the response body along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Mono<Response<Void>> updateAnomalyAlertingConfigurationWithResponseAsync(
+    public Mono<Response<BinaryData>> updateAnomalyAlertingConfigurationWithResponseAsync(
             String configurationId, BinaryData body, RequestOptions requestOptions) {
         return FluxUtil.withContext(
                 context ->
@@ -1024,15 +1091,66 @@ public final class MetricsAdvisorClientImpl {
      * }
      * }</pre>
      *
+     * <p><strong>Response Body Schema</strong>
+     *
+     * <pre>{@code
+     * {
+     *     anomalyAlertingConfigurationId: String
+     *     name: String
+     *     description: String
+     *     crossMetricsOperator: String(AND/OR/XOR)
+     *     splitAlertByDimensions: [
+     *         String
+     *     ]
+     *     hookIds: [
+     *         String
+     *     ]
+     *     metricAlertingConfigurations: [
+     *         {
+     *             anomalyDetectionConfigurationId: String
+     *             anomalyScopeType: String(All/Dimension/TopN)
+     *             negationOperation: Boolean
+     *             dimensionAnomalyScope: {
+     *                 dimension: {
+     *                     String: String
+     *                 }
+     *             }
+     *             topNAnomalyScope: {
+     *                 top: int
+     *                 period: int
+     *                 minTopCount: int
+     *             }
+     *             severityFilter: {
+     *                 minAlertSeverity: String(Low/Medium/High)
+     *                 maxAlertSeverity: String(Low/Medium/High)
+     *             }
+     *             snoozeFilter: {
+     *                 autoSnooze: int
+     *                 snoozeScope: String(Metric/Series)
+     *                 onlyForSuccessive: boolean
+     *             }
+     *             valueFilter: {
+     *                 lower: Double
+     *                 upper: Double
+     *                 direction: String(Both/Down/Up)
+     *                 type: String(Value/Mean)
+     *                 metricId: String
+     *                 triggerForMissing: Boolean
+     *             }
+     *         }
+     *     ]
+     * }
+     * }</pre>
+     *
      * @param configurationId anomaly alerting configuration unique id.
      * @param body anomaly alerting configuration.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
      * @param context The context to associate with this operation.
      * @throws HttpResponseException thrown if the request is rejected by server.
-     * @return the {@link Response} on successful completion of {@link Mono}.
+     * @return the response body along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Mono<Response<Void>> updateAnomalyAlertingConfigurationWithResponseAsync(
+    public Mono<Response<BinaryData>> updateAnomalyAlertingConfigurationWithResponseAsync(
             String configurationId, BinaryData body, RequestOptions requestOptions, Context context) {
         return service.updateAnomalyAlertingConfiguration(
                 this.getEndpoint(), configurationId, body, requestOptions, context);
@@ -1091,14 +1209,65 @@ public final class MetricsAdvisorClientImpl {
      * }
      * }</pre>
      *
+     * <p><strong>Response Body Schema</strong>
+     *
+     * <pre>{@code
+     * {
+     *     anomalyAlertingConfigurationId: String
+     *     name: String
+     *     description: String
+     *     crossMetricsOperator: String(AND/OR/XOR)
+     *     splitAlertByDimensions: [
+     *         String
+     *     ]
+     *     hookIds: [
+     *         String
+     *     ]
+     *     metricAlertingConfigurations: [
+     *         {
+     *             anomalyDetectionConfigurationId: String
+     *             anomalyScopeType: String(All/Dimension/TopN)
+     *             negationOperation: Boolean
+     *             dimensionAnomalyScope: {
+     *                 dimension: {
+     *                     String: String
+     *                 }
+     *             }
+     *             topNAnomalyScope: {
+     *                 top: int
+     *                 period: int
+     *                 minTopCount: int
+     *             }
+     *             severityFilter: {
+     *                 minAlertSeverity: String(Low/Medium/High)
+     *                 maxAlertSeverity: String(Low/Medium/High)
+     *             }
+     *             snoozeFilter: {
+     *                 autoSnooze: int
+     *                 snoozeScope: String(Metric/Series)
+     *                 onlyForSuccessive: boolean
+     *             }
+     *             valueFilter: {
+     *                 lower: Double
+     *                 upper: Double
+     *                 direction: String(Both/Down/Up)
+     *                 type: String(Value/Mean)
+     *                 metricId: String
+     *                 triggerForMissing: Boolean
+     *             }
+     *         }
+     *     ]
+     * }
+     * }</pre>
+     *
      * @param configurationId anomaly alerting configuration unique id.
      * @param body anomaly alerting configuration.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
      * @throws HttpResponseException thrown if the request is rejected by server.
-     * @return the {@link Response}.
+     * @return the response body along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> updateAnomalyAlertingConfigurationWithResponse(
+    public Response<BinaryData> updateAnomalyAlertingConfigurationWithResponse(
             String configurationId, BinaryData body, RequestOptions requestOptions) {
         return updateAnomalyAlertingConfigurationWithResponseAsync(configurationId, body, requestOptions).block();
     }
@@ -1646,6 +1815,7 @@ public final class MetricsAdvisorClientImpl {
      *     nextLink: String
      *     value: [
      *         {
+     *             dataFeedId: String
      *             metricId: String
      *             anomalyDetectionConfigurationId: String
      *             timestamp: String
@@ -1708,6 +1878,7 @@ public final class MetricsAdvisorClientImpl {
      *     nextLink: String
      *     value: [
      *         {
+     *             dataFeedId: String
      *             metricId: String
      *             anomalyDetectionConfigurationId: String
      *             timestamp: String
@@ -1769,6 +1940,7 @@ public final class MetricsAdvisorClientImpl {
      *     nextLink: String
      *     value: [
      *         {
+     *             dataFeedId: String
      *             metricId: String
      *             anomalyDetectionConfigurationId: String
      *             timestamp: String
@@ -1823,6 +1995,7 @@ public final class MetricsAdvisorClientImpl {
      *     nextLink: String
      *     value: [
      *         {
+     *             dataFeedId: String
      *             metricId: String
      *             anomalyDetectionConfigurationId: String
      *             timestamp: String
@@ -1880,6 +2053,7 @@ public final class MetricsAdvisorClientImpl {
      *     nextLink: String
      *     value: [
      *         {
+     *             dataFeedId: String
      *             metricId: String
      *             anomalyDetectionConfigurationId: String
      *             timestamp: String
@@ -1931,6 +2105,7 @@ public final class MetricsAdvisorClientImpl {
      *     nextLink: String
      *     value: [
      *         {
+     *             dataFeedId: String
      *             metricId: String
      *             anomalyDetectionConfigurationId: String
      *             incidentId: String
@@ -1995,6 +2170,7 @@ public final class MetricsAdvisorClientImpl {
      *     nextLink: String
      *     value: [
      *         {
+     *             dataFeedId: String
      *             metricId: String
      *             anomalyDetectionConfigurationId: String
      *             incidentId: String
@@ -2058,6 +2234,7 @@ public final class MetricsAdvisorClientImpl {
      *     nextLink: String
      *     value: [
      *         {
+     *             dataFeedId: String
      *             metricId: String
      *             anomalyDetectionConfigurationId: String
      *             incidentId: String
@@ -2114,6 +2291,7 @@ public final class MetricsAdvisorClientImpl {
      *     nextLink: String
      *     value: [
      *         {
+     *             dataFeedId: String
      *             metricId: String
      *             anomalyDetectionConfigurationId: String
      *             incidentId: String
@@ -2173,6 +2351,7 @@ public final class MetricsAdvisorClientImpl {
      *     nextLink: String
      *     value: [
      *         {
+     *             dataFeedId: String
      *             metricId: String
      *             anomalyDetectionConfigurationId: String
      *             incidentId: String
@@ -2448,6 +2627,85 @@ public final class MetricsAdvisorClientImpl {
      *     wholeMetricConfiguration: {
      *         conditionOperator: String(AND/OR)
      *         smartDetectionCondition: {
+     *             sensitivity: Double
+     *             anomalyDetectorDirection: String(Both/Down/Up)
+     *             suppressCondition: {
+     *                 minNumber: Integer
+     *                 minRatio: Double
+     *             }
+     *         }
+     *         hardThresholdCondition: {
+     *             lowerBound: Double
+     *             upperBound: Double
+     *             anomalyDetectorDirection: String(Both/Down/Up)
+     *             suppressCondition: (recursive schema, see suppressCondition above)
+     *         }
+     *         changeThresholdCondition: {
+     *             changePercentage: Double
+     *             shiftPoint: Integer
+     *             withinRange: Boolean
+     *             anomalyDetectorDirection: String(Both/Down/Up)
+     *             suppressCondition: (recursive schema, see suppressCondition above)
+     *         }
+     *     }
+     *     dimensionGroupOverrideConfigurations: [
+     *         {
+     *             group: {
+     *                 dimension: {
+     *                     String: String
+     *                 }
+     *             }
+     *             conditionOperator: String(AND/OR)
+     *             smartDetectionCondition: {
+     *                 sensitivity: double
+     *                 anomalyDetectorDirection: String(Both/Down/Up)
+     *                 suppressCondition: {
+     *                     minNumber: int
+     *                     minRatio: double
+     *                 }
+     *             }
+     *             hardThresholdCondition: {
+     *                 lowerBound: Double
+     *                 upperBound: Double
+     *                 anomalyDetectorDirection: String(Both/Down/Up)
+     *                 suppressCondition: (recursive schema, see suppressCondition above)
+     *             }
+     *             changeThresholdCondition: {
+     *                 changePercentage: double
+     *                 shiftPoint: int
+     *                 withinRange: boolean
+     *                 anomalyDetectorDirection: String(Both/Down/Up)
+     *                 suppressCondition: (recursive schema, see suppressCondition above)
+     *             }
+     *         }
+     *     ]
+     *     seriesOverrideConfigurations: [
+     *         {
+     *             series: {
+     *                 dimension: {
+     *                     String: String
+     *                 }
+     *             }
+     *             conditionOperator: String(AND/OR)
+     *             smartDetectionCondition: (recursive schema, see smartDetectionCondition above)
+     *             hardThresholdCondition: (recursive schema, see hardThresholdCondition above)
+     *             changeThresholdCondition: (recursive schema, see changeThresholdCondition above)
+     *         }
+     *     ]
+     * }
+     * }</pre>
+     *
+     * <p><strong>Response Body Schema</strong>
+     *
+     * <pre>{@code
+     * {
+     *     anomalyDetectionConfigurationId: String
+     *     name: String
+     *     description: String
+     *     metricId: String
+     *     wholeMetricConfiguration: {
+     *         conditionOperator: String(AND/OR)
+     *         smartDetectionCondition: {
      *             sensitivity: double
      *             anomalyDetectorDirection: String(Both/Down/Up)
      *             suppressCondition: {
@@ -2502,10 +2760,10 @@ public final class MetricsAdvisorClientImpl {
      * @param body anomaly detection configuration.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
      * @throws HttpResponseException thrown if the request is rejected by server.
-     * @return the {@link Response} on successful completion of {@link Mono}.
+     * @return the response body along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Mono<Response<Void>> updateAnomalyDetectionConfigurationWithResponseAsync(
+    public Mono<Response<BinaryData>> updateAnomalyDetectionConfigurationWithResponseAsync(
             String configurationId, BinaryData body, RequestOptions requestOptions) {
         return FluxUtil.withContext(
                 context ->
@@ -2522,6 +2780,85 @@ public final class MetricsAdvisorClientImpl {
      * {
      *     name: String
      *     description: String
+     *     wholeMetricConfiguration: {
+     *         conditionOperator: String(AND/OR)
+     *         smartDetectionCondition: {
+     *             sensitivity: Double
+     *             anomalyDetectorDirection: String(Both/Down/Up)
+     *             suppressCondition: {
+     *                 minNumber: Integer
+     *                 minRatio: Double
+     *             }
+     *         }
+     *         hardThresholdCondition: {
+     *             lowerBound: Double
+     *             upperBound: Double
+     *             anomalyDetectorDirection: String(Both/Down/Up)
+     *             suppressCondition: (recursive schema, see suppressCondition above)
+     *         }
+     *         changeThresholdCondition: {
+     *             changePercentage: Double
+     *             shiftPoint: Integer
+     *             withinRange: Boolean
+     *             anomalyDetectorDirection: String(Both/Down/Up)
+     *             suppressCondition: (recursive schema, see suppressCondition above)
+     *         }
+     *     }
+     *     dimensionGroupOverrideConfigurations: [
+     *         {
+     *             group: {
+     *                 dimension: {
+     *                     String: String
+     *                 }
+     *             }
+     *             conditionOperator: String(AND/OR)
+     *             smartDetectionCondition: {
+     *                 sensitivity: double
+     *                 anomalyDetectorDirection: String(Both/Down/Up)
+     *                 suppressCondition: {
+     *                     minNumber: int
+     *                     minRatio: double
+     *                 }
+     *             }
+     *             hardThresholdCondition: {
+     *                 lowerBound: Double
+     *                 upperBound: Double
+     *                 anomalyDetectorDirection: String(Both/Down/Up)
+     *                 suppressCondition: (recursive schema, see suppressCondition above)
+     *             }
+     *             changeThresholdCondition: {
+     *                 changePercentage: double
+     *                 shiftPoint: int
+     *                 withinRange: boolean
+     *                 anomalyDetectorDirection: String(Both/Down/Up)
+     *                 suppressCondition: (recursive schema, see suppressCondition above)
+     *             }
+     *         }
+     *     ]
+     *     seriesOverrideConfigurations: [
+     *         {
+     *             series: {
+     *                 dimension: {
+     *                     String: String
+     *                 }
+     *             }
+     *             conditionOperator: String(AND/OR)
+     *             smartDetectionCondition: (recursive schema, see smartDetectionCondition above)
+     *             hardThresholdCondition: (recursive schema, see hardThresholdCondition above)
+     *             changeThresholdCondition: (recursive schema, see changeThresholdCondition above)
+     *         }
+     *     ]
+     * }
+     * }</pre>
+     *
+     * <p><strong>Response Body Schema</strong>
+     *
+     * <pre>{@code
+     * {
+     *     anomalyDetectionConfigurationId: String
+     *     name: String
+     *     description: String
+     *     metricId: String
      *     wholeMetricConfiguration: {
      *         conditionOperator: String(AND/OR)
      *         smartDetectionCondition: {
@@ -2580,10 +2917,10 @@ public final class MetricsAdvisorClientImpl {
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
      * @param context The context to associate with this operation.
      * @throws HttpResponseException thrown if the request is rejected by server.
-     * @return the {@link Response} on successful completion of {@link Mono}.
+     * @return the response body along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Mono<Response<Void>> updateAnomalyDetectionConfigurationWithResponseAsync(
+    public Mono<Response<BinaryData>> updateAnomalyDetectionConfigurationWithResponseAsync(
             String configurationId, BinaryData body, RequestOptions requestOptions, Context context) {
         return service.updateAnomalyDetectionConfiguration(
                 this.getEndpoint(), configurationId, body, requestOptions, context);
@@ -2598,6 +2935,85 @@ public final class MetricsAdvisorClientImpl {
      * {
      *     name: String
      *     description: String
+     *     wholeMetricConfiguration: {
+     *         conditionOperator: String(AND/OR)
+     *         smartDetectionCondition: {
+     *             sensitivity: Double
+     *             anomalyDetectorDirection: String(Both/Down/Up)
+     *             suppressCondition: {
+     *                 minNumber: Integer
+     *                 minRatio: Double
+     *             }
+     *         }
+     *         hardThresholdCondition: {
+     *             lowerBound: Double
+     *             upperBound: Double
+     *             anomalyDetectorDirection: String(Both/Down/Up)
+     *             suppressCondition: (recursive schema, see suppressCondition above)
+     *         }
+     *         changeThresholdCondition: {
+     *             changePercentage: Double
+     *             shiftPoint: Integer
+     *             withinRange: Boolean
+     *             anomalyDetectorDirection: String(Both/Down/Up)
+     *             suppressCondition: (recursive schema, see suppressCondition above)
+     *         }
+     *     }
+     *     dimensionGroupOverrideConfigurations: [
+     *         {
+     *             group: {
+     *                 dimension: {
+     *                     String: String
+     *                 }
+     *             }
+     *             conditionOperator: String(AND/OR)
+     *             smartDetectionCondition: {
+     *                 sensitivity: double
+     *                 anomalyDetectorDirection: String(Both/Down/Up)
+     *                 suppressCondition: {
+     *                     minNumber: int
+     *                     minRatio: double
+     *                 }
+     *             }
+     *             hardThresholdCondition: {
+     *                 lowerBound: Double
+     *                 upperBound: Double
+     *                 anomalyDetectorDirection: String(Both/Down/Up)
+     *                 suppressCondition: (recursive schema, see suppressCondition above)
+     *             }
+     *             changeThresholdCondition: {
+     *                 changePercentage: double
+     *                 shiftPoint: int
+     *                 withinRange: boolean
+     *                 anomalyDetectorDirection: String(Both/Down/Up)
+     *                 suppressCondition: (recursive schema, see suppressCondition above)
+     *             }
+     *         }
+     *     ]
+     *     seriesOverrideConfigurations: [
+     *         {
+     *             series: {
+     *                 dimension: {
+     *                     String: String
+     *                 }
+     *             }
+     *             conditionOperator: String(AND/OR)
+     *             smartDetectionCondition: (recursive schema, see smartDetectionCondition above)
+     *             hardThresholdCondition: (recursive schema, see hardThresholdCondition above)
+     *             changeThresholdCondition: (recursive schema, see changeThresholdCondition above)
+     *         }
+     *     ]
+     * }
+     * }</pre>
+     *
+     * <p><strong>Response Body Schema</strong>
+     *
+     * <pre>{@code
+     * {
+     *     anomalyDetectionConfigurationId: String
+     *     name: String
+     *     description: String
+     *     metricId: String
      *     wholeMetricConfiguration: {
      *         conditionOperator: String(AND/OR)
      *         smartDetectionCondition: {
@@ -2655,10 +3071,10 @@ public final class MetricsAdvisorClientImpl {
      * @param body anomaly detection configuration.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
      * @throws HttpResponseException thrown if the request is rejected by server.
-     * @return the {@link Response}.
+     * @return the response body along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> updateAnomalyDetectionConfigurationWithResponse(
+    public Response<BinaryData> updateAnomalyDetectionConfigurationWithResponse(
             String configurationId, BinaryData body, RequestOptions requestOptions) {
         return updateAnomalyDetectionConfigurationWithResponseAsync(configurationId, body, requestOptions).block();
     }
@@ -2939,7 +3355,16 @@ public final class MetricsAdvisorClientImpl {
     }
 
     /**
-     * Query all anomaly alerting configurations for specific anomaly detection configuration.
+     * List all anomaly alerting configurations for specific anomaly detection configuration.
+     *
+     * <p><strong>Query Parameters</strong>
+     *
+     * <table border="1">
+     *     <caption>Query Parameters</caption>
+     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
+     *     <tr><td>skip</td><td>String</td><td>No</td><td>for paging, skipped number</td></tr>
+     *     <tr><td>maxpagesize</td><td>String</td><td>No</td><td>the maximum number of items in one page</td></tr>
+     * </table>
      *
      * <p><strong>Response Body Schema</strong>
      *
@@ -2993,25 +3418,45 @@ public final class MetricsAdvisorClientImpl {
      *             ]
      *         }
      *     ]
+     *     nextLink: String
      * }
      * }</pre>
      *
      * @param configurationId anomaly detection configuration unique id.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
      * @throws HttpResponseException thrown if the request is rejected by server.
-     * @return the response body along with {@link Response} on successful completion of {@link Mono}.
+     * @return the response body along with {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Mono<Response<BinaryData>> getAnomalyAlertingConfigurationsByAnomalyDetectionConfigurationWithResponseAsync(
-            String configurationId, RequestOptions requestOptions) {
+    public Mono<PagedResponse<BinaryData>>
+            getAnomalyAlertingConfigurationsByAnomalyDetectionConfigurationSinglePageAsync(
+                    String configurationId, RequestOptions requestOptions) {
         return FluxUtil.withContext(
-                context ->
-                        service.getAnomalyAlertingConfigurationsByAnomalyDetectionConfiguration(
-                                this.getEndpoint(), configurationId, requestOptions, context));
+                        context ->
+                                service.getAnomalyAlertingConfigurationsByAnomalyDetectionConfiguration(
+                                        this.getEndpoint(), configurationId, requestOptions, context))
+                .map(
+                        res ->
+                                new PagedResponseBase<>(
+                                        res.getRequest(),
+                                        res.getStatusCode(),
+                                        res.getHeaders(),
+                                        getValues(res.getValue(), "value"),
+                                        getNextLink(res.getValue(), "@nextLink"),
+                                        null));
     }
 
     /**
-     * Query all anomaly alerting configurations for specific anomaly detection configuration.
+     * List all anomaly alerting configurations for specific anomaly detection configuration.
+     *
+     * <p><strong>Query Parameters</strong>
+     *
+     * <table border="1">
+     *     <caption>Query Parameters</caption>
+     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
+     *     <tr><td>skip</td><td>String</td><td>No</td><td>for paging, skipped number</td></tr>
+     *     <tr><td>maxpagesize</td><td>String</td><td>No</td><td>the maximum number of items in one page</td></tr>
+     * </table>
      *
      * <p><strong>Response Body Schema</strong>
      *
@@ -3065,6 +3510,7 @@ public final class MetricsAdvisorClientImpl {
      *             ]
      *         }
      *     ]
+     *     nextLink: String
      * }
      * }</pre>
      *
@@ -3072,17 +3518,36 @@ public final class MetricsAdvisorClientImpl {
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
      * @param context The context to associate with this operation.
      * @throws HttpResponseException thrown if the request is rejected by server.
-     * @return the response body along with {@link Response} on successful completion of {@link Mono}.
+     * @return the response body along with {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Mono<Response<BinaryData>> getAnomalyAlertingConfigurationsByAnomalyDetectionConfigurationWithResponseAsync(
-            String configurationId, RequestOptions requestOptions, Context context) {
+    public Mono<PagedResponse<BinaryData>>
+            getAnomalyAlertingConfigurationsByAnomalyDetectionConfigurationSinglePageAsync(
+                    String configurationId, RequestOptions requestOptions, Context context) {
         return service.getAnomalyAlertingConfigurationsByAnomalyDetectionConfiguration(
-                this.getEndpoint(), configurationId, requestOptions, context);
+                        this.getEndpoint(), configurationId, requestOptions, context)
+                .map(
+                        res ->
+                                new PagedResponseBase<>(
+                                        res.getRequest(),
+                                        res.getStatusCode(),
+                                        res.getHeaders(),
+                                        getValues(res.getValue(), "value"),
+                                        getNextLink(res.getValue(), "@nextLink"),
+                                        null));
     }
 
     /**
-     * Query all anomaly alerting configurations for specific anomaly detection configuration.
+     * List all anomaly alerting configurations for specific anomaly detection configuration.
+     *
+     * <p><strong>Query Parameters</strong>
+     *
+     * <table border="1">
+     *     <caption>Query Parameters</caption>
+     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
+     *     <tr><td>skip</td><td>String</td><td>No</td><td>for paging, skipped number</td></tr>
+     *     <tr><td>maxpagesize</td><td>String</td><td>No</td><td>the maximum number of items in one page</td></tr>
+     * </table>
      *
      * <p><strong>Response Body Schema</strong>
      *
@@ -3136,20 +3601,191 @@ public final class MetricsAdvisorClientImpl {
      *             ]
      *         }
      *     ]
+     *     nextLink: String
      * }
      * }</pre>
      *
      * @param configurationId anomaly detection configuration unique id.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
      * @throws HttpResponseException thrown if the request is rejected by server.
-     * @return the response body along with {@link Response}.
+     * @return the paginated response with {@link PagedFlux}.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<BinaryData> getAnomalyAlertingConfigurationsByAnomalyDetectionConfigurationWithResponse(
+    @ServiceMethod(returns = ReturnType.COLLECTION)
+    public PagedFlux<BinaryData> getAnomalyAlertingConfigurationsByAnomalyDetectionConfigurationAsync(
             String configurationId, RequestOptions requestOptions) {
-        return getAnomalyAlertingConfigurationsByAnomalyDetectionConfigurationWithResponseAsync(
-                        configurationId, requestOptions)
-                .block();
+        return new PagedFlux<>(
+                () ->
+                        getAnomalyAlertingConfigurationsByAnomalyDetectionConfigurationSinglePageAsync(
+                                configurationId, requestOptions),
+                nextLink ->
+                        getAnomalyAlertingConfigurationsByAnomalyDetectionConfigurationNextSinglePageAsync(
+                                nextLink, null));
+    }
+
+    /**
+     * List all anomaly alerting configurations for specific anomaly detection configuration.
+     *
+     * <p><strong>Query Parameters</strong>
+     *
+     * <table border="1">
+     *     <caption>Query Parameters</caption>
+     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
+     *     <tr><td>skip</td><td>String</td><td>No</td><td>for paging, skipped number</td></tr>
+     *     <tr><td>maxpagesize</td><td>String</td><td>No</td><td>the maximum number of items in one page</td></tr>
+     * </table>
+     *
+     * <p><strong>Response Body Schema</strong>
+     *
+     * <pre>{@code
+     * {
+     *     value: [
+     *         {
+     *             anomalyAlertingConfigurationId: String
+     *             name: String
+     *             description: String
+     *             crossMetricsOperator: String(AND/OR/XOR)
+     *             splitAlertByDimensions: [
+     *                 String
+     *             ]
+     *             hookIds: [
+     *                 String
+     *             ]
+     *             metricAlertingConfigurations: [
+     *                 {
+     *                     anomalyDetectionConfigurationId: String
+     *                     anomalyScopeType: String(All/Dimension/TopN)
+     *                     negationOperation: Boolean
+     *                     dimensionAnomalyScope: {
+     *                         dimension: {
+     *                             String: String
+     *                         }
+     *                     }
+     *                     topNAnomalyScope: {
+     *                         top: int
+     *                         period: int
+     *                         minTopCount: int
+     *                     }
+     *                     severityFilter: {
+     *                         minAlertSeverity: String(Low/Medium/High)
+     *                         maxAlertSeverity: String(Low/Medium/High)
+     *                     }
+     *                     snoozeFilter: {
+     *                         autoSnooze: int
+     *                         snoozeScope: String(Metric/Series)
+     *                         onlyForSuccessive: boolean
+     *                     }
+     *                     valueFilter: {
+     *                         lower: Double
+     *                         upper: Double
+     *                         direction: String(Both/Down/Up)
+     *                         type: String(Value/Mean)
+     *                         metricId: String
+     *                         triggerForMissing: Boolean
+     *                     }
+     *                 }
+     *             ]
+     *         }
+     *     ]
+     *     nextLink: String
+     * }
+     * }</pre>
+     *
+     * @param configurationId anomaly detection configuration unique id.
+     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
+     * @param context The context to associate with this operation.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the paginated response with {@link PagedFlux}.
+     */
+    @ServiceMethod(returns = ReturnType.COLLECTION)
+    public PagedFlux<BinaryData> getAnomalyAlertingConfigurationsByAnomalyDetectionConfigurationAsync(
+            String configurationId, RequestOptions requestOptions, Context context) {
+        return new PagedFlux<>(
+                () ->
+                        getAnomalyAlertingConfigurationsByAnomalyDetectionConfigurationSinglePageAsync(
+                                configurationId, requestOptions, context),
+                nextLink ->
+                        getAnomalyAlertingConfigurationsByAnomalyDetectionConfigurationNextSinglePageAsync(
+                                nextLink, null, context));
+    }
+
+    /**
+     * List all anomaly alerting configurations for specific anomaly detection configuration.
+     *
+     * <p><strong>Query Parameters</strong>
+     *
+     * <table border="1">
+     *     <caption>Query Parameters</caption>
+     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
+     *     <tr><td>skip</td><td>String</td><td>No</td><td>for paging, skipped number</td></tr>
+     *     <tr><td>maxpagesize</td><td>String</td><td>No</td><td>the maximum number of items in one page</td></tr>
+     * </table>
+     *
+     * <p><strong>Response Body Schema</strong>
+     *
+     * <pre>{@code
+     * {
+     *     value: [
+     *         {
+     *             anomalyAlertingConfigurationId: String
+     *             name: String
+     *             description: String
+     *             crossMetricsOperator: String(AND/OR/XOR)
+     *             splitAlertByDimensions: [
+     *                 String
+     *             ]
+     *             hookIds: [
+     *                 String
+     *             ]
+     *             metricAlertingConfigurations: [
+     *                 {
+     *                     anomalyDetectionConfigurationId: String
+     *                     anomalyScopeType: String(All/Dimension/TopN)
+     *                     negationOperation: Boolean
+     *                     dimensionAnomalyScope: {
+     *                         dimension: {
+     *                             String: String
+     *                         }
+     *                     }
+     *                     topNAnomalyScope: {
+     *                         top: int
+     *                         period: int
+     *                         minTopCount: int
+     *                     }
+     *                     severityFilter: {
+     *                         minAlertSeverity: String(Low/Medium/High)
+     *                         maxAlertSeverity: String(Low/Medium/High)
+     *                     }
+     *                     snoozeFilter: {
+     *                         autoSnooze: int
+     *                         snoozeScope: String(Metric/Series)
+     *                         onlyForSuccessive: boolean
+     *                     }
+     *                     valueFilter: {
+     *                         lower: Double
+     *                         upper: Double
+     *                         direction: String(Both/Down/Up)
+     *                         type: String(Value/Mean)
+     *                         metricId: String
+     *                         triggerForMissing: Boolean
+     *                     }
+     *                 }
+     *             ]
+     *         }
+     *     ]
+     *     nextLink: String
+     * }
+     * }</pre>
+     *
+     * @param configurationId anomaly detection configuration unique id.
+     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the paginated response with {@link PagedIterable}.
+     */
+    @ServiceMethod(returns = ReturnType.COLLECTION)
+    public PagedIterable<BinaryData> getAnomalyAlertingConfigurationsByAnomalyDetectionConfiguration(
+            String configurationId, RequestOptions requestOptions) {
+        return new PagedIterable<>(
+                getAnomalyAlertingConfigurationsByAnomalyDetectionConfigurationAsync(configurationId, requestOptions));
     }
 
     /**
@@ -3402,6 +4038,7 @@ public final class MetricsAdvisorClientImpl {
      *     nextLink: String
      *     value: [
      *         {
+     *             dataFeedId: String
      *             metricId: String
      *             anomalyDetectionConfigurationId: String
      *             timestamp: String
@@ -3486,6 +4123,7 @@ public final class MetricsAdvisorClientImpl {
      *     nextLink: String
      *     value: [
      *         {
+     *             dataFeedId: String
      *             metricId: String
      *             anomalyDetectionConfigurationId: String
      *             timestamp: String
@@ -3569,6 +4207,7 @@ public final class MetricsAdvisorClientImpl {
      *     nextLink: String
      *     value: [
      *         {
+     *             dataFeedId: String
      *             metricId: String
      *             anomalyDetectionConfigurationId: String
      *             timestamp: String
@@ -3643,6 +4282,7 @@ public final class MetricsAdvisorClientImpl {
      *     nextLink: String
      *     value: [
      *         {
+     *             dataFeedId: String
      *             metricId: String
      *             anomalyDetectionConfigurationId: String
      *             timestamp: String
@@ -3721,6 +4361,7 @@ public final class MetricsAdvisorClientImpl {
      *     nextLink: String
      *     value: [
      *         {
+     *             dataFeedId: String
      *             metricId: String
      *             anomalyDetectionConfigurationId: String
      *             timestamp: String
@@ -4076,6 +4717,7 @@ public final class MetricsAdvisorClientImpl {
      *     nextLink: String
      *     value: [
      *         {
+     *             dataFeedId: String
      *             metricId: String
      *             anomalyDetectionConfigurationId: String
      *             incidentId: String
@@ -4157,6 +4799,7 @@ public final class MetricsAdvisorClientImpl {
      *     nextLink: String
      *     value: [
      *         {
+     *             dataFeedId: String
      *             metricId: String
      *             anomalyDetectionConfigurationId: String
      *             incidentId: String
@@ -4237,6 +4880,7 @@ public final class MetricsAdvisorClientImpl {
      *     nextLink: String
      *     value: [
      *         {
+     *             dataFeedId: String
      *             metricId: String
      *             anomalyDetectionConfigurationId: String
      *             incidentId: String
@@ -4308,6 +4952,7 @@ public final class MetricsAdvisorClientImpl {
      *     nextLink: String
      *     value: [
      *         {
+     *             dataFeedId: String
      *             metricId: String
      *             anomalyDetectionConfigurationId: String
      *             incidentId: String
@@ -4382,6 +5027,7 @@ public final class MetricsAdvisorClientImpl {
      *     nextLink: String
      *     value: [
      *         {
+     *             dataFeedId: String
      *             metricId: String
      *             anomalyDetectionConfigurationId: String
      *             incidentId: String
@@ -4435,6 +5081,7 @@ public final class MetricsAdvisorClientImpl {
      *     nextLink: String
      *     value: [
      *         {
+     *             dataFeedId: String
      *             metricId: String
      *             anomalyDetectionConfigurationId: String
      *             incidentId: String
@@ -4498,6 +5145,7 @@ public final class MetricsAdvisorClientImpl {
      *     nextLink: String
      *     value: [
      *         {
+     *             dataFeedId: String
      *             metricId: String
      *             anomalyDetectionConfigurationId: String
      *             incidentId: String
@@ -4560,6 +5208,7 @@ public final class MetricsAdvisorClientImpl {
      *     nextLink: String
      *     value: [
      *         {
+     *             dataFeedId: String
      *             metricId: String
      *             anomalyDetectionConfigurationId: String
      *             incidentId: String
@@ -4615,6 +5264,7 @@ public final class MetricsAdvisorClientImpl {
      *     nextLink: String
      *     value: [
      *         {
+     *             dataFeedId: String
      *             metricId: String
      *             anomalyDetectionConfigurationId: String
      *             incidentId: String
@@ -4673,6 +5323,7 @@ public final class MetricsAdvisorClientImpl {
      *     nextLink: String
      *     value: [
      *         {
+     *             dataFeedId: String
      *             metricId: String
      *             anomalyDetectionConfigurationId: String
      *             incidentId: String
@@ -5110,14 +5761,24 @@ public final class MetricsAdvisorClientImpl {
      * }
      * }</pre>
      *
+     * <p><strong>Response Body Schema</strong>
+     *
+     * <pre>{@code
+     * {
+     *     dataSourceCredentialId: String
+     *     dataSourceCredentialName: String
+     *     dataSourceCredentialDescription: String
+     * }
+     * }</pre>
+     *
      * @param credentialId Data source credential unique ID.
      * @param body Update data source credential request.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
      * @throws HttpResponseException thrown if the request is rejected by server.
-     * @return the {@link Response} on successful completion of {@link Mono}.
+     * @return the response body along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Mono<Response<Void>> updateCredentialWithResponseAsync(
+    public Mono<Response<BinaryData>> updateCredentialWithResponseAsync(
             String credentialId, BinaryData body, RequestOptions requestOptions) {
         return FluxUtil.withContext(
                 context -> service.updateCredential(this.getEndpoint(), credentialId, body, requestOptions, context));
@@ -5135,15 +5796,25 @@ public final class MetricsAdvisorClientImpl {
      * }
      * }</pre>
      *
+     * <p><strong>Response Body Schema</strong>
+     *
+     * <pre>{@code
+     * {
+     *     dataSourceCredentialId: String
+     *     dataSourceCredentialName: String
+     *     dataSourceCredentialDescription: String
+     * }
+     * }</pre>
+     *
      * @param credentialId Data source credential unique ID.
      * @param body Update data source credential request.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
      * @param context The context to associate with this operation.
      * @throws HttpResponseException thrown if the request is rejected by server.
-     * @return the {@link Response} on successful completion of {@link Mono}.
+     * @return the response body along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Mono<Response<Void>> updateCredentialWithResponseAsync(
+    public Mono<Response<BinaryData>> updateCredentialWithResponseAsync(
             String credentialId, BinaryData body, RequestOptions requestOptions, Context context) {
         return service.updateCredential(this.getEndpoint(), credentialId, body, requestOptions, context);
     }
@@ -5160,14 +5831,24 @@ public final class MetricsAdvisorClientImpl {
      * }
      * }</pre>
      *
+     * <p><strong>Response Body Schema</strong>
+     *
+     * <pre>{@code
+     * {
+     *     dataSourceCredentialId: String
+     *     dataSourceCredentialName: String
+     *     dataSourceCredentialDescription: String
+     * }
+     * }</pre>
+     *
      * @param credentialId Data source credential unique ID.
      * @param body Update data source credential request.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
      * @throws HttpResponseException thrown if the request is rejected by server.
-     * @return the {@link Response}.
+     * @return the response body along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> updateCredentialWithResponse(
+    public Response<BinaryData> updateCredentialWithResponse(
             String credentialId, BinaryData body, RequestOptions requestOptions) {
         return updateCredentialWithResponseAsync(credentialId, body, requestOptions).block();
     }
@@ -5314,7 +5995,7 @@ public final class MetricsAdvisorClientImpl {
      *             dataFeedId: String
      *             dataFeedName: String
      *             dataFeedDescription: String
-     *             granularityName: String(Yearly/Monthly/Weekly/Daily/Hourly/Minutely/Secondly/Custom)
+     *             granularityName: String(Yearly/Monthly/Weekly/Daily/Hourly/Minutely/Custom)
      *             granularityAmount: Integer
      *             metrics: [
      *                 {
@@ -5408,7 +6089,7 @@ public final class MetricsAdvisorClientImpl {
      *             dataFeedId: String
      *             dataFeedName: String
      *             dataFeedDescription: String
-     *             granularityName: String(Yearly/Monthly/Weekly/Daily/Hourly/Minutely/Secondly/Custom)
+     *             granularityName: String(Yearly/Monthly/Weekly/Daily/Hourly/Minutely/Custom)
      *             granularityAmount: Integer
      *             metrics: [
      *                 {
@@ -5504,7 +6185,7 @@ public final class MetricsAdvisorClientImpl {
      *             dataFeedId: String
      *             dataFeedName: String
      *             dataFeedDescription: String
-     *             granularityName: String(Yearly/Monthly/Weekly/Daily/Hourly/Minutely/Secondly/Custom)
+     *             granularityName: String(Yearly/Monthly/Weekly/Daily/Hourly/Minutely/Custom)
      *             granularityAmount: Integer
      *             metrics: [
      *                 {
@@ -5591,7 +6272,7 @@ public final class MetricsAdvisorClientImpl {
      *             dataFeedId: String
      *             dataFeedName: String
      *             dataFeedDescription: String
-     *             granularityName: String(Yearly/Monthly/Weekly/Daily/Hourly/Minutely/Secondly/Custom)
+     *             granularityName: String(Yearly/Monthly/Weekly/Daily/Hourly/Minutely/Custom)
      *             granularityAmount: Integer
      *             metrics: [
      *                 {
@@ -5679,7 +6360,7 @@ public final class MetricsAdvisorClientImpl {
      *             dataFeedId: String
      *             dataFeedName: String
      *             dataFeedDescription: String
-     *             granularityName: String(Yearly/Monthly/Weekly/Daily/Hourly/Minutely/Secondly/Custom)
+     *             granularityName: String(Yearly/Monthly/Weekly/Daily/Hourly/Minutely/Custom)
      *             granularityAmount: Integer
      *             metrics: [
      *                 {
@@ -5747,7 +6428,7 @@ public final class MetricsAdvisorClientImpl {
      *     dataFeedId: String
      *     dataFeedName: String
      *     dataFeedDescription: String
-     *     granularityName: String(Yearly/Monthly/Weekly/Daily/Hourly/Minutely/Secondly/Custom)
+     *     granularityName: String(Yearly/Monthly/Weekly/Daily/Hourly/Minutely/Custom)
      *     granularityAmount: Integer
      *     metrics: [
      *         {
@@ -5815,7 +6496,7 @@ public final class MetricsAdvisorClientImpl {
      *     dataFeedId: String
      *     dataFeedName: String
      *     dataFeedDescription: String
-     *     granularityName: String(Yearly/Monthly/Weekly/Daily/Hourly/Minutely/Secondly/Custom)
+     *     granularityName: String(Yearly/Monthly/Weekly/Daily/Hourly/Minutely/Custom)
      *     granularityAmount: Integer
      *     metrics: [
      *         {
@@ -5884,7 +6565,7 @@ public final class MetricsAdvisorClientImpl {
      *     dataFeedId: String
      *     dataFeedName: String
      *     dataFeedDescription: String
-     *     granularityName: String(Yearly/Monthly/Weekly/Daily/Hourly/Minutely/Secondly/Custom)
+     *     granularityName: String(Yearly/Monthly/Weekly/Daily/Hourly/Minutely/Custom)
      *     granularityAmount: Integer
      *     metrics: [
      *         {
@@ -5951,7 +6632,7 @@ public final class MetricsAdvisorClientImpl {
      *     dataFeedId: String
      *     dataFeedName: String
      *     dataFeedDescription: String
-     *     granularityName: String(Yearly/Monthly/Weekly/Daily/Hourly/Minutely/Secondly/Custom)
+     *     granularityName: String(Yearly/Monthly/Weekly/Daily/Hourly/Minutely/Custom)
      *     granularityAmount: Integer
      *     metrics: [
      *         {
@@ -6020,7 +6701,7 @@ public final class MetricsAdvisorClientImpl {
      *     dataFeedId: String
      *     dataFeedName: String
      *     dataFeedDescription: String
-     *     granularityName: String(Yearly/Monthly/Weekly/Daily/Hourly/Minutely/Secondly/Custom)
+     *     granularityName: String(Yearly/Monthly/Weekly/Daily/Hourly/Minutely/Custom)
      *     granularityAmount: Integer
      *     metrics: [
      *         {
@@ -6089,7 +6770,7 @@ public final class MetricsAdvisorClientImpl {
      *     dataFeedId: String
      *     dataFeedName: String
      *     dataFeedDescription: String
-     *     granularityName: String(Yearly/Monthly/Weekly/Daily/Hourly/Minutely/Secondly/Custom)
+     *     granularityName: String(Yearly/Monthly/Weekly/Daily/Hourly/Minutely/Custom)
      *     granularityAmount: Integer
      *     metrics: [
      *         {
@@ -6183,14 +6864,68 @@ public final class MetricsAdvisorClientImpl {
      * }
      * }</pre>
      *
+     * <p><strong>Response Body Schema</strong>
+     *
+     * <pre>{@code
+     * {
+     *     dataFeedId: String
+     *     dataFeedName: String
+     *     dataFeedDescription: String
+     *     granularityName: String(Yearly/Monthly/Weekly/Daily/Hourly/Minutely/Custom)
+     *     granularityAmount: Integer
+     *     metrics: [
+     *         {
+     *             metricId: String
+     *             metricName: String
+     *             metricDisplayName: String
+     *             metricDescription: String
+     *         }
+     *     ]
+     *     dimension: [
+     *         {
+     *             dimensionName: String
+     *             dimensionDisplayName: String
+     *         }
+     *     ]
+     *     timestampColumn: String
+     *     dataStartFrom: String
+     *     startOffsetInSeconds: Long
+     *     maxConcurrency: Integer
+     *     minRetryIntervalInSeconds: Long
+     *     stopRetryAfterInSeconds: Long
+     *     needRollup: String(NoRollup/NeedRollup/AlreadyRollup)
+     *     rollUpMethod: String(None/Sum/Max/Min/Avg/Count)
+     *     rollUpColumns: [
+     *         String
+     *     ]
+     *     allUpIdentification: String
+     *     fillMissingPointType: String(SmartFilling/PreviousValue/CustomValue/NoFilling)
+     *     fillMissingPointValue: Double
+     *     viewMode: String(Private/Public)
+     *     admins: [
+     *         String
+     *     ]
+     *     viewers: [
+     *         String
+     *     ]
+     *     isAdmin: Boolean
+     *     creator: String
+     *     status: String(Active/Paused)
+     *     createdTime: String
+     *     actionLinkTemplate: String
+     *     authenticationType: String(Basic/ManagedIdentity/AzureSQLConnectionString/DataLakeGen2SharedKey/ServicePrincipal/ServicePrincipalInKV)
+     *     credentialId: String
+     * }
+     * }</pre>
+     *
      * @param dataFeedId The data feed unique id.
      * @param body parameters to update a data feed.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
      * @throws HttpResponseException thrown if the request is rejected by server.
-     * @return the {@link Response} on successful completion of {@link Mono}.
+     * @return the response body along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Mono<Response<Void>> updateDataFeedWithResponseAsync(
+    public Mono<Response<BinaryData>> updateDataFeedWithResponseAsync(
             String dataFeedId, BinaryData body, RequestOptions requestOptions) {
         return FluxUtil.withContext(
                 context -> service.updateDataFeed(this.getEndpoint(), dataFeedId, body, requestOptions, context));
@@ -6233,15 +6968,69 @@ public final class MetricsAdvisorClientImpl {
      * }
      * }</pre>
      *
+     * <p><strong>Response Body Schema</strong>
+     *
+     * <pre>{@code
+     * {
+     *     dataFeedId: String
+     *     dataFeedName: String
+     *     dataFeedDescription: String
+     *     granularityName: String(Yearly/Monthly/Weekly/Daily/Hourly/Minutely/Custom)
+     *     granularityAmount: Integer
+     *     metrics: [
+     *         {
+     *             metricId: String
+     *             metricName: String
+     *             metricDisplayName: String
+     *             metricDescription: String
+     *         }
+     *     ]
+     *     dimension: [
+     *         {
+     *             dimensionName: String
+     *             dimensionDisplayName: String
+     *         }
+     *     ]
+     *     timestampColumn: String
+     *     dataStartFrom: String
+     *     startOffsetInSeconds: Long
+     *     maxConcurrency: Integer
+     *     minRetryIntervalInSeconds: Long
+     *     stopRetryAfterInSeconds: Long
+     *     needRollup: String(NoRollup/NeedRollup/AlreadyRollup)
+     *     rollUpMethod: String(None/Sum/Max/Min/Avg/Count)
+     *     rollUpColumns: [
+     *         String
+     *     ]
+     *     allUpIdentification: String
+     *     fillMissingPointType: String(SmartFilling/PreviousValue/CustomValue/NoFilling)
+     *     fillMissingPointValue: Double
+     *     viewMode: String(Private/Public)
+     *     admins: [
+     *         String
+     *     ]
+     *     viewers: [
+     *         String
+     *     ]
+     *     isAdmin: Boolean
+     *     creator: String
+     *     status: String(Active/Paused)
+     *     createdTime: String
+     *     actionLinkTemplate: String
+     *     authenticationType: String(Basic/ManagedIdentity/AzureSQLConnectionString/DataLakeGen2SharedKey/ServicePrincipal/ServicePrincipalInKV)
+     *     credentialId: String
+     * }
+     * }</pre>
+     *
      * @param dataFeedId The data feed unique id.
      * @param body parameters to update a data feed.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
      * @param context The context to associate with this operation.
      * @throws HttpResponseException thrown if the request is rejected by server.
-     * @return the {@link Response} on successful completion of {@link Mono}.
+     * @return the response body along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Mono<Response<Void>> updateDataFeedWithResponseAsync(
+    public Mono<Response<BinaryData>> updateDataFeedWithResponseAsync(
             String dataFeedId, BinaryData body, RequestOptions requestOptions, Context context) {
         return service.updateDataFeed(this.getEndpoint(), dataFeedId, body, requestOptions, context);
     }
@@ -6283,14 +7072,68 @@ public final class MetricsAdvisorClientImpl {
      * }
      * }</pre>
      *
+     * <p><strong>Response Body Schema</strong>
+     *
+     * <pre>{@code
+     * {
+     *     dataFeedId: String
+     *     dataFeedName: String
+     *     dataFeedDescription: String
+     *     granularityName: String(Yearly/Monthly/Weekly/Daily/Hourly/Minutely/Custom)
+     *     granularityAmount: Integer
+     *     metrics: [
+     *         {
+     *             metricId: String
+     *             metricName: String
+     *             metricDisplayName: String
+     *             metricDescription: String
+     *         }
+     *     ]
+     *     dimension: [
+     *         {
+     *             dimensionName: String
+     *             dimensionDisplayName: String
+     *         }
+     *     ]
+     *     timestampColumn: String
+     *     dataStartFrom: String
+     *     startOffsetInSeconds: Long
+     *     maxConcurrency: Integer
+     *     minRetryIntervalInSeconds: Long
+     *     stopRetryAfterInSeconds: Long
+     *     needRollup: String(NoRollup/NeedRollup/AlreadyRollup)
+     *     rollUpMethod: String(None/Sum/Max/Min/Avg/Count)
+     *     rollUpColumns: [
+     *         String
+     *     ]
+     *     allUpIdentification: String
+     *     fillMissingPointType: String(SmartFilling/PreviousValue/CustomValue/NoFilling)
+     *     fillMissingPointValue: Double
+     *     viewMode: String(Private/Public)
+     *     admins: [
+     *         String
+     *     ]
+     *     viewers: [
+     *         String
+     *     ]
+     *     isAdmin: Boolean
+     *     creator: String
+     *     status: String(Active/Paused)
+     *     createdTime: String
+     *     actionLinkTemplate: String
+     *     authenticationType: String(Basic/ManagedIdentity/AzureSQLConnectionString/DataLakeGen2SharedKey/ServicePrincipal/ServicePrincipalInKV)
+     *     credentialId: String
+     * }
+     * }</pre>
+     *
      * @param dataFeedId The data feed unique id.
      * @param body parameters to update a data feed.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
      * @throws HttpResponseException thrown if the request is rejected by server.
-     * @return the {@link Response}.
+     * @return the response body along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> updateDataFeedWithResponse(
+    public Response<BinaryData> updateDataFeedWithResponse(
             String dataFeedId, BinaryData body, RequestOptions requestOptions) {
         return updateDataFeedWithResponseAsync(dataFeedId, body, requestOptions).block();
     }
@@ -7257,14 +8100,28 @@ public final class MetricsAdvisorClientImpl {
      * }
      * }</pre>
      *
+     * <p><strong>Response Body Schema</strong>
+     *
+     * <pre>{@code
+     * {
+     *     hookId: String
+     *     hookName: String
+     *     description: String
+     *     externalLink: String
+     *     admins: [
+     *         String
+     *     ]
+     * }
+     * }</pre>
+     *
      * @param hookId Hook unique ID.
      * @param body Update hook request.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
      * @throws HttpResponseException thrown if the request is rejected by server.
-     * @return the {@link Response} on successful completion of {@link Mono}.
+     * @return the response body along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Mono<Response<Void>> updateHookWithResponseAsync(
+    public Mono<Response<BinaryData>> updateHookWithResponseAsync(
             String hookId, BinaryData body, RequestOptions requestOptions) {
         return FluxUtil.withContext(
                 context -> service.updateHook(this.getEndpoint(), hookId, body, requestOptions, context));
@@ -7286,15 +8143,29 @@ public final class MetricsAdvisorClientImpl {
      * }
      * }</pre>
      *
+     * <p><strong>Response Body Schema</strong>
+     *
+     * <pre>{@code
+     * {
+     *     hookId: String
+     *     hookName: String
+     *     description: String
+     *     externalLink: String
+     *     admins: [
+     *         String
+     *     ]
+     * }
+     * }</pre>
+     *
      * @param hookId Hook unique ID.
      * @param body Update hook request.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
      * @param context The context to associate with this operation.
      * @throws HttpResponseException thrown if the request is rejected by server.
-     * @return the {@link Response} on successful completion of {@link Mono}.
+     * @return the response body along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Mono<Response<Void>> updateHookWithResponseAsync(
+    public Mono<Response<BinaryData>> updateHookWithResponseAsync(
             String hookId, BinaryData body, RequestOptions requestOptions, Context context) {
         return service.updateHook(this.getEndpoint(), hookId, body, requestOptions, context);
     }
@@ -7315,14 +8186,28 @@ public final class MetricsAdvisorClientImpl {
      * }
      * }</pre>
      *
+     * <p><strong>Response Body Schema</strong>
+     *
+     * <pre>{@code
+     * {
+     *     hookId: String
+     *     hookName: String
+     *     description: String
+     *     externalLink: String
+     *     admins: [
+     *         String
+     *     ]
+     * }
+     * }</pre>
+     *
      * @param hookId Hook unique ID.
      * @param body Update hook request.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
      * @throws HttpResponseException thrown if the request is rejected by server.
-     * @return the {@link Response}.
+     * @return the response body along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> updateHookWithResponse(String hookId, BinaryData body, RequestOptions requestOptions) {
+    public Response<BinaryData> updateHookWithResponse(String hookId, BinaryData body, RequestOptions requestOptions) {
         return updateHookWithResponseAsync(hookId, body, requestOptions).block();
     }
 
@@ -8477,7 +9362,16 @@ public final class MetricsAdvisorClientImpl {
     }
 
     /**
-     * Query all anomaly detection configurations for specific metric.
+     * List all anomaly detection configurations for specific metric.
+     *
+     * <p><strong>Query Parameters</strong>
+     *
+     * <table border="1">
+     *     <caption>Query Parameters</caption>
+     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
+     *     <tr><td>skip</td><td>String</td><td>No</td><td>for paging, skipped number</td></tr>
+     *     <tr><td>maxpagesize</td><td>String</td><td>No</td><td>the maximum number of items in one page</td></tr>
+     * </table>
      *
      * <p><strong>Response Body Schema</strong>
      *
@@ -8541,25 +9435,44 @@ public final class MetricsAdvisorClientImpl {
      *             ]
      *         }
      *     ]
+     *     nextLink: String
      * }
      * }</pre>
      *
      * @param metricId metric unique id.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
      * @throws HttpResponseException thrown if the request is rejected by server.
-     * @return the response body along with {@link Response} on successful completion of {@link Mono}.
+     * @return the response body along with {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Mono<Response<BinaryData>> getAnomalyDetectionConfigurationsByMetricWithResponseAsync(
+    public Mono<PagedResponse<BinaryData>> getAnomalyDetectionConfigurationsByMetricSinglePageAsync(
             String metricId, RequestOptions requestOptions) {
         return FluxUtil.withContext(
-                context ->
-                        service.getAnomalyDetectionConfigurationsByMetric(
-                                this.getEndpoint(), metricId, requestOptions, context));
+                        context ->
+                                service.getAnomalyDetectionConfigurationsByMetric(
+                                        this.getEndpoint(), metricId, requestOptions, context))
+                .map(
+                        res ->
+                                new PagedResponseBase<>(
+                                        res.getRequest(),
+                                        res.getStatusCode(),
+                                        res.getHeaders(),
+                                        getValues(res.getValue(), "value"),
+                                        getNextLink(res.getValue(), "@nextLink"),
+                                        null));
     }
 
     /**
-     * Query all anomaly detection configurations for specific metric.
+     * List all anomaly detection configurations for specific metric.
+     *
+     * <p><strong>Query Parameters</strong>
+     *
+     * <table border="1">
+     *     <caption>Query Parameters</caption>
+     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
+     *     <tr><td>skip</td><td>String</td><td>No</td><td>for paging, skipped number</td></tr>
+     *     <tr><td>maxpagesize</td><td>String</td><td>No</td><td>the maximum number of items in one page</td></tr>
+     * </table>
      *
      * <p><strong>Response Body Schema</strong>
      *
@@ -8623,6 +9536,7 @@ public final class MetricsAdvisorClientImpl {
      *             ]
      *         }
      *     ]
+     *     nextLink: String
      * }
      * }</pre>
      *
@@ -8630,16 +9544,34 @@ public final class MetricsAdvisorClientImpl {
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
      * @param context The context to associate with this operation.
      * @throws HttpResponseException thrown if the request is rejected by server.
-     * @return the response body along with {@link Response} on successful completion of {@link Mono}.
+     * @return the response body along with {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Mono<Response<BinaryData>> getAnomalyDetectionConfigurationsByMetricWithResponseAsync(
+    public Mono<PagedResponse<BinaryData>> getAnomalyDetectionConfigurationsByMetricSinglePageAsync(
             String metricId, RequestOptions requestOptions, Context context) {
-        return service.getAnomalyDetectionConfigurationsByMetric(this.getEndpoint(), metricId, requestOptions, context);
+        return service.getAnomalyDetectionConfigurationsByMetric(this.getEndpoint(), metricId, requestOptions, context)
+                .map(
+                        res ->
+                                new PagedResponseBase<>(
+                                        res.getRequest(),
+                                        res.getStatusCode(),
+                                        res.getHeaders(),
+                                        getValues(res.getValue(), "value"),
+                                        getNextLink(res.getValue(), "@nextLink"),
+                                        null));
     }
 
     /**
-     * Query all anomaly detection configurations for specific metric.
+     * List all anomaly detection configurations for specific metric.
+     *
+     * <p><strong>Query Parameters</strong>
+     *
+     * <table border="1">
+     *     <caption>Query Parameters</caption>
+     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
+     *     <tr><td>skip</td><td>String</td><td>No</td><td>for paging, skipped number</td></tr>
+     *     <tr><td>maxpagesize</td><td>String</td><td>No</td><td>the maximum number of items in one page</td></tr>
+     * </table>
      *
      * <p><strong>Response Body Schema</strong>
      *
@@ -8703,18 +9635,202 @@ public final class MetricsAdvisorClientImpl {
      *             ]
      *         }
      *     ]
+     *     nextLink: String
      * }
      * }</pre>
      *
      * @param metricId metric unique id.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
      * @throws HttpResponseException thrown if the request is rejected by server.
-     * @return the response body along with {@link Response}.
+     * @return the paginated response with {@link PagedFlux}.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<BinaryData> getAnomalyDetectionConfigurationsByMetricWithResponse(
+    @ServiceMethod(returns = ReturnType.COLLECTION)
+    public PagedFlux<BinaryData> getAnomalyDetectionConfigurationsByMetricAsync(
             String metricId, RequestOptions requestOptions) {
-        return getAnomalyDetectionConfigurationsByMetricWithResponseAsync(metricId, requestOptions).block();
+        return new PagedFlux<>(
+                () -> getAnomalyDetectionConfigurationsByMetricSinglePageAsync(metricId, requestOptions),
+                nextLink -> getAnomalyDetectionConfigurationsByMetricNextSinglePageAsync(nextLink, null));
+    }
+
+    /**
+     * List all anomaly detection configurations for specific metric.
+     *
+     * <p><strong>Query Parameters</strong>
+     *
+     * <table border="1">
+     *     <caption>Query Parameters</caption>
+     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
+     *     <tr><td>skip</td><td>String</td><td>No</td><td>for paging, skipped number</td></tr>
+     *     <tr><td>maxpagesize</td><td>String</td><td>No</td><td>the maximum number of items in one page</td></tr>
+     * </table>
+     *
+     * <p><strong>Response Body Schema</strong>
+     *
+     * <pre>{@code
+     * {
+     *     value: [
+     *         {
+     *             anomalyDetectionConfigurationId: String
+     *             name: String
+     *             description: String
+     *             metricId: String
+     *             wholeMetricConfiguration: {
+     *                 conditionOperator: String(AND/OR)
+     *                 smartDetectionCondition: {
+     *                     sensitivity: double
+     *                     anomalyDetectorDirection: String(Both/Down/Up)
+     *                     suppressCondition: {
+     *                         minNumber: int
+     *                         minRatio: double
+     *                     }
+     *                 }
+     *                 hardThresholdCondition: {
+     *                     lowerBound: Double
+     *                     upperBound: Double
+     *                     anomalyDetectorDirection: String(Both/Down/Up)
+     *                     suppressCondition: (recursive schema, see suppressCondition above)
+     *                 }
+     *                 changeThresholdCondition: {
+     *                     changePercentage: double
+     *                     shiftPoint: int
+     *                     withinRange: boolean
+     *                     anomalyDetectorDirection: String(Both/Down/Up)
+     *                     suppressCondition: (recursive schema, see suppressCondition above)
+     *                 }
+     *             }
+     *             dimensionGroupOverrideConfigurations: [
+     *                 {
+     *                     group: {
+     *                         dimension: {
+     *                             String: String
+     *                         }
+     *                     }
+     *                     conditionOperator: String(AND/OR)
+     *                     smartDetectionCondition: (recursive schema, see smartDetectionCondition above)
+     *                     hardThresholdCondition: (recursive schema, see hardThresholdCondition above)
+     *                     changeThresholdCondition: (recursive schema, see changeThresholdCondition above)
+     *                 }
+     *             ]
+     *             seriesOverrideConfigurations: [
+     *                 {
+     *                     series: {
+     *                         dimension: {
+     *                             String: String
+     *                         }
+     *                     }
+     *                     conditionOperator: String(AND/OR)
+     *                     smartDetectionCondition: (recursive schema, see smartDetectionCondition above)
+     *                     hardThresholdCondition: (recursive schema, see hardThresholdCondition above)
+     *                     changeThresholdCondition: (recursive schema, see changeThresholdCondition above)
+     *                 }
+     *             ]
+     *         }
+     *     ]
+     *     nextLink: String
+     * }
+     * }</pre>
+     *
+     * @param metricId metric unique id.
+     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
+     * @param context The context to associate with this operation.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the paginated response with {@link PagedFlux}.
+     */
+    @ServiceMethod(returns = ReturnType.COLLECTION)
+    public PagedFlux<BinaryData> getAnomalyDetectionConfigurationsByMetricAsync(
+            String metricId, RequestOptions requestOptions, Context context) {
+        return new PagedFlux<>(
+                () -> getAnomalyDetectionConfigurationsByMetricSinglePageAsync(metricId, requestOptions, context),
+                nextLink -> getAnomalyDetectionConfigurationsByMetricNextSinglePageAsync(nextLink, null, context));
+    }
+
+    /**
+     * List all anomaly detection configurations for specific metric.
+     *
+     * <p><strong>Query Parameters</strong>
+     *
+     * <table border="1">
+     *     <caption>Query Parameters</caption>
+     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
+     *     <tr><td>skip</td><td>String</td><td>No</td><td>for paging, skipped number</td></tr>
+     *     <tr><td>maxpagesize</td><td>String</td><td>No</td><td>the maximum number of items in one page</td></tr>
+     * </table>
+     *
+     * <p><strong>Response Body Schema</strong>
+     *
+     * <pre>{@code
+     * {
+     *     value: [
+     *         {
+     *             anomalyDetectionConfigurationId: String
+     *             name: String
+     *             description: String
+     *             metricId: String
+     *             wholeMetricConfiguration: {
+     *                 conditionOperator: String(AND/OR)
+     *                 smartDetectionCondition: {
+     *                     sensitivity: double
+     *                     anomalyDetectorDirection: String(Both/Down/Up)
+     *                     suppressCondition: {
+     *                         minNumber: int
+     *                         minRatio: double
+     *                     }
+     *                 }
+     *                 hardThresholdCondition: {
+     *                     lowerBound: Double
+     *                     upperBound: Double
+     *                     anomalyDetectorDirection: String(Both/Down/Up)
+     *                     suppressCondition: (recursive schema, see suppressCondition above)
+     *                 }
+     *                 changeThresholdCondition: {
+     *                     changePercentage: double
+     *                     shiftPoint: int
+     *                     withinRange: boolean
+     *                     anomalyDetectorDirection: String(Both/Down/Up)
+     *                     suppressCondition: (recursive schema, see suppressCondition above)
+     *                 }
+     *             }
+     *             dimensionGroupOverrideConfigurations: [
+     *                 {
+     *                     group: {
+     *                         dimension: {
+     *                             String: String
+     *                         }
+     *                     }
+     *                     conditionOperator: String(AND/OR)
+     *                     smartDetectionCondition: (recursive schema, see smartDetectionCondition above)
+     *                     hardThresholdCondition: (recursive schema, see hardThresholdCondition above)
+     *                     changeThresholdCondition: (recursive schema, see changeThresholdCondition above)
+     *                 }
+     *             ]
+     *             seriesOverrideConfigurations: [
+     *                 {
+     *                     series: {
+     *                         dimension: {
+     *                             String: String
+     *                         }
+     *                     }
+     *                     conditionOperator: String(AND/OR)
+     *                     smartDetectionCondition: (recursive schema, see smartDetectionCondition above)
+     *                     hardThresholdCondition: (recursive schema, see hardThresholdCondition above)
+     *                     changeThresholdCondition: (recursive schema, see changeThresholdCondition above)
+     *                 }
+     *             ]
+     *         }
+     *     ]
+     *     nextLink: String
+     * }
+     * }</pre>
+     *
+     * @param metricId metric unique id.
+     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the paginated response with {@link PagedIterable}.
+     */
+    @ServiceMethod(returns = ReturnType.COLLECTION)
+    public PagedIterable<BinaryData> getAnomalyDetectionConfigurationsByMetric(
+            String metricId, RequestOptions requestOptions) {
+        return new PagedIterable<>(getAnomalyDetectionConfigurationsByMetricAsync(metricId, requestOptions));
     }
 
     /**
@@ -9121,6 +10237,7 @@ public final class MetricsAdvisorClientImpl {
      *     nextLink: String
      *     value: [
      *         {
+     *             dataFeedId: String
      *             metricId: String
      *             anomalyDetectionConfigurationId: String
      *             timestamp: String
@@ -9196,6 +10313,7 @@ public final class MetricsAdvisorClientImpl {
      *     nextLink: String
      *     value: [
      *         {
+     *             dataFeedId: String
      *             metricId: String
      *             anomalyDetectionConfigurationId: String
      *             timestamp: String
@@ -9885,6 +11003,7 @@ public final class MetricsAdvisorClientImpl {
      *     nextLink: String
      *     value: [
      *         {
+     *             dataFeedId: String
      *             metricId: String
      *             anomalyDetectionConfigurationId: String
      *             timestamp: String
@@ -9937,6 +11056,7 @@ public final class MetricsAdvisorClientImpl {
      *     nextLink: String
      *     value: [
      *         {
+     *             dataFeedId: String
      *             metricId: String
      *             anomalyDetectionConfigurationId: String
      *             timestamp: String
@@ -9988,6 +11108,7 @@ public final class MetricsAdvisorClientImpl {
      *     nextLink: String
      *     value: [
      *         {
+     *             dataFeedId: String
      *             metricId: String
      *             anomalyDetectionConfigurationId: String
      *             incidentId: String
@@ -10042,6 +11163,7 @@ public final class MetricsAdvisorClientImpl {
      *     nextLink: String
      *     value: [
      *         {
+     *             dataFeedId: String
      *             metricId: String
      *             anomalyDetectionConfigurationId: String
      *             incidentId: String
@@ -10092,9 +11214,175 @@ public final class MetricsAdvisorClientImpl {
      *
      * <pre>{@code
      * {
+     *     value: [
+     *         {
+     *             anomalyAlertingConfigurationId: String
+     *             name: String
+     *             description: String
+     *             crossMetricsOperator: String(AND/OR/XOR)
+     *             splitAlertByDimensions: [
+     *                 String
+     *             ]
+     *             hookIds: [
+     *                 String
+     *             ]
+     *             metricAlertingConfigurations: [
+     *                 {
+     *                     anomalyDetectionConfigurationId: String
+     *                     anomalyScopeType: String(All/Dimension/TopN)
+     *                     negationOperation: Boolean
+     *                     dimensionAnomalyScope: {
+     *                         dimension: {
+     *                             String: String
+     *                         }
+     *                     }
+     *                     topNAnomalyScope: {
+     *                         top: int
+     *                         period: int
+     *                         minTopCount: int
+     *                     }
+     *                     severityFilter: {
+     *                         minAlertSeverity: String(Low/Medium/High)
+     *                         maxAlertSeverity: String(Low/Medium/High)
+     *                     }
+     *                     snoozeFilter: {
+     *                         autoSnooze: int
+     *                         snoozeScope: String(Metric/Series)
+     *                         onlyForSuccessive: boolean
+     *                     }
+     *                     valueFilter: {
+     *                         lower: Double
+     *                         upper: Double
+     *                         direction: String(Both/Down/Up)
+     *                         type: String(Value/Mean)
+     *                         metricId: String
+     *                         triggerForMissing: Boolean
+     *                     }
+     *                 }
+     *             ]
+     *         }
+     *     ]
+     *     nextLink: String
+     * }
+     * }</pre>
+     *
+     * @param nextLink The nextLink parameter.
+     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the response body along with {@link PagedResponse} on successful completion of {@link Mono}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Mono<PagedResponse<BinaryData>>
+            getAnomalyAlertingConfigurationsByAnomalyDetectionConfigurationNextSinglePageAsync(
+                    String nextLink, RequestOptions requestOptions) {
+        return FluxUtil.withContext(
+                        context ->
+                                service.getAnomalyAlertingConfigurationsByAnomalyDetectionConfigurationNext(
+                                        nextLink, this.getEndpoint(), requestOptions, context))
+                .map(
+                        res ->
+                                new PagedResponseBase<>(
+                                        res.getRequest(),
+                                        res.getStatusCode(),
+                                        res.getHeaders(),
+                                        getValues(res.getValue(), "value"),
+                                        getNextLink(res.getValue(), "@nextLink"),
+                                        null));
+    }
+
+    /**
+     * Get the next page of items.
+     *
+     * <p><strong>Response Body Schema</strong>
+     *
+     * <pre>{@code
+     * {
+     *     value: [
+     *         {
+     *             anomalyAlertingConfigurationId: String
+     *             name: String
+     *             description: String
+     *             crossMetricsOperator: String(AND/OR/XOR)
+     *             splitAlertByDimensions: [
+     *                 String
+     *             ]
+     *             hookIds: [
+     *                 String
+     *             ]
+     *             metricAlertingConfigurations: [
+     *                 {
+     *                     anomalyDetectionConfigurationId: String
+     *                     anomalyScopeType: String(All/Dimension/TopN)
+     *                     negationOperation: Boolean
+     *                     dimensionAnomalyScope: {
+     *                         dimension: {
+     *                             String: String
+     *                         }
+     *                     }
+     *                     topNAnomalyScope: {
+     *                         top: int
+     *                         period: int
+     *                         minTopCount: int
+     *                     }
+     *                     severityFilter: {
+     *                         minAlertSeverity: String(Low/Medium/High)
+     *                         maxAlertSeverity: String(Low/Medium/High)
+     *                     }
+     *                     snoozeFilter: {
+     *                         autoSnooze: int
+     *                         snoozeScope: String(Metric/Series)
+     *                         onlyForSuccessive: boolean
+     *                     }
+     *                     valueFilter: {
+     *                         lower: Double
+     *                         upper: Double
+     *                         direction: String(Both/Down/Up)
+     *                         type: String(Value/Mean)
+     *                         metricId: String
+     *                         triggerForMissing: Boolean
+     *                     }
+     *                 }
+     *             ]
+     *         }
+     *     ]
+     *     nextLink: String
+     * }
+     * }</pre>
+     *
+     * @param nextLink The nextLink parameter.
+     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
+     * @param context The context to associate with this operation.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the response body along with {@link PagedResponse} on successful completion of {@link Mono}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Mono<PagedResponse<BinaryData>>
+            getAnomalyAlertingConfigurationsByAnomalyDetectionConfigurationNextSinglePageAsync(
+                    String nextLink, RequestOptions requestOptions, Context context) {
+        return service.getAnomalyAlertingConfigurationsByAnomalyDetectionConfigurationNext(
+                        nextLink, this.getEndpoint(), requestOptions, context)
+                .map(
+                        res ->
+                                new PagedResponseBase<>(
+                                        res.getRequest(),
+                                        res.getStatusCode(),
+                                        res.getHeaders(),
+                                        getValues(res.getValue(), "value"),
+                                        getNextLink(res.getValue(), "@nextLink"),
+                                        null));
+    }
+
+    /**
+     * Get the next page of items.
+     *
+     * <p><strong>Response Body Schema</strong>
+     *
+     * <pre>{@code
+     * {
      *     nextLink: String
      *     value: [
      *         {
+     *             dataFeedId: String
      *             metricId: String
      *             anomalyDetectionConfigurationId: String
      *             incidentId: String
@@ -10149,6 +11437,7 @@ public final class MetricsAdvisorClientImpl {
      *     nextLink: String
      *     value: [
      *         {
+     *             dataFeedId: String
      *             metricId: String
      *             anomalyDetectionConfigurationId: String
      *             incidentId: String
@@ -10202,6 +11491,7 @@ public final class MetricsAdvisorClientImpl {
      *     nextLink: String
      *     value: [
      *         {
+     *             dataFeedId: String
      *             metricId: String
      *             anomalyDetectionConfigurationId: String
      *             incidentId: String
@@ -10256,6 +11546,7 @@ public final class MetricsAdvisorClientImpl {
      *     nextLink: String
      *     value: [
      *         {
+     *             dataFeedId: String
      *             metricId: String
      *             anomalyDetectionConfigurationId: String
      *             incidentId: String
@@ -10390,7 +11681,7 @@ public final class MetricsAdvisorClientImpl {
      *             dataFeedId: String
      *             dataFeedName: String
      *             dataFeedDescription: String
-     *             granularityName: String(Yearly/Monthly/Weekly/Daily/Hourly/Minutely/Secondly/Custom)
+     *             granularityName: String(Yearly/Monthly/Weekly/Daily/Hourly/Minutely/Custom)
      *             granularityAmount: Integer
      *             metrics: [
      *                 {
@@ -10473,7 +11764,7 @@ public final class MetricsAdvisorClientImpl {
      *             dataFeedId: String
      *             dataFeedName: String
      *             dataFeedDescription: String
-     *             granularityName: String(Yearly/Monthly/Weekly/Daily/Hourly/Minutely/Secondly/Custom)
+     *             granularityName: String(Yearly/Monthly/Weekly/Daily/Hourly/Minutely/Custom)
      *             granularityAmount: Integer
      *             metrics: [
      *                 {
@@ -10618,6 +11909,189 @@ public final class MetricsAdvisorClientImpl {
     public Mono<PagedResponse<BinaryData>> listHooksNextSinglePageAsync(
             String nextLink, RequestOptions requestOptions, Context context) {
         return service.listHooksNext(nextLink, this.getEndpoint(), requestOptions, context)
+                .map(
+                        res ->
+                                new PagedResponseBase<>(
+                                        res.getRequest(),
+                                        res.getStatusCode(),
+                                        res.getHeaders(),
+                                        getValues(res.getValue(), "value"),
+                                        getNextLink(res.getValue(), "@nextLink"),
+                                        null));
+    }
+
+    /**
+     * Get the next page of items.
+     *
+     * <p><strong>Response Body Schema</strong>
+     *
+     * <pre>{@code
+     * {
+     *     value: [
+     *         {
+     *             anomalyDetectionConfigurationId: String
+     *             name: String
+     *             description: String
+     *             metricId: String
+     *             wholeMetricConfiguration: {
+     *                 conditionOperator: String(AND/OR)
+     *                 smartDetectionCondition: {
+     *                     sensitivity: double
+     *                     anomalyDetectorDirection: String(Both/Down/Up)
+     *                     suppressCondition: {
+     *                         minNumber: int
+     *                         minRatio: double
+     *                     }
+     *                 }
+     *                 hardThresholdCondition: {
+     *                     lowerBound: Double
+     *                     upperBound: Double
+     *                     anomalyDetectorDirection: String(Both/Down/Up)
+     *                     suppressCondition: (recursive schema, see suppressCondition above)
+     *                 }
+     *                 changeThresholdCondition: {
+     *                     changePercentage: double
+     *                     shiftPoint: int
+     *                     withinRange: boolean
+     *                     anomalyDetectorDirection: String(Both/Down/Up)
+     *                     suppressCondition: (recursive schema, see suppressCondition above)
+     *                 }
+     *             }
+     *             dimensionGroupOverrideConfigurations: [
+     *                 {
+     *                     group: {
+     *                         dimension: {
+     *                             String: String
+     *                         }
+     *                     }
+     *                     conditionOperator: String(AND/OR)
+     *                     smartDetectionCondition: (recursive schema, see smartDetectionCondition above)
+     *                     hardThresholdCondition: (recursive schema, see hardThresholdCondition above)
+     *                     changeThresholdCondition: (recursive schema, see changeThresholdCondition above)
+     *                 }
+     *             ]
+     *             seriesOverrideConfigurations: [
+     *                 {
+     *                     series: {
+     *                         dimension: {
+     *                             String: String
+     *                         }
+     *                     }
+     *                     conditionOperator: String(AND/OR)
+     *                     smartDetectionCondition: (recursive schema, see smartDetectionCondition above)
+     *                     hardThresholdCondition: (recursive schema, see hardThresholdCondition above)
+     *                     changeThresholdCondition: (recursive schema, see changeThresholdCondition above)
+     *                 }
+     *             ]
+     *         }
+     *     ]
+     *     nextLink: String
+     * }
+     * }</pre>
+     *
+     * @param nextLink The nextLink parameter.
+     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the response body along with {@link PagedResponse} on successful completion of {@link Mono}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Mono<PagedResponse<BinaryData>> getAnomalyDetectionConfigurationsByMetricNextSinglePageAsync(
+            String nextLink, RequestOptions requestOptions) {
+        return FluxUtil.withContext(
+                        context ->
+                                service.getAnomalyDetectionConfigurationsByMetricNext(
+                                        nextLink, this.getEndpoint(), requestOptions, context))
+                .map(
+                        res ->
+                                new PagedResponseBase<>(
+                                        res.getRequest(),
+                                        res.getStatusCode(),
+                                        res.getHeaders(),
+                                        getValues(res.getValue(), "value"),
+                                        getNextLink(res.getValue(), "@nextLink"),
+                                        null));
+    }
+
+    /**
+     * Get the next page of items.
+     *
+     * <p><strong>Response Body Schema</strong>
+     *
+     * <pre>{@code
+     * {
+     *     value: [
+     *         {
+     *             anomalyDetectionConfigurationId: String
+     *             name: String
+     *             description: String
+     *             metricId: String
+     *             wholeMetricConfiguration: {
+     *                 conditionOperator: String(AND/OR)
+     *                 smartDetectionCondition: {
+     *                     sensitivity: double
+     *                     anomalyDetectorDirection: String(Both/Down/Up)
+     *                     suppressCondition: {
+     *                         minNumber: int
+     *                         minRatio: double
+     *                     }
+     *                 }
+     *                 hardThresholdCondition: {
+     *                     lowerBound: Double
+     *                     upperBound: Double
+     *                     anomalyDetectorDirection: String(Both/Down/Up)
+     *                     suppressCondition: (recursive schema, see suppressCondition above)
+     *                 }
+     *                 changeThresholdCondition: {
+     *                     changePercentage: double
+     *                     shiftPoint: int
+     *                     withinRange: boolean
+     *                     anomalyDetectorDirection: String(Both/Down/Up)
+     *                     suppressCondition: (recursive schema, see suppressCondition above)
+     *                 }
+     *             }
+     *             dimensionGroupOverrideConfigurations: [
+     *                 {
+     *                     group: {
+     *                         dimension: {
+     *                             String: String
+     *                         }
+     *                     }
+     *                     conditionOperator: String(AND/OR)
+     *                     smartDetectionCondition: (recursive schema, see smartDetectionCondition above)
+     *                     hardThresholdCondition: (recursive schema, see hardThresholdCondition above)
+     *                     changeThresholdCondition: (recursive schema, see changeThresholdCondition above)
+     *                 }
+     *             ]
+     *             seriesOverrideConfigurations: [
+     *                 {
+     *                     series: {
+     *                         dimension: {
+     *                             String: String
+     *                         }
+     *                     }
+     *                     conditionOperator: String(AND/OR)
+     *                     smartDetectionCondition: (recursive schema, see smartDetectionCondition above)
+     *                     hardThresholdCondition: (recursive schema, see hardThresholdCondition above)
+     *                     changeThresholdCondition: (recursive schema, see changeThresholdCondition above)
+     *                 }
+     *             ]
+     *         }
+     *     ]
+     *     nextLink: String
+     * }
+     * }</pre>
+     *
+     * @param nextLink The nextLink parameter.
+     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
+     * @param context The context to associate with this operation.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the response body along with {@link PagedResponse} on successful completion of {@link Mono}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Mono<PagedResponse<BinaryData>> getAnomalyDetectionConfigurationsByMetricNextSinglePageAsync(
+            String nextLink, RequestOptions requestOptions, Context context) {
+        return service.getAnomalyDetectionConfigurationsByMetricNext(
+                        nextLink, this.getEndpoint(), requestOptions, context)
                 .map(
                         res ->
                                 new PagedResponseBase<>(

@@ -62,6 +62,666 @@ public final class MetricsAdvisorClient {
         return this.serviceClient.getActiveSeriesCountWithResponse(requestOptions);
     }
 
+    @ServiceMethod(returns = ReturnType.COLLECTION)
+    public PagedIterable<AnomalyAlert> listAlerts(
+            String alertConfigurationId,
+            OffsetDateTime startTime,
+            OffsetDateTime endTime,
+            ListAlertOptions options,
+            Context context) {
+        Objects.requireNonNull(alertConfigurationId, "'alertConfigurationId' is required.");
+        Objects.requireNonNull(startTime, "'startTime' is required.");
+        Objects.requireNonNull(endTime, "'endTime' is required.");
+        RequestOptions requestOptions = new RequestOptions();
+        if (options.getMaxPageSize() != null) {
+            requestOptions.addQueryParam("$maxpagesize", options.getMaxPageSize().toString());
+        }
+        if (options.getSkip() != null) {
+            requestOptions.addQueryParam("$skip", options.getSkip().toString());
+        }
+        ObjectNode objectNode = JsonNodeFactory.instance.objectNode();
+        if (startTime != null) {
+            objectNode.put("startTime", startTime.toString());
+        }
+        if (endTime != null) {
+            objectNode.put("endTime", endTime.toString());
+        }
+        if (options != null && options.getTimeMode() != null) {
+            objectNode.put("timeMode", options.getTimeMode().toString());
+        }
+        if (context != null) {
+            requestOptions.setContext(context);
+        }
+        BinaryData body = BinaryData.fromString(objectNode.toString());
+        PagedIterable<BinaryData> response =
+                this.getAlertsByAnomalyAlertingConfiguration(alertConfigurationId, body, requestOptions);
+        return response.mapPage(binaryData -> binaryData.toObject(AnomalyAlert.class));
+    }
+
+    /**
+     * Query anomalies under anomaly detection configuration.
+     *
+     * <p><strong>Query Parameters</strong>
+     *
+     * <table border="1">
+     *     <caption>Query Parameters</caption>
+     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
+     *     <tr><td>skip</td><td>String</td><td>No</td><td>for paging, skipped number</td></tr>
+     *     <tr><td>maxpagesize</td><td>String</td><td>No</td><td>the maximum number of items in one page</td></tr>
+     * </table>
+     *
+     * <p><strong>Request Body Schema</strong>
+     *
+     * <pre>{@code
+     * {
+     *     startTime: String
+     *     endTime: String
+     *     filter: {
+     *         dimensionFilter: [
+     *             {
+     *                 dimension: {
+     *                     String: String
+     *                 }
+     *             }
+     *         ]
+     *         severityFilter: {
+     *             min: String(Low/Medium/High)
+     *             max: String(Low/Medium/High)
+     *         }
+     *     }
+     * }
+     * }</pre>
+     *
+     * <p><strong>Response Body Schema</strong>
+     *
+     * <pre>{@code
+     * {
+     *     nextLink: String
+     *     value: [
+     *         {
+     *             dataFeedId: String
+     *             metricId: String
+     *             anomalyDetectionConfigurationId: String
+     *             timestamp: String
+     *             createdTime: String
+     *             modifiedTime: String
+     *             dimension: {
+     *                 String: String
+     *             }
+     *             property: {
+     *                 anomalySeverity: String(Low/Medium/High)
+     *                 anomalyStatus: String(Active/Resolved)
+     *                 value: Double
+     *                 expectedValue: Double
+     *             }
+     *         }
+     *     ]
+     * }
+     * }</pre>
+     *
+     * @param configurationId anomaly detection configuration unique id.
+     * @param body query detection anomaly result request.
+     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the paginated response with {@link PagedIterable}.
+     */
+    @Generated
+    @ServiceMethod(returns = ReturnType.COLLECTION)
+    public PagedIterable<BinaryData> getAnomaliesByAnomalyDetectionConfiguration(
+            String configurationId, BinaryData body, RequestOptions requestOptions) {
+        return this.serviceClient.getAnomaliesByAnomalyDetectionConfiguration(configurationId, body, requestOptions);
+    }
+
+    /**
+     * Query incidents under anomaly detection configuration.
+     *
+     * <p><strong>Query Parameters</strong>
+     *
+     * <table border="1">
+     *     <caption>Query Parameters</caption>
+     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
+     *     <tr><td>maxpagesize</td><td>String</td><td>No</td><td>the maximum number of items in one page</td></tr>
+     * </table>
+     *
+     * <p><strong>Request Body Schema</strong>
+     *
+     * <pre>{@code
+     * {
+     *     startTime: String
+     *     endTime: String
+     *     filter: {
+     *         dimensionFilter: [
+     *             {
+     *                 dimension: {
+     *                     String: String
+     *                 }
+     *             }
+     *         ]
+     *     }
+     * }
+     * }</pre>
+     *
+     * <p><strong>Response Body Schema</strong>
+     *
+     * <pre>{@code
+     * {
+     *     nextLink: String
+     *     value: [
+     *         {
+     *             dataFeedId: String
+     *             metricId: String
+     *             anomalyDetectionConfigurationId: String
+     *             incidentId: String
+     *             startTime: String
+     *             lastTime: String
+     *             rootNode: {
+     *                 dimension: {
+     *                     String: String
+     *                 }
+     *             }
+     *             property: {
+     *                 maxSeverity: String(Low/Medium/High)
+     *                 incidentStatus: String(Active/Resolved)
+     *                 valueOfRootNode: Double
+     *                 expectedValueOfRootNode: Double
+     *             }
+     *         }
+     *     ]
+     * }
+     * }</pre>
+     *
+     * @param configurationId anomaly detection configuration unique id.
+     * @param body query detection incident result request.
+     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the paginated response with {@link PagedIterable}.
+     */
+    @Generated
+    @ServiceMethod(returns = ReturnType.COLLECTION)
+    public PagedIterable<BinaryData> getIncidentsByAnomalyDetectionConfiguration(
+            String configurationId, BinaryData body, RequestOptions requestOptions) {
+        return this.serviceClient.getIncidentsByAnomalyDetectionConfiguration(configurationId, body, requestOptions);
+    }
+
+    /**
+     * Query incidents under anomaly detection configuration.
+     *
+     * <p><strong>Query Parameters</strong>
+     *
+     * <table border="1">
+     *     <caption>Query Parameters</caption>
+     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
+     *     <tr><td>maxpagesize</td><td>String</td><td>No</td><td>the maximum number of items in one page</td></tr>
+     *     <tr><td>token</td><td>String</td><td>No</td><td>the token for getting the next page</td></tr>
+     * </table>
+     *
+     * <p><strong>Response Body Schema</strong>
+     *
+     * <pre>{@code
+     * {
+     *     nextLink: String
+     *     value: [
+     *         {
+     *             dataFeedId: String
+     *             metricId: String
+     *             anomalyDetectionConfigurationId: String
+     *             incidentId: String
+     *             startTime: String
+     *             lastTime: String
+     *             rootNode: {
+     *                 dimension: {
+     *                     String: String
+     *                 }
+     *             }
+     *             property: {
+     *                 maxSeverity: String(Low/Medium/High)
+     *                 incidentStatus: String(Active/Resolved)
+     *                 valueOfRootNode: Double
+     *                 expectedValueOfRootNode: Double
+     *             }
+     *         }
+     *     ]
+     * }
+     * }</pre>
+     *
+     * @param configurationId anomaly detection configuration unique id.
+     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the paginated response with {@link PagedIterable}.
+     */
+    @Generated
+    @ServiceMethod(returns = ReturnType.COLLECTION)
+    public PagedIterable<BinaryData> getIncidentsByAnomalyDetectionConfigurationNextPages(
+            String configurationId, RequestOptions requestOptions) {
+        return this.serviceClient.getIncidentsByAnomalyDetectionConfigurationNextPages(configurationId, requestOptions);
+    }
+
+    /**
+     * List all data feeds.
+     *
+     * <p><strong>Query Parameters</strong>
+     *
+     * <table border="1">
+     *     <caption>Query Parameters</caption>
+     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
+     *     <tr><td>dataFeedName</td><td>String</td><td>No</td><td>filter data feed by its name</td></tr>
+     *     <tr><td>dataSourceType</td><td>String</td><td>No</td><td>filter data feed by its source type</td></tr>
+     *     <tr><td>granularityName</td><td>String</td><td>No</td><td>filter data feed by its granularity</td></tr>
+     *     <tr><td>status</td><td>String</td><td>No</td><td>filter data feed by its status</td></tr>
+     *     <tr><td>creator</td><td>String</td><td>No</td><td>filter data feed by its creator</td></tr>
+     *     <tr><td>skip</td><td>String</td><td>No</td><td>for paging, skipped number</td></tr>
+     *     <tr><td>maxpagesize</td><td>String</td><td>No</td><td>the maximum number of items in one page</td></tr>
+     * </table>
+     *
+     * <p><strong>Response Body Schema</strong>
+     *
+     * <pre>{@code
+     * {
+     *     nextLink: String
+     *     value: [
+     *         {
+     *             dataFeedId: String
+     *             dataFeedName: String
+     *             dataFeedDescription: String
+     *             granularityName: String(Yearly/Monthly/Weekly/Daily/Hourly/Minutely/Custom)
+     *             granularityAmount: Integer
+     *             metrics: [
+     *                 {
+     *                     metricId: String
+     *                     metricName: String
+     *                     metricDisplayName: String
+     *                     metricDescription: String
+     *                 }
+     *             ]
+     *             dimension: [
+     *                 {
+     *                     dimensionName: String
+     *                     dimensionDisplayName: String
+     *                 }
+     *             ]
+     *             timestampColumn: String
+     *             dataStartFrom: String
+     *             startOffsetInSeconds: Long
+     *             maxConcurrency: Integer
+     *             minRetryIntervalInSeconds: Long
+     *             stopRetryAfterInSeconds: Long
+     *             needRollup: String(NoRollup/NeedRollup/AlreadyRollup)
+     *             rollUpMethod: String(None/Sum/Max/Min/Avg/Count)
+     *             rollUpColumns: [
+     *                 String
+     *             ]
+     *             allUpIdentification: String
+     *             fillMissingPointType: String(SmartFilling/PreviousValue/CustomValue/NoFilling)
+     *             fillMissingPointValue: Double
+     *             viewMode: String(Private/Public)
+     *             admins: [
+     *                 String
+     *             ]
+     *             viewers: [
+     *                 String
+     *             ]
+     *             isAdmin: Boolean
+     *             creator: String
+     *             status: String(Active/Paused)
+     *             createdTime: String
+     *             actionLinkTemplate: String
+     *             authenticationType: String(Basic/ManagedIdentity/AzureSQLConnectionString/DataLakeGen2SharedKey/ServicePrincipal/ServicePrincipalInKV)
+     *             credentialId: String
+     *         }
+     *     ]
+     * }
+     * }</pre>
+     *
+     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the paginated response with {@link PagedIterable}.
+     */
+    @Generated
+    @ServiceMethod(returns = ReturnType.COLLECTION)
+    public PagedIterable<BinaryData> listDataFeeds(RequestOptions requestOptions) {
+        return this.serviceClient.listDataFeeds(requestOptions);
+    }
+
+    /**
+     * Create a new data feed.
+     *
+     * <p><strong>Request Body Schema</strong>
+     *
+     * <pre>{@code
+     * {
+     *     dataFeedId: String
+     *     dataFeedName: String
+     *     dataFeedDescription: String
+     *     granularityName: String(Yearly/Monthly/Weekly/Daily/Hourly/Minutely/Custom)
+     *     granularityAmount: Integer
+     *     metrics: [
+     *         {
+     *             metricId: String
+     *             metricName: String
+     *             metricDisplayName: String
+     *             metricDescription: String
+     *         }
+     *     ]
+     *     dimension: [
+     *         {
+     *             dimensionName: String
+     *             dimensionDisplayName: String
+     *         }
+     *     ]
+     *     timestampColumn: String
+     *     dataStartFrom: String
+     *     startOffsetInSeconds: Long
+     *     maxConcurrency: Integer
+     *     minRetryIntervalInSeconds: Long
+     *     stopRetryAfterInSeconds: Long
+     *     needRollup: String(NoRollup/NeedRollup/AlreadyRollup)
+     *     rollUpMethod: String(None/Sum/Max/Min/Avg/Count)
+     *     rollUpColumns: [
+     *         String
+     *     ]
+     *     allUpIdentification: String
+     *     fillMissingPointType: String(SmartFilling/PreviousValue/CustomValue/NoFilling)
+     *     fillMissingPointValue: Double
+     *     viewMode: String(Private/Public)
+     *     admins: [
+     *         String
+     *     ]
+     *     viewers: [
+     *         String
+     *     ]
+     *     isAdmin: Boolean
+     *     creator: String
+     *     status: String(Active/Paused)
+     *     createdTime: String
+     *     actionLinkTemplate: String
+     *     authenticationType: String(Basic/ManagedIdentity/AzureSQLConnectionString/DataLakeGen2SharedKey/ServicePrincipal/ServicePrincipalInKV)
+     *     credentialId: String
+     * }
+     * }</pre>
+     *
+     * @param body parameters to create a data feed.
+     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the {@link Response}.
+     */
+    @Generated
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<Void> createDataFeedWithResponse(BinaryData body, RequestOptions requestOptions) {
+        return this.serviceClient.createDataFeedWithResponse(body, requestOptions);
+    }
+
+    /**
+     * Update a data feed.
+     *
+     * <p><strong>Request Body Schema</strong>
+     *
+     * <pre>{@code
+     * {
+     *     dataFeedName: String
+     *     dataFeedDescription: String
+     *     timestampColumn: String
+     *     dataStartFrom: String
+     *     startOffsetInSeconds: Long
+     *     maxConcurrency: Integer
+     *     minRetryIntervalInSeconds: Long
+     *     stopRetryAfterInSeconds: Long
+     *     needRollup: String(NoRollup/NeedRollup/AlreadyRollup)
+     *     rollUpMethod: String(None/Sum/Max/Min/Avg/Count)
+     *     rollUpColumns: [
+     *         String
+     *     ]
+     *     allUpIdentification: String
+     *     fillMissingPointType: String(SmartFilling/PreviousValue/CustomValue/NoFilling)
+     *     fillMissingPointValue: Double
+     *     viewMode: String(Private/Public)
+     *     admins: [
+     *         String
+     *     ]
+     *     viewers: [
+     *         String
+     *     ]
+     *     status: String(Active/Paused)
+     *     actionLinkTemplate: String
+     *     authenticationType: String(Basic/ManagedIdentity/AzureSQLConnectionString/DataLakeGen2SharedKey/ServicePrincipal/ServicePrincipalInKV)
+     *     credentialId: String
+     * }
+     * }</pre>
+     *
+     * <p><strong>Response Body Schema</strong>
+     *
+     * <pre>{@code
+     * {
+     *     dataFeedId: String
+     *     dataFeedName: String
+     *     dataFeedDescription: String
+     *     granularityName: String(Yearly/Monthly/Weekly/Daily/Hourly/Minutely/Custom)
+     *     granularityAmount: Integer
+     *     metrics: [
+     *         {
+     *             metricId: String
+     *             metricName: String
+     *             metricDisplayName: String
+     *             metricDescription: String
+     *         }
+     *     ]
+     *     dimension: [
+     *         {
+     *             dimensionName: String
+     *             dimensionDisplayName: String
+     *         }
+     *     ]
+     *     timestampColumn: String
+     *     dataStartFrom: String
+     *     startOffsetInSeconds: Long
+     *     maxConcurrency: Integer
+     *     minRetryIntervalInSeconds: Long
+     *     stopRetryAfterInSeconds: Long
+     *     needRollup: String(NoRollup/NeedRollup/AlreadyRollup)
+     *     rollUpMethod: String(None/Sum/Max/Min/Avg/Count)
+     *     rollUpColumns: [
+     *         String
+     *     ]
+     *     allUpIdentification: String
+     *     fillMissingPointType: String(SmartFilling/PreviousValue/CustomValue/NoFilling)
+     *     fillMissingPointValue: Double
+     *     viewMode: String(Private/Public)
+     *     admins: [
+     *         String
+     *     ]
+     *     viewers: [
+     *         String
+     *     ]
+     *     isAdmin: Boolean
+     *     creator: String
+     *     status: String(Active/Paused)
+     *     createdTime: String
+     *     actionLinkTemplate: String
+     *     authenticationType: String(Basic/ManagedIdentity/AzureSQLConnectionString/DataLakeGen2SharedKey/ServicePrincipal/ServicePrincipalInKV)
+     *     credentialId: String
+     * }
+     * }</pre>
+     *
+     * @param dataFeedId The data feed unique id.
+     * @param body parameters to update a data feed.
+     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the response body along with {@link Response}.
+     */
+    @Generated
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<BinaryData> updateDataFeedWithResponse(
+            String dataFeedId, BinaryData body, RequestOptions requestOptions) {
+        return this.serviceClient.updateDataFeedWithResponse(dataFeedId, body, requestOptions);
+    }
+
+    /**
+     * Delete a data feed.
+     *
+     * @param dataFeedId The data feed unique id.
+     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the {@link Response}.
+     */
+    @Generated
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<Void> deleteDataFeedWithResponse(String dataFeedId, RequestOptions requestOptions) {
+        return this.serviceClient.deleteDataFeedWithResponse(dataFeedId, requestOptions);
+    }
+
+    /**
+     * List all hooks.
+     *
+     * <p><strong>Query Parameters</strong>
+     *
+     * <table border="1">
+     *     <caption>Query Parameters</caption>
+     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
+     *     <tr><td>hookName</td><td>String</td><td>No</td><td>filter hook by its name</td></tr>
+     *     <tr><td>skip</td><td>String</td><td>No</td><td>for paging, skipped number</td></tr>
+     *     <tr><td>maxpagesize</td><td>String</td><td>No</td><td>the maximum number of items in one page</td></tr>
+     * </table>
+     *
+     * <p><strong>Response Body Schema</strong>
+     *
+     * <pre>{@code
+     * {
+     *     nextLink: String
+     *     value: [
+     *         {
+     *             hookId: String
+     *             hookName: String
+     *             description: String
+     *             externalLink: String
+     *             admins: [
+     *                 String
+     *             ]
+     *         }
+     *     ]
+     * }
+     * }</pre>
+     *
+     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the paginated response with {@link PagedIterable}.
+     */
+    @Generated
+    @ServiceMethod(returns = ReturnType.COLLECTION)
+    public PagedIterable<BinaryData> listHooks(RequestOptions requestOptions) {
+        return this.serviceClient.listHooks(requestOptions);
+    }
+
+    /**
+     * Create a new hook.
+     *
+     * <p><strong>Request Body Schema</strong>
+     *
+     * <pre>{@code
+     * {
+     *     hookId: String
+     *     hookName: String
+     *     description: String
+     *     externalLink: String
+     *     admins: [
+     *         String
+     *     ]
+     * }
+     * }</pre>
+     *
+     * @param body Create hook request.
+     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the {@link Response}.
+     */
+    @Generated
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<Void> createHookWithResponse(BinaryData body, RequestOptions requestOptions) {
+        return this.serviceClient.createHookWithResponse(body, requestOptions);
+    }
+
+    /**
+     * Get a hook by its id.
+     *
+     * <p><strong>Response Body Schema</strong>
+     *
+     * <pre>{@code
+     * {
+     *     hookId: String
+     *     hookName: String
+     *     description: String
+     *     externalLink: String
+     *     admins: [
+     *         String
+     *     ]
+     * }
+     * }</pre>
+     *
+     * @param hookId Hook unique ID.
+     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return a hook by its id along with {@link Response}.
+     */
+    @Generated
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<BinaryData> getHookWithResponse(String hookId, RequestOptions requestOptions) {
+        return this.serviceClient.getHookWithResponse(hookId, requestOptions);
+    }
+
+    /**
+     * Update a hook.
+     *
+     * <p><strong>Request Body Schema</strong>
+     *
+     * <pre>{@code
+     * {
+     *     hookName: String
+     *     description: String
+     *     externalLink: String
+     *     admins: [
+     *         String
+     *     ]
+     * }
+     * }</pre>
+     *
+     * <p><strong>Response Body Schema</strong>
+     *
+     * <pre>{@code
+     * {
+     *     hookId: String
+     *     hookName: String
+     *     description: String
+     *     externalLink: String
+     *     admins: [
+     *         String
+     *     ]
+     * }
+     * }</pre>
+     *
+     * @param hookId Hook unique ID.
+     * @param body Update hook request.
+     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the response body along with {@link Response}.
+     */
+    @Generated
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<BinaryData> updateHookWithResponse(String hookId, BinaryData body, RequestOptions requestOptions) {
+        return this.serviceClient.updateHookWithResponse(hookId, body, requestOptions);
+    }
+
+    /**
+     * Delete a hook.
+     *
+     * @param hookId Hook unique ID.
+     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @return the {@link Response}.
+     */
+    @Generated
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<Void> deleteHookWithResponse(String hookId, RequestOptions requestOptions) {
+        return this.serviceClient.deleteHookWithResponse(hookId, requestOptions);
+    }
+
     /**
      * Query a single anomaly alerting configuration.
      *
@@ -181,15 +841,66 @@ public final class MetricsAdvisorClient {
      * }
      * }</pre>
      *
+     * <p><strong>Response Body Schema</strong>
+     *
+     * <pre>{@code
+     * {
+     *     anomalyAlertingConfigurationId: String
+     *     name: String
+     *     description: String
+     *     crossMetricsOperator: String(AND/OR/XOR)
+     *     splitAlertByDimensions: [
+     *         String
+     *     ]
+     *     hookIds: [
+     *         String
+     *     ]
+     *     metricAlertingConfigurations: [
+     *         {
+     *             anomalyDetectionConfigurationId: String
+     *             anomalyScopeType: String(All/Dimension/TopN)
+     *             negationOperation: Boolean
+     *             dimensionAnomalyScope: {
+     *                 dimension: {
+     *                     String: String
+     *                 }
+     *             }
+     *             topNAnomalyScope: {
+     *                 top: int
+     *                 period: int
+     *                 minTopCount: int
+     *             }
+     *             severityFilter: {
+     *                 minAlertSeverity: String(Low/Medium/High)
+     *                 maxAlertSeverity: String(Low/Medium/High)
+     *             }
+     *             snoozeFilter: {
+     *                 autoSnooze: int
+     *                 snoozeScope: String(Metric/Series)
+     *                 onlyForSuccessive: boolean
+     *             }
+     *             valueFilter: {
+     *                 lower: Double
+     *                 upper: Double
+     *                 direction: String(Both/Down/Up)
+     *                 type: String(Value/Mean)
+     *                 metricId: String
+     *                 triggerForMissing: Boolean
+     *             }
+     *         }
+     *     ]
+     * }
+     * }</pre>
+     *
      * @param configurationId anomaly alerting configuration unique id.
      * @param body anomaly alerting configuration.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
      * @throws HttpResponseException thrown if the request is rejected by server.
-     * @return the {@link Response}.
+     * @return the response body along with {@link Response}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> updateAnomalyAlertingConfigurationWithResponse(
+    public Response<BinaryData> updateAnomalyAlertingConfigurationWithResponse(
             String configurationId, BinaryData body, RequestOptions requestOptions) {
         return this.serviceClient.updateAnomalyAlertingConfigurationWithResponse(configurationId, body, requestOptions);
     }
@@ -326,44 +1037,6 @@ public final class MetricsAdvisorClient {
         return this.serviceClient.getAlertsByAnomalyAlertingConfiguration(configurationId, body, requestOptions);
     }
 
-    @ServiceMethod(returns = ReturnType.COLLECTION)
-    public PagedIterable<AnomalyAlert> listAlerts(
-            String alertConfigurationId,
-            OffsetDateTime startTime,
-            OffsetDateTime endTime,
-            ListAlertOptions options,
-            Context context) {
-
-        Objects.requireNonNull(alertConfigurationId, "'alertConfigurationId' is required.");
-        Objects.requireNonNull(startTime, "'startTime' is required.");
-        Objects.requireNonNull(endTime, "'endTime' is required.");
-
-        RequestOptions requestOptions = new RequestOptions();
-        if (options.getMaxPageSize() != null) {
-            requestOptions.addQueryParam("$maxpagesize", options.getMaxPageSize().toString());
-        }
-        if (options.getSkip() != null) {
-            requestOptions.addQueryParam("$skip", options.getSkip().toString());
-        }
-        ObjectNode objectNode = JsonNodeFactory.instance.objectNode();
-        if (startTime != null) {
-            objectNode.put("startTime", startTime.toString());
-        }
-        if (endTime != null) {
-            objectNode.put("endTime", endTime.toString());
-        }
-        if (options != null && options.getTimeMode() != null) {
-            objectNode.put("timeMode", options.getTimeMode().toString());
-        }
-        if (context != null) {
-            requestOptions.setContext(context);
-        }
-        BinaryData body = BinaryData.fromString(objectNode.toString());
-        PagedIterable<BinaryData> response =
-                this.getAlertsByAnomalyAlertingConfiguration(alertConfigurationId, body, requestOptions);
-        return response.mapPage(binaryData -> binaryData.toObject(AnomalyAlert.class));
-    }
-
     /**
      * Query anomalies under a specific alert.
      *
@@ -383,6 +1056,7 @@ public final class MetricsAdvisorClient {
      *     nextLink: String
      *     value: [
      *         {
+     *             dataFeedId: String
      *             metricId: String
      *             anomalyDetectionConfigurationId: String
      *             timestamp: String
@@ -435,6 +1109,7 @@ public final class MetricsAdvisorClient {
      *     nextLink: String
      *     value: [
      *         {
+     *             dataFeedId: String
      *             metricId: String
      *             anomalyDetectionConfigurationId: String
      *             incidentId: String
@@ -558,6 +1233,85 @@ public final class MetricsAdvisorClient {
      *     wholeMetricConfiguration: {
      *         conditionOperator: String(AND/OR)
      *         smartDetectionCondition: {
+     *             sensitivity: Double
+     *             anomalyDetectorDirection: String(Both/Down/Up)
+     *             suppressCondition: {
+     *                 minNumber: Integer
+     *                 minRatio: Double
+     *             }
+     *         }
+     *         hardThresholdCondition: {
+     *             lowerBound: Double
+     *             upperBound: Double
+     *             anomalyDetectorDirection: String(Both/Down/Up)
+     *             suppressCondition: (recursive schema, see suppressCondition above)
+     *         }
+     *         changeThresholdCondition: {
+     *             changePercentage: Double
+     *             shiftPoint: Integer
+     *             withinRange: Boolean
+     *             anomalyDetectorDirection: String(Both/Down/Up)
+     *             suppressCondition: (recursive schema, see suppressCondition above)
+     *         }
+     *     }
+     *     dimensionGroupOverrideConfigurations: [
+     *         {
+     *             group: {
+     *                 dimension: {
+     *                     String: String
+     *                 }
+     *             }
+     *             conditionOperator: String(AND/OR)
+     *             smartDetectionCondition: {
+     *                 sensitivity: double
+     *                 anomalyDetectorDirection: String(Both/Down/Up)
+     *                 suppressCondition: {
+     *                     minNumber: int
+     *                     minRatio: double
+     *                 }
+     *             }
+     *             hardThresholdCondition: {
+     *                 lowerBound: Double
+     *                 upperBound: Double
+     *                 anomalyDetectorDirection: String(Both/Down/Up)
+     *                 suppressCondition: (recursive schema, see suppressCondition above)
+     *             }
+     *             changeThresholdCondition: {
+     *                 changePercentage: double
+     *                 shiftPoint: int
+     *                 withinRange: boolean
+     *                 anomalyDetectorDirection: String(Both/Down/Up)
+     *                 suppressCondition: (recursive schema, see suppressCondition above)
+     *             }
+     *         }
+     *     ]
+     *     seriesOverrideConfigurations: [
+     *         {
+     *             series: {
+     *                 dimension: {
+     *                     String: String
+     *                 }
+     *             }
+     *             conditionOperator: String(AND/OR)
+     *             smartDetectionCondition: (recursive schema, see smartDetectionCondition above)
+     *             hardThresholdCondition: (recursive schema, see hardThresholdCondition above)
+     *             changeThresholdCondition: (recursive schema, see changeThresholdCondition above)
+     *         }
+     *     ]
+     * }
+     * }</pre>
+     *
+     * <p><strong>Response Body Schema</strong>
+     *
+     * <pre>{@code
+     * {
+     *     anomalyDetectionConfigurationId: String
+     *     name: String
+     *     description: String
+     *     metricId: String
+     *     wholeMetricConfiguration: {
+     *         conditionOperator: String(AND/OR)
+     *         smartDetectionCondition: {
      *             sensitivity: double
      *             anomalyDetectorDirection: String(Both/Down/Up)
      *             suppressCondition: {
@@ -612,11 +1366,11 @@ public final class MetricsAdvisorClient {
      * @param body anomaly detection configuration.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
      * @throws HttpResponseException thrown if the request is rejected by server.
-     * @return the {@link Response}.
+     * @return the response body along with {@link Response}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> updateAnomalyDetectionConfigurationWithResponse(
+    public Response<BinaryData> updateAnomalyDetectionConfigurationWithResponse(
             String configurationId, BinaryData body, RequestOptions requestOptions) {
         return this.serviceClient.updateAnomalyDetectionConfigurationWithResponse(
                 configurationId, body, requestOptions);
@@ -714,7 +1468,16 @@ public final class MetricsAdvisorClient {
     }
 
     /**
-     * Query all anomaly alerting configurations for specific anomaly detection configuration.
+     * List all anomaly alerting configurations for specific anomaly detection configuration.
+     *
+     * <p><strong>Query Parameters</strong>
+     *
+     * <table border="1">
+     *     <caption>Query Parameters</caption>
+     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
+     *     <tr><td>skip</td><td>String</td><td>No</td><td>for paging, skipped number</td></tr>
+     *     <tr><td>maxpagesize</td><td>String</td><td>No</td><td>the maximum number of items in one page</td></tr>
+     * </table>
      *
      * <p><strong>Response Body Schema</strong>
      *
@@ -768,19 +1531,20 @@ public final class MetricsAdvisorClient {
      *             ]
      *         }
      *     ]
+     *     nextLink: String
      * }
      * }</pre>
      *
      * @param configurationId anomaly detection configuration unique id.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
      * @throws HttpResponseException thrown if the request is rejected by server.
-     * @return the response body along with {@link Response}.
+     * @return the paginated response with {@link PagedIterable}.
      */
     @Generated
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<BinaryData> getAnomalyAlertingConfigurationsByAnomalyDetectionConfigurationWithResponse(
+    @ServiceMethod(returns = ReturnType.COLLECTION)
+    public PagedIterable<BinaryData> getAnomalyAlertingConfigurationsByAnomalyDetectionConfiguration(
             String configurationId, RequestOptions requestOptions) {
-        return this.serviceClient.getAnomalyAlertingConfigurationsByAnomalyDetectionConfigurationWithResponse(
+        return this.serviceClient.getAnomalyAlertingConfigurationsByAnomalyDetectionConfiguration(
                 configurationId, requestOptions);
     }
 
@@ -855,79 +1619,6 @@ public final class MetricsAdvisorClient {
     }
 
     /**
-     * Query anomalies under anomaly detection configuration.
-     *
-     * <p><strong>Query Parameters</strong>
-     *
-     * <table border="1">
-     *     <caption>Query Parameters</caption>
-     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
-     *     <tr><td>skip</td><td>String</td><td>No</td><td>for paging, skipped number</td></tr>
-     *     <tr><td>maxpagesize</td><td>String</td><td>No</td><td>the maximum number of items in one page</td></tr>
-     * </table>
-     *
-     * <p><strong>Request Body Schema</strong>
-     *
-     * <pre>{@code
-     * {
-     *     startTime: String
-     *     endTime: String
-     *     filter: {
-     *         dimensionFilter: [
-     *             {
-     *                 dimension: {
-     *                     String: String
-     *                 }
-     *             }
-     *         ]
-     *         severityFilter: {
-     *             min: String(Low/Medium/High)
-     *             max: String(Low/Medium/High)
-     *         }
-     *     }
-     * }
-     * }</pre>
-     *
-     * <p><strong>Response Body Schema</strong>
-     *
-     * <pre>{@code
-     * {
-     *     nextLink: String
-     *     value: [
-     *         {
-     *             metricId: String
-     *             anomalyDetectionConfigurationId: String
-     *             timestamp: String
-     *             createdTime: String
-     *             modifiedTime: String
-     *             dimension: {
-     *                 String: String
-     *             }
-     *             property: {
-     *                 anomalySeverity: String(Low/Medium/High)
-     *                 anomalyStatus: String(Active/Resolved)
-     *                 value: Double
-     *                 expectedValue: Double
-     *             }
-     *         }
-     *     ]
-     * }
-     * }</pre>
-     *
-     * @param configurationId anomaly detection configuration unique id.
-     * @param body query detection anomaly result request.
-     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @throws HttpResponseException thrown if the request is rejected by server.
-     * @return the paginated response with {@link PagedIterable}.
-     */
-    @Generated
-    @ServiceMethod(returns = ReturnType.COLLECTION)
-    public PagedIterable<BinaryData> getAnomaliesByAnomalyDetectionConfiguration(
-            String configurationId, BinaryData body, RequestOptions requestOptions) {
-        return this.serviceClient.getAnomaliesByAnomalyDetectionConfiguration(configurationId, body, requestOptions);
-    }
-
-    /**
      * Query dimension values of anomalies.
      *
      * <p><strong>Query Parameters</strong>
@@ -977,128 +1668,6 @@ public final class MetricsAdvisorClient {
             String configurationId, BinaryData body, RequestOptions requestOptions) {
         return this.serviceClient.getDimensionOfAnomaliesByAnomalyDetectionConfiguration(
                 configurationId, body, requestOptions);
-    }
-
-    /**
-     * Query incidents under anomaly detection configuration.
-     *
-     * <p><strong>Query Parameters</strong>
-     *
-     * <table border="1">
-     *     <caption>Query Parameters</caption>
-     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
-     *     <tr><td>maxpagesize</td><td>String</td><td>No</td><td>the maximum number of items in one page</td></tr>
-     * </table>
-     *
-     * <p><strong>Request Body Schema</strong>
-     *
-     * <pre>{@code
-     * {
-     *     startTime: String
-     *     endTime: String
-     *     filter: {
-     *         dimensionFilter: [
-     *             {
-     *                 dimension: {
-     *                     String: String
-     *                 }
-     *             }
-     *         ]
-     *     }
-     * }
-     * }</pre>
-     *
-     * <p><strong>Response Body Schema</strong>
-     *
-     * <pre>{@code
-     * {
-     *     nextLink: String
-     *     value: [
-     *         {
-     *             metricId: String
-     *             anomalyDetectionConfigurationId: String
-     *             incidentId: String
-     *             startTime: String
-     *             lastTime: String
-     *             rootNode: {
-     *                 dimension: {
-     *                     String: String
-     *                 }
-     *             }
-     *             property: {
-     *                 maxSeverity: String(Low/Medium/High)
-     *                 incidentStatus: String(Active/Resolved)
-     *                 valueOfRootNode: Double
-     *                 expectedValueOfRootNode: Double
-     *             }
-     *         }
-     *     ]
-     * }
-     * }</pre>
-     *
-     * @param configurationId anomaly detection configuration unique id.
-     * @param body query detection incident result request.
-     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @throws HttpResponseException thrown if the request is rejected by server.
-     * @return the paginated response with {@link PagedIterable}.
-     */
-    @Generated
-    @ServiceMethod(returns = ReturnType.COLLECTION)
-    public PagedIterable<BinaryData> getIncidentsByAnomalyDetectionConfiguration(
-            String configurationId, BinaryData body, RequestOptions requestOptions) {
-        return this.serviceClient.getIncidentsByAnomalyDetectionConfiguration(configurationId, body, requestOptions);
-    }
-
-    /**
-     * Query incidents under anomaly detection configuration.
-     *
-     * <p><strong>Query Parameters</strong>
-     *
-     * <table border="1">
-     *     <caption>Query Parameters</caption>
-     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
-     *     <tr><td>maxpagesize</td><td>String</td><td>No</td><td>the maximum number of items in one page</td></tr>
-     *     <tr><td>token</td><td>String</td><td>No</td><td>the token for getting the next page</td></tr>
-     * </table>
-     *
-     * <p><strong>Response Body Schema</strong>
-     *
-     * <pre>{@code
-     * {
-     *     nextLink: String
-     *     value: [
-     *         {
-     *             metricId: String
-     *             anomalyDetectionConfigurationId: String
-     *             incidentId: String
-     *             startTime: String
-     *             lastTime: String
-     *             rootNode: {
-     *                 dimension: {
-     *                     String: String
-     *                 }
-     *             }
-     *             property: {
-     *                 maxSeverity: String(Low/Medium/High)
-     *                 incidentStatus: String(Active/Resolved)
-     *                 valueOfRootNode: Double
-     *                 expectedValueOfRootNode: Double
-     *             }
-     *         }
-     *     ]
-     * }
-     * }</pre>
-     *
-     * @param configurationId anomaly detection configuration unique id.
-     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @throws HttpResponseException thrown if the request is rejected by server.
-     * @return the paginated response with {@link PagedIterable}.
-     */
-    @Generated
-    @ServiceMethod(returns = ReturnType.COLLECTION)
-    public PagedIterable<BinaryData> getIncidentsByAnomalyDetectionConfigurationNextPages(
-            String configurationId, RequestOptions requestOptions) {
-        return this.serviceClient.getIncidentsByAnomalyDetectionConfigurationNextPages(configurationId, requestOptions);
     }
 
     /**
@@ -1212,15 +1781,25 @@ public final class MetricsAdvisorClient {
      * }
      * }</pre>
      *
+     * <p><strong>Response Body Schema</strong>
+     *
+     * <pre>{@code
+     * {
+     *     dataSourceCredentialId: String
+     *     dataSourceCredentialName: String
+     *     dataSourceCredentialDescription: String
+     * }
+     * }</pre>
+     *
      * @param credentialId Data source credential unique ID.
      * @param body Update data source credential request.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
      * @throws HttpResponseException thrown if the request is rejected by server.
-     * @return the {@link Response}.
+     * @return the response body along with {@link Response}.
      */
     @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> updateCredentialWithResponse(
+    public Response<BinaryData> updateCredentialWithResponse(
             String credentialId, BinaryData body, RequestOptions requestOptions) {
         return this.serviceClient.updateCredentialWithResponse(credentialId, body, requestOptions);
     }
@@ -1264,160 +1843,6 @@ public final class MetricsAdvisorClient {
     }
 
     /**
-     * List all data feeds.
-     *
-     * <p><strong>Query Parameters</strong>
-     *
-     * <table border="1">
-     *     <caption>Query Parameters</caption>
-     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
-     *     <tr><td>dataFeedName</td><td>String</td><td>No</td><td>filter data feed by its name</td></tr>
-     *     <tr><td>dataSourceType</td><td>String</td><td>No</td><td>filter data feed by its source type</td></tr>
-     *     <tr><td>granularityName</td><td>String</td><td>No</td><td>filter data feed by its granularity</td></tr>
-     *     <tr><td>status</td><td>String</td><td>No</td><td>filter data feed by its status</td></tr>
-     *     <tr><td>creator</td><td>String</td><td>No</td><td>filter data feed by its creator</td></tr>
-     *     <tr><td>skip</td><td>String</td><td>No</td><td>for paging, skipped number</td></tr>
-     *     <tr><td>maxpagesize</td><td>String</td><td>No</td><td>the maximum number of items in one page</td></tr>
-     * </table>
-     *
-     * <p><strong>Response Body Schema</strong>
-     *
-     * <pre>{@code
-     * {
-     *     nextLink: String
-     *     value: [
-     *         {
-     *             dataFeedId: String
-     *             dataFeedName: String
-     *             dataFeedDescription: String
-     *             granularityName: String(Yearly/Monthly/Weekly/Daily/Hourly/Minutely/Secondly/Custom)
-     *             granularityAmount: Integer
-     *             metrics: [
-     *                 {
-     *                     metricId: String
-     *                     metricName: String
-     *                     metricDisplayName: String
-     *                     metricDescription: String
-     *                 }
-     *             ]
-     *             dimension: [
-     *                 {
-     *                     dimensionName: String
-     *                     dimensionDisplayName: String
-     *                 }
-     *             ]
-     *             timestampColumn: String
-     *             dataStartFrom: String
-     *             startOffsetInSeconds: Long
-     *             maxConcurrency: Integer
-     *             minRetryIntervalInSeconds: Long
-     *             stopRetryAfterInSeconds: Long
-     *             needRollup: String(NoRollup/NeedRollup/AlreadyRollup)
-     *             rollUpMethod: String(None/Sum/Max/Min/Avg/Count)
-     *             rollUpColumns: [
-     *                 String
-     *             ]
-     *             allUpIdentification: String
-     *             fillMissingPointType: String(SmartFilling/PreviousValue/CustomValue/NoFilling)
-     *             fillMissingPointValue: Double
-     *             viewMode: String(Private/Public)
-     *             admins: [
-     *                 String
-     *             ]
-     *             viewers: [
-     *                 String
-     *             ]
-     *             isAdmin: Boolean
-     *             creator: String
-     *             status: String(Active/Paused)
-     *             createdTime: String
-     *             actionLinkTemplate: String
-     *             authenticationType: String(Basic/ManagedIdentity/AzureSQLConnectionString/DataLakeGen2SharedKey/ServicePrincipal/ServicePrincipalInKV)
-     *             credentialId: String
-     *         }
-     *     ]
-     * }
-     * }</pre>
-     *
-     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @throws HttpResponseException thrown if the request is rejected by server.
-     * @return the paginated response with {@link PagedIterable}.
-     */
-    @Generated
-    @ServiceMethod(returns = ReturnType.COLLECTION)
-    public PagedIterable<BinaryData> listDataFeeds(RequestOptions requestOptions) {
-        return this.serviceClient.listDataFeeds(requestOptions);
-    }
-
-    /**
-     * Create a new data feed.
-     *
-     * <p><strong>Request Body Schema</strong>
-     *
-     * <pre>{@code
-     * {
-     *     dataFeedId: String
-     *     dataFeedName: String
-     *     dataFeedDescription: String
-     *     granularityName: String(Yearly/Monthly/Weekly/Daily/Hourly/Minutely/Secondly/Custom)
-     *     granularityAmount: Integer
-     *     metrics: [
-     *         {
-     *             metricId: String
-     *             metricName: String
-     *             metricDisplayName: String
-     *             metricDescription: String
-     *         }
-     *     ]
-     *     dimension: [
-     *         {
-     *             dimensionName: String
-     *             dimensionDisplayName: String
-     *         }
-     *     ]
-     *     timestampColumn: String
-     *     dataStartFrom: String
-     *     startOffsetInSeconds: Long
-     *     maxConcurrency: Integer
-     *     minRetryIntervalInSeconds: Long
-     *     stopRetryAfterInSeconds: Long
-     *     needRollup: String(NoRollup/NeedRollup/AlreadyRollup)
-     *     rollUpMethod: String(None/Sum/Max/Min/Avg/Count)
-     *     rollUpColumns: [
-     *         String
-     *     ]
-     *     allUpIdentification: String
-     *     fillMissingPointType: String(SmartFilling/PreviousValue/CustomValue/NoFilling)
-     *     fillMissingPointValue: Double
-     *     viewMode: String(Private/Public)
-     *     admins: [
-     *         String
-     *     ]
-     *     viewers: [
-     *         String
-     *     ]
-     *     isAdmin: Boolean
-     *     creator: String
-     *     status: String(Active/Paused)
-     *     createdTime: String
-     *     actionLinkTemplate: String
-     *     authenticationType: String(Basic/ManagedIdentity/AzureSQLConnectionString/DataLakeGen2SharedKey/ServicePrincipal/ServicePrincipalInKV)
-     *     credentialId: String
-     * }
-     * }</pre>
-     *
-     * @param body parameters to create a data feed.
-     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @throws HttpResponseException thrown if the request is rejected by server.
-     * @return the {@link Response}.
-     */
-    @Generated
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> createDataFeedWithResponse(BinaryData body, RequestOptions requestOptions) {
-        return this.serviceClient.createDataFeedWithResponse(body, requestOptions);
-    }
-
-    /**
      * Get a data feed by its id.
      *
      * <p><strong>Response Body Schema</strong>
@@ -1427,7 +1852,7 @@ public final class MetricsAdvisorClient {
      *     dataFeedId: String
      *     dataFeedName: String
      *     dataFeedDescription: String
-     *     granularityName: String(Yearly/Monthly/Weekly/Daily/Hourly/Minutely/Secondly/Custom)
+     *     granularityName: String(Yearly/Monthly/Weekly/Daily/Hourly/Minutely/Custom)
      *     granularityAmount: Integer
      *     metrics: [
      *         {
@@ -1483,70 +1908,6 @@ public final class MetricsAdvisorClient {
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Response<BinaryData> getDataFeedByIdWithResponse(String dataFeedId, RequestOptions requestOptions) {
         return this.serviceClient.getDataFeedByIdWithResponse(dataFeedId, requestOptions);
-    }
-
-    /**
-     * Update a data feed.
-     *
-     * <p><strong>Request Body Schema</strong>
-     *
-     * <pre>{@code
-     * {
-     *     dataFeedName: String
-     *     dataFeedDescription: String
-     *     timestampColumn: String
-     *     dataStartFrom: String
-     *     startOffsetInSeconds: Long
-     *     maxConcurrency: Integer
-     *     minRetryIntervalInSeconds: Long
-     *     stopRetryAfterInSeconds: Long
-     *     needRollup: String(NoRollup/NeedRollup/AlreadyRollup)
-     *     rollUpMethod: String(None/Sum/Max/Min/Avg/Count)
-     *     rollUpColumns: [
-     *         String
-     *     ]
-     *     allUpIdentification: String
-     *     fillMissingPointType: String(SmartFilling/PreviousValue/CustomValue/NoFilling)
-     *     fillMissingPointValue: Double
-     *     viewMode: String(Private/Public)
-     *     admins: [
-     *         String
-     *     ]
-     *     viewers: [
-     *         String
-     *     ]
-     *     status: String(Active/Paused)
-     *     actionLinkTemplate: String
-     *     authenticationType: String(Basic/ManagedIdentity/AzureSQLConnectionString/DataLakeGen2SharedKey/ServicePrincipal/ServicePrincipalInKV)
-     *     credentialId: String
-     * }
-     * }</pre>
-     *
-     * @param dataFeedId The data feed unique id.
-     * @param body parameters to update a data feed.
-     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @throws HttpResponseException thrown if the request is rejected by server.
-     * @return the {@link Response}.
-     */
-    @Generated
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> updateDataFeedWithResponse(
-            String dataFeedId, BinaryData body, RequestOptions requestOptions) {
-        return this.serviceClient.updateDataFeedWithResponse(dataFeedId, body, requestOptions);
-    }
-
-    /**
-     * Delete a data feed.
-     *
-     * @param dataFeedId The data feed unique id.
-     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @throws HttpResponseException thrown if the request is rejected by server.
-     * @return the {@link Response}.
-     */
-    @Generated
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> deleteDataFeedWithResponse(String dataFeedId, RequestOptions requestOptions) {
-        return this.serviceClient.deleteDataFeedWithResponse(dataFeedId, requestOptions);
     }
 
     /**
@@ -1668,146 +2029,6 @@ public final class MetricsAdvisorClient {
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Response<Void> createMetricFeedbackWithResponse(BinaryData body, RequestOptions requestOptions) {
         return this.serviceClient.createMetricFeedbackWithResponse(body, requestOptions);
-    }
-
-    /**
-     * List all hooks.
-     *
-     * <p><strong>Query Parameters</strong>
-     *
-     * <table border="1">
-     *     <caption>Query Parameters</caption>
-     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
-     *     <tr><td>hookName</td><td>String</td><td>No</td><td>filter hook by its name</td></tr>
-     *     <tr><td>skip</td><td>String</td><td>No</td><td>for paging, skipped number</td></tr>
-     *     <tr><td>maxpagesize</td><td>String</td><td>No</td><td>the maximum number of items in one page</td></tr>
-     * </table>
-     *
-     * <p><strong>Response Body Schema</strong>
-     *
-     * <pre>{@code
-     * {
-     *     nextLink: String
-     *     value: [
-     *         {
-     *             hookId: String
-     *             hookName: String
-     *             description: String
-     *             externalLink: String
-     *             admins: [
-     *                 String
-     *             ]
-     *         }
-     *     ]
-     * }
-     * }</pre>
-     *
-     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @throws HttpResponseException thrown if the request is rejected by server.
-     * @return the paginated response with {@link PagedIterable}.
-     */
-    @Generated
-    @ServiceMethod(returns = ReturnType.COLLECTION)
-    public PagedIterable<BinaryData> listHooks(RequestOptions requestOptions) {
-        return this.serviceClient.listHooks(requestOptions);
-    }
-
-    /**
-     * Create a new hook.
-     *
-     * <p><strong>Request Body Schema</strong>
-     *
-     * <pre>{@code
-     * {
-     *     hookId: String
-     *     hookName: String
-     *     description: String
-     *     externalLink: String
-     *     admins: [
-     *         String
-     *     ]
-     * }
-     * }</pre>
-     *
-     * @param body Create hook request.
-     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @throws HttpResponseException thrown if the request is rejected by server.
-     * @return the {@link Response}.
-     */
-    @Generated
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> createHookWithResponse(BinaryData body, RequestOptions requestOptions) {
-        return this.serviceClient.createHookWithResponse(body, requestOptions);
-    }
-
-    /**
-     * Get a hook by its id.
-     *
-     * <p><strong>Response Body Schema</strong>
-     *
-     * <pre>{@code
-     * {
-     *     hookId: String
-     *     hookName: String
-     *     description: String
-     *     externalLink: String
-     *     admins: [
-     *         String
-     *     ]
-     * }
-     * }</pre>
-     *
-     * @param hookId Hook unique ID.
-     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @throws HttpResponseException thrown if the request is rejected by server.
-     * @return a hook by its id along with {@link Response}.
-     */
-    @Generated
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<BinaryData> getHookWithResponse(String hookId, RequestOptions requestOptions) {
-        return this.serviceClient.getHookWithResponse(hookId, requestOptions);
-    }
-
-    /**
-     * Update a hook.
-     *
-     * <p><strong>Request Body Schema</strong>
-     *
-     * <pre>{@code
-     * {
-     *     hookName: String
-     *     description: String
-     *     externalLink: String
-     *     admins: [
-     *         String
-     *     ]
-     * }
-     * }</pre>
-     *
-     * @param hookId Hook unique ID.
-     * @param body Update hook request.
-     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @throws HttpResponseException thrown if the request is rejected by server.
-     * @return the {@link Response}.
-     */
-    @Generated
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> updateHookWithResponse(String hookId, BinaryData body, RequestOptions requestOptions) {
-        return this.serviceClient.updateHookWithResponse(hookId, body, requestOptions);
-    }
-
-    /**
-     * Delete a hook.
-     *
-     * @param hookId Hook unique ID.
-     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @throws HttpResponseException thrown if the request is rejected by server.
-     * @return the {@link Response}.
-     */
-    @Generated
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> deleteHookWithResponse(String hookId, RequestOptions requestOptions) {
-        return this.serviceClient.deleteHookWithResponse(hookId, requestOptions);
     }
 
     /**
@@ -2059,7 +2280,16 @@ public final class MetricsAdvisorClient {
     }
 
     /**
-     * Query all anomaly detection configurations for specific metric.
+     * List all anomaly detection configurations for specific metric.
+     *
+     * <p><strong>Query Parameters</strong>
+     *
+     * <table border="1">
+     *     <caption>Query Parameters</caption>
+     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
+     *     <tr><td>skip</td><td>String</td><td>No</td><td>for paging, skipped number</td></tr>
+     *     <tr><td>maxpagesize</td><td>String</td><td>No</td><td>the maximum number of items in one page</td></tr>
+     * </table>
      *
      * <p><strong>Response Body Schema</strong>
      *
@@ -2123,19 +2353,20 @@ public final class MetricsAdvisorClient {
      *             ]
      *         }
      *     ]
+     *     nextLink: String
      * }
      * }</pre>
      *
      * @param metricId metric unique id.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
      * @throws HttpResponseException thrown if the request is rejected by server.
-     * @return the response body along with {@link Response}.
+     * @return the paginated response with {@link PagedIterable}.
      */
     @Generated
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<BinaryData> getAnomalyDetectionConfigurationsByMetricWithResponse(
+    @ServiceMethod(returns = ReturnType.COLLECTION)
+    public PagedIterable<BinaryData> getAnomalyDetectionConfigurationsByMetric(
             String metricId, RequestOptions requestOptions) {
-        return this.serviceClient.getAnomalyDetectionConfigurationsByMetricWithResponse(metricId, requestOptions);
+        return this.serviceClient.getAnomalyDetectionConfigurationsByMetric(metricId, requestOptions);
     }
 
     /**

@@ -195,7 +195,7 @@ public final class MetricsAdvisorAdministrationClient {
      */
     @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> updateAnomalyAlertingConfigurationWithResponse(
+    public Response<BinaryData> updateAnomalyAlertingConfigurationWithResponse(
             String configurationId, BinaryData body, RequestOptions requestOptions) {
         return this.serviceClient.updateAnomalyAlertingConfigurationWithResponse(configurationId, body, requestOptions);
     }
@@ -617,7 +617,7 @@ public final class MetricsAdvisorAdministrationClient {
      */
     @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> updateAnomalyDetectionConfigurationWithResponse(
+    public Response<BinaryData> updateAnomalyDetectionConfigurationWithResponse(
             String configurationId, BinaryData body, RequestOptions requestOptions) {
         return this.serviceClient.updateAnomalyDetectionConfigurationWithResponse(
                 configurationId, body, requestOptions);
@@ -712,77 +712,6 @@ public final class MetricsAdvisorAdministrationClient {
     public Response<Void> createAnomalyDetectionConfigurationWithResponse(
             BinaryData body, RequestOptions requestOptions) {
         return this.serviceClient.createAnomalyDetectionConfigurationWithResponse(body, requestOptions);
-    }
-
-    /**
-     * Query all anomaly alerting configurations for specific anomaly detection configuration.
-     *
-     * <p><strong>Response Body Schema</strong>
-     *
-     * <pre>{@code
-     * {
-     *     value: [
-     *         {
-     *             anomalyAlertingConfigurationId: String
-     *             name: String
-     *             description: String
-     *             crossMetricsOperator: String(AND/OR/XOR)
-     *             splitAlertByDimensions: [
-     *                 String
-     *             ]
-     *             hookIds: [
-     *                 String
-     *             ]
-     *             metricAlertingConfigurations: [
-     *                 {
-     *                     anomalyDetectionConfigurationId: String
-     *                     anomalyScopeType: String(All/Dimension/TopN)
-     *                     negationOperation: Boolean
-     *                     dimensionAnomalyScope: {
-     *                         dimension: {
-     *                             String: String
-     *                         }
-     *                     }
-     *                     topNAnomalyScope: {
-     *                         top: int
-     *                         period: int
-     *                         minTopCount: int
-     *                     }
-     *                     severityFilter: {
-     *                         minAlertSeverity: String(Low/Medium/High)
-     *                         maxAlertSeverity: String(Low/Medium/High)
-     *                     }
-     *                     snoozeFilter: {
-     *                         autoSnooze: int
-     *                         snoozeScope: String(Metric/Series)
-     *                         onlyForSuccessive: boolean
-     *                     }
-     *                     valueFilter: {
-     *                         lower: Double
-     *                         upper: Double
-     *                         direction: String(Both/Down/Up)
-     *                         type: String(Value/Mean)
-     *                         metricId: String
-     *                         triggerForMissing: Boolean
-     *                     }
-     *                 }
-     *             ]
-     *         }
-     *     ]
-     * }
-     * }</pre>
-     *
-     * @param configurationId anomaly detection configuration unique id.
-     * @param requestOptions  The options to configure the HTTP request before HTTP client sends it.
-     * @return the response body along with {@link Response}.
-     * @throws HttpResponseException thrown if the request is rejected by server.
-     */
-    @Generated
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<BinaryData> getAnomalyAlertingConfigurationsByAnomalyDetectionConfigurationWithResponse(
-            String configurationId, RequestOptions requestOptions) {
-        return this.serviceClient.getAnomalyAlertingConfigurationsByAnomalyDetectionConfigurationWithResponse(
-                configurationId, requestOptions);
     }
 
     /**
@@ -1221,7 +1150,7 @@ public final class MetricsAdvisorAdministrationClient {
      */
     @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> updateCredentialWithResponse(
+    public Response<BinaryData> updateCredentialWithResponse(
             String credentialId, BinaryData body, RequestOptions requestOptions) {
         return this.serviceClient.updateCredentialWithResponse(credentialId, body, requestOptions);
     }
@@ -1562,7 +1491,7 @@ public final class MetricsAdvisorAdministrationClient {
      */
     @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> updateDataFeedWithResponse(
+    public Response<BinaryData> updateDataFeedWithResponse(
             String dataFeedId, BinaryData body, RequestOptions requestOptions) {
         return this.serviceClient.updateDataFeedWithResponse(dataFeedId, body, requestOptions);
     }
@@ -1844,7 +1773,7 @@ public final class MetricsAdvisorAdministrationClient {
      */
     @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> updateHookWithResponse(String hookId, BinaryData body, RequestOptions requestOptions) {
+    public Response<BinaryData> updateHookWithResponse(String hookId, BinaryData body, RequestOptions requestOptions) {
         return this.serviceClient.updateHookWithResponse(hookId, body, requestOptions);
     }
 
@@ -2108,86 +2037,6 @@ public final class MetricsAdvisorAdministrationClient {
     public PagedIterable<BinaryData> getMetricDimension(
             String metricId, BinaryData body, RequestOptions requestOptions) {
         return this.serviceClient.getMetricDimension(metricId, body, requestOptions);
-    }
-
-    /**
-     * Query all anomaly detection configurations for specific metric.
-     *
-     * <p><strong>Response Body Schema</strong>
-     *
-     * <pre>{@code
-     * {
-     *     value: [
-     *         {
-     *             anomalyDetectionConfigurationId: String
-     *             name: String
-     *             description: String
-     *             metricId: String
-     *             wholeMetricConfiguration: {
-     *                 conditionOperator: String(AND/OR)
-     *                 smartDetectionCondition: {
-     *                     sensitivity: double
-     *                     anomalyDetectorDirection: String(Both/Down/Up)
-     *                     suppressCondition: {
-     *                         minNumber: int
-     *                         minRatio: double
-     *                     }
-     *                 }
-     *                 hardThresholdCondition: {
-     *                     lowerBound: Double
-     *                     upperBound: Double
-     *                     anomalyDetectorDirection: String(Both/Down/Up)
-     *                     suppressCondition: (recursive schema, see suppressCondition above)
-     *                 }
-     *                 changeThresholdCondition: {
-     *                     changePercentage: double
-     *                     shiftPoint: int
-     *                     withinRange: boolean
-     *                     anomalyDetectorDirection: String(Both/Down/Up)
-     *                     suppressCondition: (recursive schema, see suppressCondition above)
-     *                 }
-     *             }
-     *             dimensionGroupOverrideConfigurations: [
-     *                 {
-     *                     group: {
-     *                         dimension: {
-     *                             String: String
-     *                         }
-     *                     }
-     *                     conditionOperator: String(AND/OR)
-     *                     smartDetectionCondition: (recursive schema, see smartDetectionCondition above)
-     *                     hardThresholdCondition: (recursive schema, see hardThresholdCondition above)
-     *                     changeThresholdCondition: (recursive schema, see changeThresholdCondition above)
-     *                 }
-     *             ]
-     *             seriesOverrideConfigurations: [
-     *                 {
-     *                     series: {
-     *                         dimension: {
-     *                             String: String
-     *                         }
-     *                     }
-     *                     conditionOperator: String(AND/OR)
-     *                     smartDetectionCondition: (recursive schema, see smartDetectionCondition above)
-     *                     hardThresholdCondition: (recursive schema, see hardThresholdCondition above)
-     *                     changeThresholdCondition: (recursive schema, see changeThresholdCondition above)
-     *                 }
-     *             ]
-     *         }
-     *     ]
-     * }
-     * }</pre>
-     *
-     * @param metricId       metric unique id.
-     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @return the response body along with {@link Response}.
-     * @throws HttpResponseException thrown if the request is rejected by server.
-     */
-    @Generated
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<BinaryData> getAnomalyDetectionConfigurationsByMetricWithResponse(
-            String metricId, RequestOptions requestOptions) {
-        return this.serviceClient.getAnomalyDetectionConfigurationsByMetricWithResponse(metricId, requestOptions);
     }
 
     /**

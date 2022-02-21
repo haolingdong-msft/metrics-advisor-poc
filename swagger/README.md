@@ -20,7 +20,7 @@ autorest --java --use=C:/work/autorest.java
 
 ### Code generation settings
 ```yaml
-input-file: ./metricsadvisor_1.20200903_openapi.v2.json
+input-file: https://github.com/Azure/azure-rest-api-specs/blob/main/specification/cognitiveservices/data-plane/MetricsAdvisor/stable/v1.0/MetricsAdvisor.json
 java: true
 output-folder: ../
 regenerate-pom: false
