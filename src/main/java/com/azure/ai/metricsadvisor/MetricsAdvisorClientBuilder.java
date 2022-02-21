@@ -45,7 +45,6 @@ public final class MetricsAdvisorClientBuilder {
 
     static final String API_KEY = "x-api-key";
 
-
     @Generated
     private static final String[] DEFAULT_SCOPES = new String[] {"https://cognitiveservices.azure.com/.default"};
 
