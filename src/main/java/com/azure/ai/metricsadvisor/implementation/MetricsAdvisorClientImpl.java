@@ -352,7 +352,7 @@ public final class MetricsAdvisorClientImpl {
                 Context context);
 
         @Patch("/dataFeeds/{dataFeedId}")
-        @ExpectedResponses({204})
+        @ExpectedResponses({200})
         Mono<Response<Void>> updateDataFeed(
                 @HostParam("endpoint") String endpoint,
                 @PathParam("dataFeedId") String dataFeedId,

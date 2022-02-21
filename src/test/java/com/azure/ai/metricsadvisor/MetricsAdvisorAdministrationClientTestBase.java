@@ -3,10 +3,8 @@
 
 package com.azure.ai.metricsadvisor;
 
-import com.azure.ai.metricsadvisor.MetricsAdvisorClientBuilder;
-import com.azure.ai.metricsadvisor.MetricsAdvisorServiceVersion;
+import com.azure.ai.metricsadvisor.administration.MetricsAdvisorAdministrationClientBuilder;
 import com.azure.ai.metricsadvisor.models.MetricsAdvisorKeyCredential;
-import com.azure.core.credential.AccessToken;
 import com.azure.core.http.HttpClient;
 import com.azure.core.http.policy.HttpLogDetailLevel;
 import com.azure.core.http.policy.HttpLogOptions;
@@ -14,21 +12,24 @@ import com.azure.core.test.TestBase;
 import com.azure.core.test.TestMode;
 import com.azure.core.util.Configuration;
 import com.azure.identity.DefaultAzureCredentialBuilder;
-import reactor.core.publisher.Mono;
-
-import java.time.OffsetDateTime;
 
 import static com.azure.ai.metricsadvisor.TestUtils.AZURE_METRICS_ADVISOR_ENDPOINT;
 
-public abstract class MetricsAdvisorClientTestBase extends TestBase {
+public abstract class MetricsAdvisorAdministrationClientTestBase extends TestBase {
 
     @Override
     protected void beforeTest() {
     }
 
-    public MetricsAdvisorClientBuilder getMetricsAdvisorBuilder(HttpClient httpClient,
-                                                         MetricsAdvisorServiceVersion serviceVersion) {
-        MetricsAdvisorClientBuilder builder = new MetricsAdvisorClientBuilder()
+    MetricsAdvisorAdministrationClientBuilder getMetricsAdvisorAdministrationBuilder(HttpClient httpClient,
+        MetricsAdvisorServiceVersion serviceVersion) {
+        return getMetricsAdvisorAdministrationBuilder(httpClient, serviceVersion, true);
+    }
+
+    MetricsAdvisorAdministrationClientBuilder getMetricsAdvisorAdministrationBuilder(HttpClient httpClient,
+                                                                                     MetricsAdvisorServiceVersion serviceVersion,
+                                                                                     boolean useKeyCredential) {
+        MetricsAdvisorAdministrationClientBuilder builder = new MetricsAdvisorAdministrationClientBuilder()
             .endpoint(getEndpoint())
             .httpClient(httpClient == null ? interceptorManager.getPlaybackClient() : httpClient)
             .httpLogOptions(new HttpLogOptions().setLogLevel(HttpLogDetailLevel.BODY_AND_HEADERS))
@@ -37,10 +38,13 @@ public abstract class MetricsAdvisorClientTestBase extends TestBase {
         if (getTestMode() == TestMode.PLAYBACK) {
             builder.credential(new MetricsAdvisorKeyCredential("subscription_key", "api_key"));
         } else {
-//            builder.credential(new DefaultAzureCredentialBuilder().build());
-            builder.credential(new MetricsAdvisorKeyCredential(
-                        Configuration.getGlobalConfiguration().get("AZURE_METRICS_ADVISOR_SUBSCRIPTION_KEY"),
-                        Configuration.getGlobalConfiguration().get("AZURE_METRICS_ADVISOR_API_KEY")));
+            if (useKeyCredential) {
+                builder.credential(new MetricsAdvisorKeyCredential(
+                    Configuration.getGlobalConfiguration().get("AZURE_METRICS_ADVISOR_SUBSCRIPTION_KEY"),
+                    Configuration.getGlobalConfiguration().get("AZURE_METRICS_ADVISOR_API_KEY")));
+            } else {
+                builder.credential(new DefaultAzureCredentialBuilder().build());
+            }
         }
         return builder;
     }

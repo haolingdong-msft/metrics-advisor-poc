@@ -34,6 +34,7 @@ public final class AlertAsyncTest extends AlertTestBase {
         StepVerifier.resetDefaultTimeout();
     }
 
+
     @ParameterizedTest(name = DISPLAY_NAME_WITH_ARGUMENTS)
     @MethodSource("com.azure.ai.metricsadvisor.TestUtils#getTestParameters")
     @Override

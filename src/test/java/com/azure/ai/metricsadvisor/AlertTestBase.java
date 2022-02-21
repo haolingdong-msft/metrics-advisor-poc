@@ -25,7 +25,7 @@ public abstract class AlertTestBase extends MetricsAdvisorClientTestBase {
         public static final ListAlertsInput INSTANCE = new ListAlertsInput();
         public final OffsetDateTime startTime = OffsetDateTime.parse("2021-10-10T00:00:00Z");
         public final OffsetDateTime endTime = OffsetDateTime.parse("2021-10-21T00:00:00Z");
-        public final AlertQueryTimeMode timeMode = AlertQueryTimeMode.fromString("test");
+        public final AlertQueryTimeMode timeMode = AlertQueryTimeMode.ANOMALY_TIME;
         public final ListAlertOptions options = new ListAlertOptions()
             .setAlertQueryTimeMode(timeMode)
             .setMaxPageSize(10);
