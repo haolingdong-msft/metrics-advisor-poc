@@ -3,16 +3,19 @@
 
 package com.azure.ai.metricsadvisor.implementation.util;
 
+import com.azure.ai.metricsadvisor.administration.models.DataFeed;
 import com.azure.core.http.rest.PagedFlux;
 import com.azure.core.http.rest.PagedIterable;
 import com.azure.core.http.rest.PagedResponse;
 import com.azure.core.http.rest.PagedResponseBase;
 import com.azure.core.http.rest.Response;
 import com.azure.core.util.paging.PageRetriever;
+import com.azure.core.util.polling.PollerFlux;
 import org.reactivestreams.Publisher;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
@@ -56,6 +59,16 @@ public final class PagedConverter {
                 ? pagedFlux.byPage().take(1)
                 : pagedFlux.byPage(continuationToken).take(1);
             return flux.map(mapPagedResponse(mapper));
+        };
+        return PagedFlux.create(provider);
+    }
+
+    public static <T> PagedFlux<T> mapError(PagedFlux<T> pagedFlux, Function<? super Throwable, ? extends Throwable> errorMapper) {
+        Supplier<PageRetriever<String, PagedResponse<T>>> provider = () -> (continuationToken, pageSize) -> {
+            Flux<PagedResponse<T>> flux = (continuationToken == null)
+                    ? pagedFlux.byPage().take(1)
+                    : pagedFlux.byPage(continuationToken).take(1);
+            return flux.onErrorMap(errorMapper);
         };
         return PagedFlux.create(provider);
     }

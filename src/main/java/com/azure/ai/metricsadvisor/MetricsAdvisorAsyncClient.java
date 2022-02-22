@@ -4,6 +4,7 @@
 package com.azure.ai.metricsadvisor;
 
 import com.azure.ai.metricsadvisor.implementation.MetricsAdvisorClientImpl;
+import com.azure.ai.metricsadvisor.implementation.util.PagedConverter;
 import com.azure.ai.metricsadvisor.models.AnomalyAlert;
 import com.azure.ai.metricsadvisor.models.ListAlertOptions;
 import com.azure.core.annotation.Generated;
@@ -19,6 +20,8 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.time.OffsetDateTime;
 import java.util.Objects;
+
+import com.fasterxml.jackson.databind.util.Converter;
 import reactor.core.publisher.Mono;
 
 /** Initializes a new instance of the asynchronous MetricsAdvisorClient type. */
@@ -92,7 +95,7 @@ public final class MetricsAdvisorAsyncClient {
         BinaryData body = BinaryData.fromString(objectNode.toString());
         PagedFlux<BinaryData> response =
                 this.getAlertsByAnomalyAlertingConfiguration(alertConfigurationId, body, requestOptions);
-        return response.mapPage(binaryData -> binaryData.toObject(AnomalyAlert.class));
+        return PagedConverter.mapPage(response, binaryData -> binaryData.toObject(AnomalyAlert.class));
     }
 
     /**

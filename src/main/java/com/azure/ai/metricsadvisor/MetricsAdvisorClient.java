@@ -4,6 +4,7 @@
 package com.azure.ai.metricsadvisor;
 
 import com.azure.ai.metricsadvisor.implementation.MetricsAdvisorClientImpl;
+import com.azure.ai.metricsadvisor.implementation.util.PagedConverter;
 import com.azure.ai.metricsadvisor.models.AnomalyAlert;
 import com.azure.ai.metricsadvisor.models.ListAlertOptions;
 import com.azure.core.annotation.Generated;
@@ -95,7 +96,7 @@ public final class MetricsAdvisorClient {
         BinaryData body = BinaryData.fromString(objectNode.toString());
         PagedIterable<BinaryData> response =
                 this.getAlertsByAnomalyAlertingConfiguration(alertConfigurationId, body, requestOptions);
-        return response.mapPage(binaryData -> binaryData.toObject(AnomalyAlert.class));
+        return PagedConverter.mapPage(response, binaryData -> binaryData.toObject(AnomalyAlert.class));
     }
 
     /**

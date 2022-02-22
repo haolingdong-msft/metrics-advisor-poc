@@ -95,7 +95,6 @@ public class DataFeedAsyncClientTest extends DataFeedTestBase {
                 PagedFlux<DataFeed> response = client.listDataFeeds(new ListDataFeedOptions()
                         .setListDataFeedFilter(new ListDataFeedFilter().setDataFeedGranularityType(DAILY)
                                 .setName("java_")));
-//                List<DataFeed> dataFeeds = response.toStream().collect(Collectors.toList());
                 // Act
                 StepVerifier.create(client.listDataFeeds(new ListDataFeedOptions()
                     .setListDataFeedFilter(new ListDataFeedFilter().setDataFeedGranularityType(DAILY)

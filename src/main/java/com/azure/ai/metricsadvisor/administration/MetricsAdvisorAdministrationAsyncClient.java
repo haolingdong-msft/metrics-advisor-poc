@@ -283,7 +283,14 @@ public final class MetricsAdvisorAdministrationAsyncClient {
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedFlux<BinaryData> listDataFeeds(RequestOptions requestOptions) {
-        return this.serviceClient.listDataFeedsAsync(requestOptions);
+        return PagedConverter.mapError(this.serviceClient.listDataFeedsAsync(requestOptions), throwable -> {
+            if (throwable instanceof HttpResponseException) {
+                MetricsAdvisorError error = BinaryData.fromObject(((HttpResponseException) throwable).getValue()).toObject(MetricsAdvisorError.class);
+                return new MetricsAdvisorResponseException(throwable.getMessage(), ((HttpResponseException) throwable).getResponse(), error);
+            } else {
+                return throwable;
+            }
+        });
     }
 
     @ServiceMethod(returns = ReturnType.COLLECTION)
