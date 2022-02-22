@@ -3,7 +3,6 @@
 
 package com.azure.ai.metricsadvisor;
 
-import com.azure.ai.metricsadvisor.administration.MetricsAdvisorAdministrationAsyncClient;
 import com.azure.ai.metricsadvisor.administration.MetricsAdvisorAdministrationClient;
 import com.azure.ai.metricsadvisor.administration.models.DataFeed;
 import com.azure.ai.metricsadvisor.administration.models.DataFeedGranularity;
@@ -89,22 +88,22 @@ public class DataFeedClientTest extends DataFeedTestBase {
             listDataFeedRunner(inputDataFeedList -> {
                 List<DataFeed> actualDataFeedList = new ArrayList<>();
                 List<DataFeed> expectedDataFeedList =
-                    inputDataFeedList.stream().map(dataFeed -> client.createDataFeed(dataFeed))
-                        .collect(Collectors.toList());
+                        inputDataFeedList.stream().map(dataFeed -> client.createDataFeed(dataFeed))
+                                .collect(Collectors.toList());
 
                 // Act & Assert
                 client.listDataFeeds(new ListDataFeedOptions().setListDataFeedFilter(new ListDataFeedFilter()
-                    .setDataFeedGranularityType(DAILY)
-                    .setName("java_")), Context.NONE)
-                    .forEach(actualDataFeedList::add);
+                        .setDataFeedGranularityType(DAILY)
+                        .setName("java_")), Context.NONE)
+                        .forEach(actualDataFeedList::add);
 
                 expectedDataFeedIdList.set(expectedDataFeedList.stream()
-                    .map(DataFeed::getId)
-                    .collect(Collectors.toList()));
+                        .map(DataFeed::getId)
+                        .collect(Collectors.toList()));
                 final List<DataFeed> actualList =
-                    actualDataFeedList.stream()
-                        .filter(dataFeed -> expectedDataFeedIdList.get().contains(dataFeed.getId()))
-                        .collect(Collectors.toList());
+                        actualDataFeedList.stream()
+                                .filter(dataFeed -> expectedDataFeedIdList.get().contains(dataFeed.getId()))
+                                .collect(Collectors.toList());
 
                 assertEquals(inputDataFeedList.size(), actualList.size());
                 expectedDataFeedList.sort(Comparator.comparing(dataFeed -> dataFeed.getSourceType().toString()));
@@ -112,8 +111,8 @@ public class DataFeedClientTest extends DataFeedTestBase {
                 final AtomicInteger i = new AtomicInteger(-1);
                 final List<DataFeedSourceType> dataFeedSourceTypes = Arrays.asList(AZURE_BLOB, SQL_SERVER_DB);
                 expectedDataFeedList.forEach(expectedDataFeed ->
-                    validateDataFeedResult(expectedDataFeed,
-                        actualList.get(i.incrementAndGet()), dataFeedSourceTypes.get(i.get())));
+                        validateDataFeedResult(expectedDataFeed,
+                                actualList.get(i.incrementAndGet()), dataFeedSourceTypes.get(i.get())));
             });
         } finally {
             if (!CoreUtils.isNullOrEmpty(expectedDataFeedIdList.get())) {
@@ -135,8 +134,8 @@ public class DataFeedClientTest extends DataFeedTestBase {
         // Act & Assert
         int pageCount = 0;
         for (PagedResponse<DataFeed> dataFeedPagedResponse : client.listDataFeeds(new ListDataFeedOptions().setMaxPageSize(3),
-            Context.NONE)
-            .iterableByPage()) {
+                Context.NONE)
+                .iterableByPage()) {
             assertTrue(3 >= dataFeedPagedResponse.getValue().size());
             pageCount++;
             if (pageCount > 4) {
@@ -167,10 +166,10 @@ public class DataFeedClientTest extends DataFeedTestBase {
 
                 // Act & Assert
                 for (PagedResponse<DataFeed> dataFeedPagedResponse : client.listDataFeeds(new ListDataFeedOptions()
-                            .setListDataFeedFilter(new ListDataFeedFilter()
-                            .setCreator(createdDataFeed.getCreator())),
-                    Context.NONE)
-                    .iterableByPage()) {
+                                .setListDataFeedFilter(new ListDataFeedFilter()
+                                        .setCreator(createdDataFeed.getCreator())),
+                        Context.NONE)
+                        .iterableByPage()) {
                     List<DataFeed> dataFeedList = dataFeedPagedResponse.getValue();
                     dataFeedList.forEach(dataFeed -> assertEquals(createdDataFeed.getCreator(), dataFeed.getCreator()));
                     pageCount[0]++;
@@ -221,9 +220,9 @@ public class DataFeedClientTest extends DataFeedTestBase {
 
         // Act & Assert
         client.listDataFeeds(
-            new ListDataFeedOptions().setListDataFeedFilter(new ListDataFeedFilter()
-                .setDataFeedSourceType(AZURE_BLOB)), Context.NONE)
-            .stream().iterator().forEachRemaining(dataFeed -> assertEquals(AZURE_BLOB, dataFeed.getSourceType()));
+                new ListDataFeedOptions().setListDataFeedFilter(new ListDataFeedFilter()
+                        .setDataFeedSourceType(AZURE_BLOB)), Context.NONE)
+                .stream().iterator().forEachRemaining(dataFeed -> assertEquals(AZURE_BLOB, dataFeed.getSourceType()));
     }
 
     /**
@@ -239,9 +238,9 @@ public class DataFeedClientTest extends DataFeedTestBase {
         // Act & Assert
         int pageCount = 0;
         for (PagedResponse<DataFeed> dataFeedPagedResponse : client.listDataFeeds(
-            new ListDataFeedOptions().setListDataFeedFilter(new ListDataFeedFilter().setDataFeedStatus(ACTIVE)),
+                new ListDataFeedOptions().setListDataFeedFilter(new ListDataFeedFilter().setDataFeedStatus(ACTIVE)),
                 Context.NONE)
-            .iterableByPage()) {
+                .iterableByPage()) {
             dataFeedPagedResponse.getValue().forEach((dataFeed -> assertEquals(ACTIVE, dataFeed.getStatus())));
             pageCount++;
             if (pageCount > 4) {
@@ -250,6 +249,31 @@ public class DataFeedClientTest extends DataFeedTestBase {
             }
         }
     }
+
+//    @ParameterizedTest(name = DISPLAY_NAME_WITH_ARGUMENTS)
+//    @MethodSource("com.azure.ai.metricsadvisor.TestUtils#getTestParameters")
+//    public void listDataFeedRejectByServerWithResponse(HttpClient httpClient, MetricsAdvisorServiceVersion serviceVersion) {
+//        // Arrange
+//        client = getMetricsAdvisorAdministrationBuilder(httpClient, serviceVersion).buildClient();
+//
+//        for (PagedResponse<DataFeed> dataFeedPagedResponse : client.listDataFeeds(
+//                new ListDataFeedOptions().setListDataFeedFilter(new ListDataFeedFilter().setDataFeedStatus(ACTIVE)),
+//                Context.NONE)
+//                .iterableByPage()) {
+//            dataFeedPagedResponse.getValue().forEach((dataFeed -> assertEquals(ACTIVE, dataFeed.getStatus())));
+//        }
+//
+//
+////            assertEquals(HttpResponseStatus.NO_CONTENT.code(),
+////                    client.deleteDataFeedWithResponse(createdDataFeed.getId(), Context.NONE).getStatusCode());
+////
+////            // Act & Assert
+////            MetricsAdvisorResponseException exception = assertThrows(MetricsAdvisorResponseException.class, () ->
+////                    client.getDataFeedWithResponse(createdDataFeed.getId(), Context.NONE));
+////            final MetricsAdvisorError errorCode = exception.getValue();
+////            assertEquals(errorCode.getMessage(), "datafeedId is invalid.");
+////        }, SQL_SERVER_DB);
+//    }
 
     /**
      * Verifies the result of the list data feed method to filter results using
@@ -262,14 +286,14 @@ public class DataFeedClientTest extends DataFeedTestBase {
         client = getMetricsAdvisorAdministrationBuilder(httpClient, serviceVersion).buildClient();
 
         // Act & Assert
-        int[] pageCount = new int[] {0};
+        int[] pageCount = new int[]{0};
 
         for (PagedResponse<DataFeed> dataFeedPagedResponse : client.listDataFeeds(
                 new ListDataFeedOptions().setListDataFeedFilter(new ListDataFeedFilter()
-                    .setDataFeedGranularityType(DAILY)), Context.NONE)
-            .iterableByPage()) {
+                        .setDataFeedGranularityType(DAILY)), Context.NONE)
+                .iterableByPage()) {
             dataFeedPagedResponse.getValue()
-                .forEach(dataFeed -> assertEquals(DAILY, dataFeed.getGranularity().getGranularityType()));
+                    .forEach(dataFeed -> assertEquals(DAILY, dataFeed.getGranularity().getGranularityType()));
             pageCount[0]++;
             if (pageCount[0] > 4) {
                 // Stop after 4 pages since there can be large number of feeds.
@@ -305,7 +329,7 @@ public class DataFeedClientTest extends DataFeedTestBase {
 
         // Act & Assert
         Exception exception = assertThrows(IllegalArgumentException.class,
-            () -> client.getDataFeed(INCORRECT_UUID));
+                () -> client.getDataFeed(INCORRECT_UUID));
         assertEquals(INCORRECT_UUID_ERROR, exception.getMessage());
     }
 
@@ -327,7 +351,7 @@ public class DataFeedClientTest extends DataFeedTestBase {
 
                 // Act & Assert
                 final Response<DataFeed> dataFeedResponse =
-                    client.getDataFeedWithResponse(createdDataFeed.getId(), Context.NONE);
+                        client.getDataFeedWithResponse(createdDataFeed.getId(), Context.NONE);
                 assertEquals(dataFeedResponse.getStatusCode(), HttpResponseStatus.OK.code());
                 validateDataFeedResult(createdDataFeed, dataFeedResponse.getValue(), SQL_SERVER_DB);
             }, SQL_SERVER_DB);
@@ -667,29 +691,29 @@ public class DataFeedClientTest extends DataFeedTestBase {
             assertEquals("'dataFeed' is required and cannot be null.", ex.getMessage());
 
             ex = assertThrows(NullPointerException.class, () -> client.createDataFeed(
-                new DataFeed().setName("name")));
+                    new DataFeed().setName("name")));
             assertEquals("'dataFeedSource' is required and cannot be null.", ex.getMessage());
 
             ex = assertThrows(NullPointerException.class, () -> client.createDataFeed(
-                new DataFeed().setName("name")
-                    .setSource(new PostgreSqlDataFeedSource("conn-string", "query"))));
+                    new DataFeed().setName("name")
+                            .setSource(new PostgreSqlDataFeedSource("conn-string", "query"))));
             assertEquals("'dataFeedSchema.metrics' cannot be null or empty.", ex.getMessage());
 
             ex = assertThrows(NullPointerException.class, () -> client.createDataFeed(
-                new DataFeed()
-                    .setName("name")
-                    .setSource(new PostgreSqlDataFeedSource("conn-string", "query"))
-                    .setSchema(new DataFeedSchema(Collections.singletonList(new DataFeedMetric("name"))))));
+                    new DataFeed()
+                            .setName("name")
+                            .setSource(new PostgreSqlDataFeedSource("conn-string", "query"))
+                            .setSchema(new DataFeedSchema(Collections.singletonList(new DataFeedMetric("name"))))));
             assertEquals("'dataFeedGranularity.granularityType' is required and cannot be null.", ex.getMessage());
 
             ex = assertThrows(NullPointerException.class, () -> client.createDataFeed(
-                new DataFeed()
-                    .setName("name")
-                    .setSource(new PostgreSqlDataFeedSource("conn-string", "query"))
-                    .setSchema(new DataFeedSchema(Collections.singletonList(new DataFeedMetric("name"))))
-                    .setGranularity(new DataFeedGranularity().setGranularityType(DAILY))));
+                    new DataFeed()
+                            .setName("name")
+                            .setSource(new PostgreSqlDataFeedSource("conn-string", "query"))
+                            .setSchema(new DataFeedSchema(Collections.singletonList(new DataFeedMetric("name"))))
+                            .setGranularity(new DataFeedGranularity().setGranularityType(DAILY))));
             assertEquals("'dataFeedIngestionSettings.ingestionStartTime' is required and cannot be null.",
-                ex.getMessage());
+                    ex.getMessage());
 
         }, SQL_SERVER_DB);
     }
@@ -707,7 +731,7 @@ public class DataFeedClientTest extends DataFeedTestBase {
 
         // Act & Assert
         Exception exception = assertThrows(IllegalArgumentException.class, () ->
-            client.getDataFeed(INCORRECT_UUID));
+                client.getDataFeed(INCORRECT_UUID));
         assertEquals(INCORRECT_UUID_ERROR, exception.getMessage());
     }
 
@@ -723,11 +747,11 @@ public class DataFeedClientTest extends DataFeedTestBase {
             final DataFeed createdDataFeed = client.createDataFeed(dataFeed);
 
             assertEquals(HttpResponseStatus.NO_CONTENT.code(),
-                client.deleteDataFeedWithResponse(createdDataFeed.getId(), Context.NONE).getStatusCode());
+                    client.deleteDataFeedWithResponse(createdDataFeed.getId(), Context.NONE).getStatusCode());
 
             // Act & Assert
             MetricsAdvisorResponseException exception = assertThrows(MetricsAdvisorResponseException.class, () ->
-                client.getDataFeedWithResponse(createdDataFeed.getId(), Context.NONE));
+                    client.getDataFeedWithResponse(createdDataFeed.getId(), Context.NONE));
             final MetricsAdvisorError errorCode = exception.getValue();
             assertEquals(errorCode.getMessage(), "datafeedId is invalid.");
         }, SQL_SERVER_DB);
@@ -750,10 +774,10 @@ public class DataFeedClientTest extends DataFeedTestBase {
                 expectedDataFeed.setSchema(new DataFeedSchema(Arrays.asList(dataFeedMetric, dataFeedMetric2)));
                 // Act & Assert
                 final MetricsAdvisorResponseException errorCodeException
-                    = assertThrows(MetricsAdvisorResponseException.class, () -> client.createDataFeed(expectedDataFeed));
+                        = assertThrows(MetricsAdvisorResponseException.class, () -> client.createDataFeed(expectedDataFeed));
 
                 assertEquals("The metric name 'cost' is duplicate,please remove one.",
-                    errorCodeException.getValue().getMessage());
+                        errorCodeException.getValue().getMessage());
             }, SQL_SERVER_DB);
         } finally {
             if (!CoreUtils.isNullOrEmpty(dataFeedId.get())) {

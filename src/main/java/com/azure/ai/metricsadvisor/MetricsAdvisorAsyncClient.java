@@ -4,6 +4,7 @@
 package com.azure.ai.metricsadvisor;
 
 import com.azure.ai.metricsadvisor.implementation.MetricsAdvisorClientImpl;
+import com.azure.ai.metricsadvisor.implementation.models.AlertingResultQuery;
 import com.azure.ai.metricsadvisor.implementation.util.PagedConverter;
 import com.azure.ai.metricsadvisor.models.AnomalyAlert;
 import com.azure.ai.metricsadvisor.models.ListAlertOptions;
@@ -20,8 +21,6 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.time.OffsetDateTime;
 import java.util.Objects;
-
-import com.fasterxml.jackson.databind.util.Converter;
 import reactor.core.publisher.Mono;
 
 /** Initializes a new instance of the asynchronous MetricsAdvisorClient type. */
@@ -74,7 +73,6 @@ public final class MetricsAdvisorAsyncClient {
         if (options == null) {
             options = new ListAlertOptions();
         }
-
         RequestOptions requestOptions = new RequestOptions();
         if (options.getMaxPageSize() != null) {
             requestOptions.addQueryParam("$maxpagesize", options.getMaxPageSize().toString());
@@ -82,17 +80,22 @@ public final class MetricsAdvisorAsyncClient {
         if (options.getSkip() != null) {
             requestOptions.addQueryParam("$skip", options.getSkip().toString());
         }
-        ObjectNode objectNode = JsonNodeFactory.instance.objectNode();
-        if (startTime != null) {
-            objectNode.put("startTime", startTime.toString());
-        }
-        if (endTime != null) {
-            objectNode.put("endTime", endTime.toString());
-        }
-        if (options != null && options.getTimeMode() != null) {
-            objectNode.put("timeMode", options.getTimeMode().toString());
-        }
-        BinaryData body = BinaryData.fromString(objectNode.toString());
+        AlertingResultQuery alertingResultQuery = new AlertingResultQuery();
+        alertingResultQuery.setStartTime(startTime);
+        alertingResultQuery.setEndTime(endTime);
+        alertingResultQuery.setTimeMode(options.getTimeMode());
+        BinaryData body = BinaryData.fromObject(alertingResultQuery);
+//        ObjectNode objectNode = JsonNodeFactory.instance.objectNode();
+//        if (startTime != null) {
+//            objectNode.put("startTime", startTime.toString());
+//        }
+//        if (endTime != null) {
+//            objectNode.put("endTime", endTime.toString());
+//        }
+//        if (options != null && options.getTimeMode() != null) {
+//            objectNode.put("timeMode", options.getTimeMode().toString());
+//        }
+//        BinaryData body = BinaryData.fromString(objectNode.toString());
         PagedFlux<BinaryData> response =
                 this.getAlertsByAnomalyAlertingConfiguration(alertConfigurationId, body, requestOptions);
         return PagedConverter.mapPage(response, binaryData -> binaryData.toObject(AnomalyAlert.class));

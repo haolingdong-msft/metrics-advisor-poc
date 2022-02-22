@@ -4,6 +4,7 @@
 package com.azure.ai.metricsadvisor;
 
 import com.azure.ai.metricsadvisor.implementation.MetricsAdvisorClientImpl;
+import com.azure.ai.metricsadvisor.implementation.models.AlertingResultQuery;
 import com.azure.ai.metricsadvisor.implementation.util.PagedConverter;
 import com.azure.ai.metricsadvisor.models.AnomalyAlert;
 import com.azure.ai.metricsadvisor.models.ListAlertOptions;
@@ -80,20 +81,26 @@ public final class MetricsAdvisorClient {
         if (options.getSkip() != null) {
             requestOptions.addQueryParam("$skip", options.getSkip().toString());
         }
-        ObjectNode objectNode = JsonNodeFactory.instance.objectNode();
-        if (startTime != null) {
-            objectNode.put("startTime", startTime.toString());
-        }
-        if (endTime != null) {
-            objectNode.put("endTime", endTime.toString());
-        }
-        if (options != null && options.getTimeMode() != null) {
-            objectNode.put("timeMode", options.getTimeMode().toString());
-        }
+//        ObjectNode objectNode = JsonNodeFactory.instance.objectNode();
+//        if (startTime != null) {
+//            objectNode.put("startTime", startTime.toString());
+//        }
+//        if (endTime != null) {
+//            objectNode.put("endTime", endTime.toString());
+//        }
+//        if (options != null && options.getTimeMode() != null) {
+//            objectNode.put("timeMode", options.getTimeMode().toString());
+//        }
+//        BinaryData body = BinaryData.fromObject(alertingResultQuery);
+
+        AlertingResultQuery alertingResultQuery = new AlertingResultQuery();
+        alertingResultQuery.setStartTime(startTime);
+        alertingResultQuery.setEndTime(endTime);
+        alertingResultQuery.setTimeMode(options.getTimeMode());
+        BinaryData body = BinaryData.fromObject(alertingResultQuery);
         if (context != null) {
             requestOptions.setContext(context);
         }
-        BinaryData body = BinaryData.fromString(objectNode.toString());
         PagedIterable<BinaryData> response =
                 this.getAlertsByAnomalyAlertingConfiguration(alertConfigurationId, body, requestOptions);
         return PagedConverter.mapPage(response, binaryData -> binaryData.toObject(AnomalyAlert.class));

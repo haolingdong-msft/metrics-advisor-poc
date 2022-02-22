@@ -33,7 +33,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-/** A builder for creating a new instance of the MetricsAdvisorClient type. */
+/** A builder for creating a new instance of the MetricsAdvisorAdministrationClient type. */
 @ServiceClientBuilder(serviceClients = {MetricsAdvisorAdministrationClient.class, MetricsAdvisorAdministrationAsyncClient.class})
 public final class MetricsAdvisorAdministrationClientBuilder {
 
@@ -305,9 +305,9 @@ public final class MetricsAdvisorAdministrationClientBuilder {
     }
 
     /**
-     * Builds an instance of MetricsAdvisorClient sync client.
+     * Builds an instance of MetricsAdvisorAdministrationClient sync client.
      *
-     * @return an instance of MetricsAdvisorClient.
+     * @return an instance of MetricsAdvisorAdministrationClient.
      */
     public MetricsAdvisorAdministrationClient buildClient() {
         return new MetricsAdvisorAdministrationClient(buildInnerClient(), buildAsyncClient());
