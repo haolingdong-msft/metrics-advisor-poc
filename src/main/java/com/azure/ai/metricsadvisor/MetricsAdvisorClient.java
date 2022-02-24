@@ -18,8 +18,6 @@ import com.azure.core.http.rest.RequestOptions;
 import com.azure.core.http.rest.Response;
 import com.azure.core.util.BinaryData;
 import com.azure.core.util.Context;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 
@@ -81,18 +79,6 @@ public final class MetricsAdvisorClient {
         if (options.getSkip() != null) {
             requestOptions.addQueryParam("$skip", options.getSkip().toString());
         }
-//        ObjectNode objectNode = JsonNodeFactory.instance.objectNode();
-//        if (startTime != null) {
-//            objectNode.put("startTime", startTime.toString());
-//        }
-//        if (endTime != null) {
-//            objectNode.put("endTime", endTime.toString());
-//        }
-//        if (options != null && options.getTimeMode() != null) {
-//            objectNode.put("timeMode", options.getTimeMode().toString());
-//        }
-//        BinaryData body = BinaryData.fromObject(alertingResultQuery);
-
         AlertingResultQuery alertingResultQuery = new AlertingResultQuery();
         alertingResultQuery.setStartTime(startTime);
         alertingResultQuery.setEndTime(endTime);

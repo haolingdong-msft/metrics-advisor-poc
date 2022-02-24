@@ -17,8 +17,6 @@ import com.azure.core.http.rest.PagedFlux;
 import com.azure.core.http.rest.RequestOptions;
 import com.azure.core.http.rest.Response;
 import com.azure.core.util.BinaryData;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 import reactor.core.publisher.Mono;
@@ -85,17 +83,6 @@ public final class MetricsAdvisorAsyncClient {
         alertingResultQuery.setEndTime(endTime);
         alertingResultQuery.setTimeMode(options.getTimeMode());
         BinaryData body = BinaryData.fromObject(alertingResultQuery);
-//        ObjectNode objectNode = JsonNodeFactory.instance.objectNode();
-//        if (startTime != null) {
-//            objectNode.put("startTime", startTime.toString());
-//        }
-//        if (endTime != null) {
-//            objectNode.put("endTime", endTime.toString());
-//        }
-//        if (options != null && options.getTimeMode() != null) {
-//            objectNode.put("timeMode", options.getTimeMode().toString());
-//        }
-//        BinaryData body = BinaryData.fromString(objectNode.toString());
         PagedFlux<BinaryData> response =
                 this.getAlertsByAnomalyAlertingConfiguration(alertConfigurationId, body, requestOptions);
         return PagedConverter.mapPage(response, binaryData -> binaryData.toObject(AnomalyAlert.class));
