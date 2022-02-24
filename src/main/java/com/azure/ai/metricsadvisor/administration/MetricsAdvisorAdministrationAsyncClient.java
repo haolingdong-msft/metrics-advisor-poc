@@ -155,14 +155,7 @@ public final class MetricsAdvisorAdministrationAsyncClient {
     @Generated
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedFlux<BinaryData> listDataFeeds(RequestOptions requestOptions) {
-        return PagedConverter.mapError(this.serviceClient.listDataFeedsAsync(requestOptions), throwable -> {
-            if (throwable instanceof HttpResponseException) {
-                MetricsAdvisorError error = BinaryData.fromObject(((HttpResponseException) throwable).getValue()).toObject(MetricsAdvisorError.class);
-                return new MetricsAdvisorResponseException(throwable.getMessage(), ((HttpResponseException) throwable).getResponse(), error);
-            } else {
-                return throwable;
-            }
-        });
+        return this.serviceClient.listDataFeedsAsync(requestOptions);
     }
 
     @ServiceMethod(returns = ReturnType.COLLECTION)
@@ -205,21 +198,10 @@ public final class MetricsAdvisorAdministrationAsyncClient {
             requestOptions.addQueryParam("$maxpagesize", options.getMaxPageSize().toString(), true);
         }
 
-        return PagedConverter.mapPage(PagedConverter.mapError(this.listDataFeeds(requestOptions), throwable -> {
-            if (throwable instanceof HttpResponseException) {
-                MetricsAdvisorError error = BinaryData.fromObject(((HttpResponseException) throwable).getValue()).toObject(MetricsAdvisorError.class);
-                return new MetricsAdvisorResponseException(throwable.getMessage(), ((HttpResponseException) throwable).getResponse(), error);
-            } else {
-                return throwable;
-            }
-        }), response -> {
+        return PagedConverter.mapPage(this.listDataFeeds(requestOptions), response -> {
             DataFeedDetail dataFeedDetail = response.toObject(DataFeedDetail.class);
             return DataFeedTransforms.fromInner(dataFeedDetail);
         });
-//                listDataFeeds(requestOptions).mapPage(response -> {
-//            DataFeedDetail dataFeedDetail = response.toObject(DataFeedDetail.class);
-//            return DataFeedTransforms.fromInner(dataFeedDetail);
-//        });
     }
 
     /**
@@ -284,16 +266,10 @@ public final class MetricsAdvisorAdministrationAsyncClient {
      * @return the {@link Response} on successful completion of {@link Mono}.
      * @throws HttpResponseException thrown if the request is rejected by server.
      */
+    @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Response<Void>> createDataFeedWithResponse(BinaryData body, RequestOptions requestOptions) {
-        return this.serviceClient.createDataFeedWithResponseAsync(body, requestOptions).onErrorMap(throwable -> {
-            if (throwable instanceof HttpResponseException) {
-                ResponseError error = BinaryData.fromObject(((HttpResponseException) throwable).getValue()).toObject(ResponseError.class);
-                return new HttpResponseException(throwable.getMessage(), ((HttpResponseException) throwable).getResponse(), error);
-            } else {
-                return throwable;
-            }
-        });
+        return this.serviceClient.createDataFeedWithResponseAsync(body, requestOptions);
     }
 
     @ServiceMethod(returns = ReturnType.SINGLE)
@@ -466,16 +442,10 @@ public final class MetricsAdvisorAdministrationAsyncClient {
      * @return a data feed by its id along with {@link Response} on successful completion of {@link Mono}.
      * @throws HttpResponseException thrown if the request is rejected by server.
      */
+    @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Response<BinaryData>> getDataFeedByIdWithResponse(String dataFeedId, RequestOptions requestOptions) {
-        return this.serviceClient.getDataFeedByIdWithResponseAsync(dataFeedId, requestOptions).onErrorMap(throwable -> {
-            if (throwable instanceof HttpResponseException) {
-                MetricsAdvisorError error = BinaryData.fromObject(((HttpResponseException) throwable).getValue()).toObject(MetricsAdvisorError.class);
-                return new MetricsAdvisorResponseException(throwable.getMessage(), ((HttpResponseException) throwable).getResponse(), error);
-            } else {
-                return throwable;
-            }
-        });
+        return this.serviceClient.getDataFeedByIdWithResponseAsync(dataFeedId, requestOptions);
     }
 
     @ServiceMethod(returns = ReturnType.SINGLE)
@@ -552,14 +522,7 @@ public final class MetricsAdvisorAdministrationAsyncClient {
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Response<BinaryData>> updateDataFeedWithResponse(
             String dataFeedId, BinaryData body, RequestOptions requestOptions) {
-        return this.serviceClient.updateDataFeedWithResponseAsync(dataFeedId, body, requestOptions).onErrorMap(throwable -> {
-            if (throwable instanceof HttpResponseException) {
-                MetricsAdvisorError error = BinaryData.fromObject(((HttpResponseException) throwable).getValue()).toObject(MetricsAdvisorError.class);
-                return new MetricsAdvisorResponseException(throwable.getMessage(), ((HttpResponseException) throwable).getResponse(), error);
-            } else {
-                return throwable;
-            }
-        });
+        return this.serviceClient.updateDataFeedWithResponseAsync(dataFeedId, body, requestOptions);
     }
 
     @ServiceMethod(returns = ReturnType.SINGLE)
@@ -658,14 +621,7 @@ public final class MetricsAdvisorAdministrationAsyncClient {
     @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Response<Void>> deleteDataFeedWithResponse(String dataFeedId, RequestOptions requestOptions) {
-        return this.serviceClient.deleteDataFeedWithResponseAsync(dataFeedId, requestOptions).onErrorMap(throwable -> {
-            if (throwable instanceof HttpResponseException) {
-                MetricsAdvisorError error = BinaryData.fromObject(((HttpResponseException) throwable).getValue()).toObject(MetricsAdvisorError.class);
-                return new MetricsAdvisorResponseException(throwable.getMessage(), ((HttpResponseException) throwable).getResponse(), error);
-            } else {
-                return throwable;
-            }
-        });
+        return this.serviceClient.deleteDataFeedWithResponseAsync(dataFeedId, requestOptions);
     }
 
     @ServiceMethod(returns = ReturnType.SINGLE)
