@@ -2,7 +2,7 @@
 
 ## Overview of Project
 
-This project is the experiment project on describing Data plane Codegen(EPG) grow up story for Java, it uses Metrics Advisor as example resource provider. 
+This project is the experiment project on describing Data plane Codegen(DPG) grow up story for Java, it uses Metrics Advisor as example resource provider. 
 
 The project includes manual added codes such as client models/utils, code sample of DPG configuration, customized authentication, convenient methods including model conversion.
 

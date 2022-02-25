@@ -15,7 +15,7 @@ npm install -g autorest
 ### Generation
 ```ps
 cd <swagger-folder>
-autorest --java --use=C:/work/autorest.java
+autorest <your-path-to-swagger-readme> --version=3.6.1 --use=./
 ```
 
 ### Code generation settings
@@ -29,6 +29,7 @@ generate-sync-async-clients: true
 generate-client-as-impl: true
 generate-client-interfaces: false
 add-context-parameter: true
+artifact-id: azure-ai-metricsadvisor
 low-level-client: true
 sync-methods: all
 generate-samples: true
