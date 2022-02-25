@@ -15,7 +15,9 @@ import com.azure.ai.metricsadvisor.models.MetricsAdvisorResponseException;
 import com.azure.core.exception.HttpResponseException;
 import com.azure.core.http.HttpClient;
 import com.azure.core.http.rest.PagedFlux;
+import com.azure.core.models.ResponseError;
 import com.azure.core.test.TestBase;
+import com.azure.core.util.BinaryData;
 import com.azure.core.util.CoreUtils;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import org.junit.jupiter.api.AfterAll;
@@ -764,9 +766,9 @@ public class DataFeedAsyncClientTest extends DataFeedTestBase {
             // Act & Assert
             StepVerifier.create(client.getDataFeedWithResponse(createdDataFeed.getId()))
                 .verifyErrorSatisfies(throwable -> {
-                    assertEquals(MetricsAdvisorResponseException.class, throwable.getClass());
-                    final MetricsAdvisorError errorCode = ((MetricsAdvisorResponseException) throwable).getValue();
-                    assertEquals(errorCode.getMessage(), "datafeedId is invalid.");
+                    assertEquals(HttpResponseException.class, throwable.getClass());
+                    ResponseError error = BinaryData.fromObject(((HttpResponseException) throwable).getValue()).toObject(ResponseError.class);
+                    assertEquals(error.getMessage(), "datafeedId is invalid.");
                 });
         }, SQL_SERVER_DB);
     }

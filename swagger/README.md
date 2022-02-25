@@ -14,7 +14,6 @@ npm install -g autorest
 
 ### Generation
 ```ps
-cd <swagger-folder>
 autorest <your-path-to-swagger-readme> --version=3.6.1 --use=./
 ```
 

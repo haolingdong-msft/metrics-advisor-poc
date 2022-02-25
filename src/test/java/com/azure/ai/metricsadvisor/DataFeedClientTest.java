@@ -16,9 +16,12 @@ import com.azure.ai.metricsadvisor.administration.models.ListDataFeedOptions;
 import com.azure.ai.metricsadvisor.administration.models.PostgreSqlDataFeedSource;
 import com.azure.ai.metricsadvisor.models.MetricsAdvisorError;
 import com.azure.ai.metricsadvisor.models.MetricsAdvisorResponseException;
+import com.azure.core.exception.HttpResponseException;
 import com.azure.core.http.HttpClient;
 import com.azure.core.http.rest.PagedResponse;
 import com.azure.core.http.rest.Response;
+import com.azure.core.models.ResponseError;
+import com.azure.core.util.BinaryData;
 import com.azure.core.util.Context;
 import com.azure.core.util.CoreUtils;
 import io.netty.handler.codec.http.HttpResponseStatus;
@@ -750,10 +753,10 @@ public class DataFeedClientTest extends DataFeedTestBase {
                     client.deleteDataFeedWithResponse(createdDataFeed.getId(), Context.NONE).getStatusCode());
 
             // Act & Assert
-            MetricsAdvisorResponseException exception = assertThrows(MetricsAdvisorResponseException.class, () ->
+            HttpResponseException exception = assertThrows(HttpResponseException.class, () ->
                     client.getDataFeedWithResponse(createdDataFeed.getId(), Context.NONE));
-            final MetricsAdvisorError errorCode = exception.getValue();
-            assertEquals(errorCode.getMessage(), "datafeedId is invalid.");
+            final MetricsAdvisorError error = BinaryData.fromObject(((HttpResponseException) exception).getValue()).toObject(MetricsAdvisorError.class);
+            assertEquals(error.getMessage(), "datafeedId is invalid.");
         }, SQL_SERVER_DB);
     }
 
@@ -773,11 +776,12 @@ public class DataFeedClientTest extends DataFeedTestBase {
             creatDataFeedRunner(expectedDataFeed -> {
                 expectedDataFeed.setSchema(new DataFeedSchema(Arrays.asList(dataFeedMetric, dataFeedMetric2)));
                 // Act & Assert
-                final MetricsAdvisorResponseException errorCodeException
-                        = assertThrows(MetricsAdvisorResponseException.class, () -> client.createDataFeed(expectedDataFeed));
+                final HttpResponseException errorCodeException
+                        = assertThrows(HttpResponseException.class, () -> client.createDataFeed(expectedDataFeed));
+                final ResponseError error = BinaryData.fromObject(((HttpResponseException) errorCodeException).getValue()).toObject(ResponseError.class);
 
                 assertEquals("The metric name 'cost' is duplicate,please remove one.",
-                        errorCodeException.getValue().getMessage());
+                        error.getMessage());
             }, SQL_SERVER_DB);
         } finally {
             if (!CoreUtils.isNullOrEmpty(dataFeedId.get())) {
