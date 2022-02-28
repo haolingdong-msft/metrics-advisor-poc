@@ -8,7 +8,7 @@ Please refer to [`swagger/README.md`](https://github.com/haolingdong-msft/metric
 
 ### See the gaps between generated code and released code
 
-In order to grow up on top of generated code, we first need to see the gaps between generated code and released code. The gaps are:
+In order to grow up on top of generated code, we first need to see the gaps between generated code and [released code](https://github.com/Azure/azure-sdk-for-java/tree/main/sdk/metricsadvisor/azure-ai-metricsadvisor/src). The gaps are:
 
 * models/utils classes are not in generated code
 * There are two clients, i.e. `MetricsAdvisorAdministrationClient` and `MetricsAdvisorClient` in released code.
