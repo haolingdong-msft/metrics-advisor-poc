@@ -22,7 +22,7 @@ In order to grow up on top of generated code, we first need to see the gaps betw
 
 * Released code has customized exception type `MetricsAdvisorResponseException` with  `MetricsAdvisorError`
 
-  Released code has customized exception type `MetricsAdvisorResponseException` with  `MetricsAdvisorError`, while DPG generated code has exception type HttpResponseException` with `ResponseError`. I've brought up this issue within Java DPG group and we also discussed it in LLC group. For Java, `azure-core` already has exception type `HttpResponseException` with `ResponseError`, those two types provide more information than MA's customized types. So we will use the exception types in `azure-core`. But customer is also able to customize the exception if they want.
+  Released code has customized exception type `MetricsAdvisorResponseException` with  `MetricsAdvisorError`, while DPG generated code has exception type `HttpResponseException` with `ResponseError`. I've brought up this issue within Java DPG group and we also discussed it in LLC group. For Java, `azure-core` already has exception type `HttpResponseException` with `ResponseError`, those two types provide more information than MA's customized types. So we will use the exception types in `azure-core`. But customer is also able to customize the exception if they want.
 
 ### Pick a list of Metrics Advisor's APIs to do experiment
 
