@@ -29,6 +29,7 @@ Below are the manual codes (including models and utils) added:
 https://github.com/haolingdong-msft/metrics-advisor-poc/blob/master/src/main/java/com/azure/ai/metricsadvisor/implementation/models
 https://github.com/haolingdong-msft/metrics-advisor-poc/blob/master/src/main/java/com/azure/ai/metricsadvisor/implementation/util
 https://github.com/haolingdong-msft/metrics-advisor-poc/blob/master/src/main/java/com/azure/ai/metricsadvisor/models
+https://github.com/haolingdong-msft/metrics-advisor-poc/blob/5e4b3aa5add5231e5cad5b7ad599536fc58790b2/src/main/java/com/azure/ai/metricsadvisor/administration/models
 
 ## Convenient Methods
 
