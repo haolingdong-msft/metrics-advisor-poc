@@ -3,7 +3,7 @@
 
 package com.azure.ai.metricsadvisor;
 
-import com.azure.ai.metricsadvisor.administration.MetricsAdvisorAdministrationClient;
+import com.azure.ai.metricsadvisor.MetricsAdvisorAdministrationClient;
 import com.azure.ai.metricsadvisor.administration.models.DataFeed;
 import com.azure.ai.metricsadvisor.administration.models.DataFeedGranularity;
 import com.azure.ai.metricsadvisor.administration.models.DataFeedGranularityType;

@@ -3,7 +3,7 @@
 
 package com.azure.ai.metricsadvisor;
 
-import com.azure.ai.metricsadvisor.administration.MetricsAdvisorAdministrationAsyncClient;
+import com.azure.ai.metricsadvisor.MetricsAdvisorAdministrationAsyncClient;
 import com.azure.ai.metricsadvisor.administration.models.DataFeed;
 import com.azure.ai.metricsadvisor.administration.models.DataFeedGranularityType;
 import com.azure.ai.metricsadvisor.administration.models.DataFeedSourceType;
@@ -13,6 +13,7 @@ import com.azure.ai.metricsadvisor.administration.models.ListDataFeedOptions;
 import com.azure.ai.metricsadvisor.models.MetricsAdvisorError;
 import com.azure.ai.metricsadvisor.models.MetricsAdvisorResponseException;
 import com.azure.core.exception.HttpResponseException;
+import com.azure.core.exception.ResourceNotFoundException;
 import com.azure.core.http.HttpClient;
 import com.azure.core.http.rest.PagedFlux;
 import com.azure.core.models.ResponseError;
@@ -766,7 +767,7 @@ public class DataFeedAsyncClientTest extends DataFeedTestBase {
             // Act & Assert
             StepVerifier.create(client.getDataFeedWithResponse(createdDataFeed.getId()))
                 .verifyErrorSatisfies(throwable -> {
-                    assertEquals(HttpResponseException.class, throwable.getClass());
+                    assertEquals(ResourceNotFoundException.class, throwable.getClass());
                     ResponseError error = BinaryData.fromObject(((HttpResponseException) throwable).getValue()).toObject(ResponseError.class);
                     assertEquals(error.getMessage(), "datafeedId is invalid.");
                 });

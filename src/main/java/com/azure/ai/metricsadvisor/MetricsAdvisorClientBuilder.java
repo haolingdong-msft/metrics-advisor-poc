@@ -27,7 +27,6 @@ import com.azure.core.util.Configuration;
 import com.azure.core.util.CoreUtils;
 import com.azure.core.util.serializer.JacksonAdapter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -48,7 +47,8 @@ public final class MetricsAdvisorClientBuilder {
     @Generated
     private static final String[] DEFAULT_SCOPES = new String[] {"https://cognitiveservices.azure.com/.default"};
 
-    @Generated private final Map<String, String> properties = new HashMap<>();
+    @Generated
+    private final Map<String, String> properties = CoreUtils.getProperties("azure-ai-metricsadvisor.properties");
 
     /** Create an instance of the MetricsAdvisorClientBuilder. */
     @Generated
@@ -295,22 +295,22 @@ public final class MetricsAdvisorClientBuilder {
     }
 
     /**
-     * Builds an instance of MetricsAdvisorAsyncClient async client.
+     * Builds an instance of MetricsAdvisorAsyncClient class.
      *
      * @return an instance of MetricsAdvisorAsyncClient.
      */
     @Generated
     public MetricsAdvisorAsyncClient buildAsyncClient() {
-        return new MetricsAdvisorAsyncClient(buildInnerClient());
+        return new MetricsAdvisorAsyncClient(buildInnerClient().getMetricsAdvisors());
     }
 
     /**
-     * Builds an instance of MetricsAdvisorClient sync client.
+     * Builds an instance of MetricsAdvisorClient class.
      *
      * @return an instance of MetricsAdvisorClient.
      */
     @Generated
     public MetricsAdvisorClient buildClient() {
-        return new MetricsAdvisorClient(buildInnerClient());
+        return new MetricsAdvisorClient(new MetricsAdvisorAsyncClient(buildInnerClient().getMetricsAdvisors()));
     }
 }

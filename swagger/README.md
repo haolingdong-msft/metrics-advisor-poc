@@ -21,7 +21,7 @@ https://github.com/Azure/azure-rest-api-specs/blob/main/specification/cognitives
 
 ### Code generation settings
 ```yaml
-input-file: ./metricsadvisor_haoling.json
+input-file: https://github.com/Azure/azure-rest-api-specs/blob/f9a5bf06925934b7841bdc95c14e9b70379b426b/specification/cognitiveservices/data-plane/MetricsAdvisor/stable/v1.0/MetricsAdvisor.json
 java: true
 output-folder: ../
 regenerate-pom: false
