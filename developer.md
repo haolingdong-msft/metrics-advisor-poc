@@ -13,7 +13,7 @@ In order to grow up on top of generated code, we first need to see the gaps betw
 * models/utils classes are not in generated code
 * There are two clients, i.e. `MetricsAdvisorAdministrationClient` and `MetricsAdvisorClient` in released code.
 
-  Because Swagger spec does not define operation group in `operation_id`, only one client `MetricsAdvisorClient` is generated. I've brought up this issue in LLC group, currently we agree that it is better to modify Swagger directly to generate two clients. Since we know for sure that adding operation group in `operation_id` will generate two clients, I did not spend time to modify swagger for now as this is not first priority for our experiment. I just create `MetricsAdvisorAdministrationClient` and related `Builder` manually and move the APIs we want to test into `MetricsAdvisorAdministrationClient`.
+  Because Swagger spec does not define operation group in `operation_id`, only one client `MetricsAdvisorClient` is generated. I've brought up this issue in LLC group, currently we agree that it is better to modify Swagger directly to generate two clients. I have updated swagger in a draft pr with operation group and use the spec in the pr to generate code. Spec pr is here: https://github.com/Azure/azure-rest-api-specs/pull/18107
 
 * Released code supports customized authentication using `MetricsAdvisorKeyCredential`.
 * Released clients have APIs with high level model where DPG generated code does not have.
@@ -23,6 +23,10 @@ In order to grow up on top of generated code, we first need to see the gaps betw
 * Released code has customized exception type `MetricsAdvisorResponseException` with  `MetricsAdvisorError`
 
   Released code has customized exception type `MetricsAdvisorResponseException` with  `MetricsAdvisorError`, while DPG generated code has exception type `HttpResponseException` with `ResponseError`. I've brought up this issue within Java DPG group and we also discussed it in LLC group. For Java, `azure-core` already has exception type `HttpResponseException` with `ResponseError`, those two types provide more information than MA's customized types. So we will use the exception types in `azure-core`. But customer is also able to customize the exception if they want.
+
+* Released code use POST when retrieving next page in list paging operation.
+
+I also add POST operation when retrieving next page in the swagger spec draft pr: https://github.com/Azure/azure-rest-api-specs/pull/18107
 
 ### 3. Pick a list of Metrics Advisor's APIs to do experiment
 
