@@ -13,16 +13,16 @@ import com.azure.identity.DefaultAzureCredentialBuilder;
 
 public class GetADataFeedByItsId {
     public static void main(String[] args) {
-        // BEGIN: com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationgetdatafeedbyid.getadatafeedbyitsid
         MetricsAdvisorAdministrationClient metricsAdvisorAdministrationClient =
                 new MetricsAdvisorAdministrationClientBuilder()
                         .credential(new DefaultAzureCredentialBuilder().build())
                         .endpoint("{endpoint}")
                         .buildClient();
+        // BEGIN:com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationgetdatafeedbyid.getadatafeedbyitsid
         RequestOptions requestOptions = new RequestOptions();
         Response<BinaryData> response =
                 metricsAdvisorAdministrationClient.getDataFeedByIdWithResponse(
                         "01234567-8901-2345-6789-012345678901", requestOptions);
-        // END: com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationgetdatafeedbyid.getadatafeedbyitsid
+        // END:com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationgetdatafeedbyid.getadatafeedbyitsid
     }
 }

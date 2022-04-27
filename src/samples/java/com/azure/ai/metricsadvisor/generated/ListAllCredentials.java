@@ -13,14 +13,14 @@ import com.azure.identity.DefaultAzureCredentialBuilder;
 
 public class ListAllCredentials {
     public static void main(String[] args) {
-        // BEGIN: com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationlistcredentials.listallcredentials
         MetricsAdvisorAdministrationClient metricsAdvisorAdministrationClient =
                 new MetricsAdvisorAdministrationClientBuilder()
                         .credential(new DefaultAzureCredentialBuilder().build())
                         .endpoint("{endpoint}")
                         .buildClient();
+        // BEGIN:com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationlistcredentials.listallcredentials
         RequestOptions requestOptions = new RequestOptions();
         PagedIterable<BinaryData> response = metricsAdvisorAdministrationClient.listCredentials(requestOptions);
-        // END: com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationlistcredentials.listallcredentials
+        // END:com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationlistcredentials.listallcredentials
     }
 }

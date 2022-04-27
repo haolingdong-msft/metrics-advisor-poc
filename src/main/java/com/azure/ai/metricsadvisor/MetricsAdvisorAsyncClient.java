@@ -919,16 +919,6 @@ public final class MetricsAdvisorAsyncClient {
     }
 
     /**
-     * Initializes an instance of MetricsAdvisorAsyncClient class.
-     *
-     * @param serviceClient the service client implementation.
-     */
-    @Generated
-    MetricsAdvisorAsyncClient(MetricsAdvisorsImpl serviceClient) {
-        this.serviceClient = serviceClient;
-    }
-
-    /**
      * Query alerts under anomaly alerting configuration.
      *
      * <p><strong>Query Parameters</strong>
@@ -1049,5 +1039,15 @@ public final class MetricsAdvisorAsyncClient {
     public Mono<Response<BinaryData>> getAnomalyAlertingConfigurationWithResponse(
             String configurationId, RequestOptions requestOptions) {
         return this.serviceClient.getAnomalyAlertingConfigurationWithResponseAsync(configurationId, requestOptions);
+    }
+
+    /**
+     * Initializes an instance of MetricsAdvisorAsyncClient class.
+     *
+     * @param serviceClient the service client implementation.
+     */
+    @Generated
+    MetricsAdvisorAsyncClient(MetricsAdvisorsImpl serviceClient) {
+        this.serviceClient = serviceClient;
     }
 }

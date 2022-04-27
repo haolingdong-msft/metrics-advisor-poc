@@ -13,16 +13,16 @@ import com.azure.identity.DefaultAzureCredentialBuilder;
 
 public class ListDimensionFromCertainMetric {
     public static void main(String[] args) {
-        // BEGIN: com.azure.ai.metricsadvisor.generated.metricsadvisorgetmetricdimension.listdimensionfromcertainmetric
         MetricsAdvisorClient metricsAdvisorClient =
                 new MetricsAdvisorClientBuilder()
                         .credential(new DefaultAzureCredentialBuilder().build())
                         .endpoint("{endpoint}")
                         .buildClient();
+        // BEGIN:com.azure.ai.metricsadvisor.generated.metricsadvisorgetmetricdimension.listdimensionfromcertainmetric
         BinaryData body = BinaryData.fromString("{\"dimensionName\":\"city\"}");
         RequestOptions requestOptions = new RequestOptions();
         PagedIterable<BinaryData> response =
                 metricsAdvisorClient.getMetricDimension("22222222-2222-2222-2222-000000000001", body, requestOptions);
-        // END: com.azure.ai.metricsadvisor.generated.metricsadvisorgetmetricdimension.listdimensionfromcertainmetric
+        // END:com.azure.ai.metricsadvisor.generated.metricsadvisorgetmetricdimension.listdimensionfromcertainmetric
     }
 }

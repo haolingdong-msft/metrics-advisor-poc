@@ -12,18 +12,16 @@ import com.azure.identity.DefaultAzureCredentialBuilder;
 
 public class DeleteADataSourceCredential {
     public static void main(String[] args) {
-        // BEGIN:
-        // com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationdeletecredential.deleteadatasourcecredential
         MetricsAdvisorAdministrationClient metricsAdvisorAdministrationClient =
                 new MetricsAdvisorAdministrationClientBuilder()
                         .credential(new DefaultAzureCredentialBuilder().build())
                         .endpoint("{endpoint}")
                         .buildClient();
+        // BEGIN:com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationdeletecredential.deleteadatasourcecredential
         RequestOptions requestOptions = new RequestOptions();
         Response<Void> response =
                 metricsAdvisorAdministrationClient.deleteCredentialWithResponse(
                         "01234567-8901-2345-6789-012345678901", requestOptions);
-        // END:
-        // com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationdeletecredential.deleteadatasourcecredential
+        // END:com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationdeletecredential.deleteadatasourcecredential
     }
 }

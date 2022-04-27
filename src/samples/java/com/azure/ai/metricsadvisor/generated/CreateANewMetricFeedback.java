@@ -13,17 +13,17 @@ import com.azure.identity.DefaultAzureCredentialBuilder;
 
 public class CreateANewMetricFeedback {
     public static void main(String[] args) {
-        // BEGIN: com.azure.ai.metricsadvisor.generated.metricsadvisorcreatemetricfeedback.createanewmetricfeedback
         MetricsAdvisorClient metricsAdvisorClient =
                 new MetricsAdvisorClientBuilder()
                         .credential(new DefaultAzureCredentialBuilder().build())
                         .endpoint("{endpoint}")
                         .buildClient();
+        // BEGIN:com.azure.ai.metricsadvisor.generated.metricsadvisorcreatemetricfeedback.createanewmetricfeedback
         BinaryData body =
                 BinaryData.fromString(
                         "{\"anomalyDetectionConfigurationId\":\"33333333-3333-3333-3333-000000000001\",\"dimensionFilter\":{\"dimension\":{\"city\":\"Beijing\"}},\"endTime\":\"2020-01-01T00:00:00.000Z\",\"feedbackType\":\"Anomaly\",\"metricId\":\"22222222-2222-2222-2222-000000000001\",\"startTime\":\"2020-01-01T00:00:00.000Z\",\"value\":{\"anomalyValue\":\"NotAnomaly\"}}");
         RequestOptions requestOptions = new RequestOptions();
         Response<Void> response = metricsAdvisorClient.createMetricFeedbackWithResponse(body, requestOptions);
-        // END: com.azure.ai.metricsadvisor.generated.metricsadvisorcreatemetricfeedback.createanewmetricfeedback
+        // END:com.azure.ai.metricsadvisor.generated.metricsadvisorcreatemetricfeedback.createanewmetricfeedback
     }
 }

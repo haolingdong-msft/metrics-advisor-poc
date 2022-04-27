@@ -13,17 +13,17 @@ import com.azure.identity.DefaultAzureCredentialBuilder;
 
 public class UpdateAHook {
     public static void main(String[] args) {
-        // BEGIN: com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationupdatehook.updateahook
         MetricsAdvisorAdministrationClient metricsAdvisorAdministrationClient =
                 new MetricsAdvisorAdministrationClientBuilder()
                         .credential(new DefaultAzureCredentialBuilder().build())
                         .endpoint("{endpoint}")
                         .buildClient();
+        // BEGIN:com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationupdatehook.updateahook
         BinaryData body = BinaryData.fromString("{\"description\":\"This is a webhook.\"}");
         RequestOptions requestOptions = new RequestOptions();
         Response<BinaryData> response =
                 metricsAdvisorAdministrationClient.updateHookWithResponse(
                         "01234567-8901-2345-6789-012345678901", body, requestOptions);
-        // END: com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationupdatehook.updateahook
+        // END:com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationupdatehook.updateahook
     }
 }

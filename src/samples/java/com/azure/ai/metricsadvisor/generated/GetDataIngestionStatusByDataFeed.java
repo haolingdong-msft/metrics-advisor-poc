@@ -13,13 +13,12 @@ import com.azure.identity.DefaultAzureCredentialBuilder;
 
 public class GetDataIngestionStatusByDataFeed {
     public static void main(String[] args) {
-        // BEGIN:
-        // com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationgetdatafeedingestionstatus.getdataingestionstatusbydatafeed
         MetricsAdvisorAdministrationClient metricsAdvisorAdministrationClient =
                 new MetricsAdvisorAdministrationClientBuilder()
                         .credential(new DefaultAzureCredentialBuilder().build())
                         .endpoint("{endpoint}")
                         .buildClient();
+        // BEGIN:com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationgetdatafeedingestionstatus.getdataingestionstatusbydatafeed
         BinaryData body =
                 BinaryData.fromString(
                         "{\"endTime\":\"2020-02-01T00:00:00.000Z\",\"startTime\":\"2020-01-01T00:00:00.000Z\"}");
@@ -27,7 +26,6 @@ public class GetDataIngestionStatusByDataFeed {
         PagedIterable<BinaryData> response =
                 metricsAdvisorAdministrationClient.getDataFeedIngestionStatus(
                         "01234567-8901-2345-6789-012345678901", body, requestOptions);
-        // END:
-        // com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationgetdatafeedingestionstatus.getdataingestionstatusbydatafeed
+        // END:com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationgetdatafeedingestionstatus.getdataingestionstatusbydatafeed
     }
 }

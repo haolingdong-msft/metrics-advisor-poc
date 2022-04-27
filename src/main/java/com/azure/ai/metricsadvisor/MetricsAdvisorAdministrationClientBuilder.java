@@ -7,6 +7,10 @@ import com.azure.ai.metricsadvisor.implementation.MetricsAdvisorClientImpl;
 import com.azure.ai.metricsadvisor.models.MetricsAdvisorKeyCredential;
 import com.azure.core.annotation.Generated;
 import com.azure.core.annotation.ServiceClientBuilder;
+import com.azure.core.client.traits.ConfigurationTrait;
+import com.azure.core.client.traits.EndpointTrait;
+import com.azure.core.client.traits.HttpTrait;
+import com.azure.core.client.traits.TokenCredentialTrait;
 import com.azure.core.credential.TokenCredential;
 import com.azure.core.http.HttpClient;
 import com.azure.core.http.HttpHeaders;
@@ -20,6 +24,7 @@ import com.azure.core.http.policy.HttpLogOptions;
 import com.azure.core.http.policy.HttpLoggingPolicy;
 import com.azure.core.http.policy.HttpPipelinePolicy;
 import com.azure.core.http.policy.HttpPolicyProviders;
+import com.azure.core.http.policy.RetryOptions;
 import com.azure.core.http.policy.RetryPolicy;
 import com.azure.core.http.policy.UserAgentPolicy;
 import com.azure.core.util.ClientOptions;
@@ -35,7 +40,11 @@ import java.util.stream.Collectors;
 /** A builder for creating a new instance of the MetricsAdvisorAdministrationClient type. */
 @ServiceClientBuilder(
         serviceClients = {MetricsAdvisorAdministrationClient.class, MetricsAdvisorAdministrationAsyncClient.class})
-public final class MetricsAdvisorAdministrationClientBuilder {
+public final class MetricsAdvisorAdministrationClientBuilder
+        implements HttpTrait<MetricsAdvisorAdministrationClientBuilder>,
+                ConfigurationTrait<MetricsAdvisorAdministrationClientBuilder>,
+                TokenCredentialTrait<MetricsAdvisorAdministrationClientBuilder>,
+                EndpointTrait<MetricsAdvisorAdministrationClientBuilder> {
 
     @Generated private static final String SDK_NAME = "name";
 
@@ -58,36 +67,26 @@ public final class MetricsAdvisorAdministrationClientBuilder {
     }
 
     /*
-     * Supported Cognitive Services endpoints (protocol and hostname, for
-     * example: https://<resource-name>.cognitiveservices.azure.com).
+     * The service endpoint
      */
     @Generated private String endpoint;
 
-    /**
-     * Sets Supported Cognitive Services endpoints (protocol and hostname, for example:
-     * https://&lt;resource-name&gt;.cognitiveservices.azure.com).
-     *
-     * @param endpoint the endpoint value.
-     * @return the MetricsAdvisorAdministrationClientBuilder.
-     */
+    /** {@inheritDoc}. */
     @Generated
+    @Override
     public MetricsAdvisorAdministrationClientBuilder endpoint(String endpoint) {
         this.endpoint = endpoint;
         return this;
     }
 
     /*
-     * The HTTP pipeline to send requests through
+     * The HTTP pipeline to send requests through.
      */
     @Generated private HttpPipeline pipeline;
 
-    /**
-     * Sets The HTTP pipeline to send requests through.
-     *
-     * @param pipeline the pipeline value.
-     * @return the MetricsAdvisorAdministrationClientBuilder.
-     */
+    /** {@inheritDoc}. */
     @Generated
+    @Override
     public MetricsAdvisorAdministrationClientBuilder pipeline(HttpPipeline pipeline) {
         this.pipeline = pipeline;
         return this;
@@ -98,13 +97,9 @@ public final class MetricsAdvisorAdministrationClientBuilder {
      */
     @Generated private HttpClient httpClient;
 
-    /**
-     * Sets The HTTP client used to send the request.
-     *
-     * @param httpClient the httpClient value.
-     * @return the MetricsAdvisorAdministrationClientBuilder.
-     */
+    /** {@inheritDoc}. */
     @Generated
+    @Override
     public MetricsAdvisorAdministrationClientBuilder httpClient(HttpClient httpClient) {
         this.httpClient = httpClient;
         return this;
@@ -116,13 +111,9 @@ public final class MetricsAdvisorAdministrationClientBuilder {
      */
     @Generated private Configuration configuration;
 
-    /**
-     * Sets The configuration store that is used during construction of the service client.
-     *
-     * @param configuration the configuration value.
-     * @return the MetricsAdvisorAdministrationClientBuilder.
-     */
+    /** {@inheritDoc}. */
     @Generated
+    @Override
     public MetricsAdvisorAdministrationClientBuilder configuration(Configuration configuration) {
         this.configuration = configuration;
         return this;
@@ -133,13 +124,9 @@ public final class MetricsAdvisorAdministrationClientBuilder {
      */
     @Generated private TokenCredential tokenCredential;
 
-    /**
-     * Sets The TokenCredential used for authentication.
-     *
-     * @param tokenCredential the tokenCredential value.
-     * @return the MetricsAdvisorAdministrationClientBuilder.
-     */
+    /** {@inheritDoc}. */
     @Generated
+    @Override
     public MetricsAdvisorAdministrationClientBuilder credential(TokenCredential tokenCredential) {
         this.tokenCredential = tokenCredential;
         return this;
@@ -168,13 +155,9 @@ public final class MetricsAdvisorAdministrationClientBuilder {
      */
     @Generated private HttpLogOptions httpLogOptions;
 
-    /**
-     * Sets The logging configuration for HTTP requests and responses.
-     *
-     * @param httpLogOptions the httpLogOptions value.
-     * @return the MetricsAdvisorAdministrationClientBuilder.
-     */
+    /** {@inheritDoc}. */
     @Generated
+    @Override
     public MetricsAdvisorAdministrationClientBuilder httpLogOptions(HttpLogOptions httpLogOptions) {
         this.httpLogOptions = httpLogOptions;
         return this;
@@ -198,9 +181,6 @@ public final class MetricsAdvisorAdministrationClientBuilder {
         return this;
     }
 
-    /*
-     * The list of Http pipeline policies to add.
-     */
     @Generated private final List<HttpPipelinePolicy> pipelinePolicies;
 
     /*
@@ -209,25 +189,17 @@ public final class MetricsAdvisorAdministrationClientBuilder {
      */
     @Generated private ClientOptions clientOptions;
 
-    /**
-     * Sets The client options such as application ID and custom headers to set on a request.
-     *
-     * @param clientOptions the clientOptions value.
-     * @return the MetricsAdvisorAdministrationClientBuilder.
-     */
+    /** {@inheritDoc}. */
     @Generated
+    @Override
     public MetricsAdvisorAdministrationClientBuilder clientOptions(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
         return this;
     }
 
-    /**
-     * Adds a custom Http pipeline policy.
-     *
-     * @param customPolicy The custom Http pipeline policy to add.
-     * @return the MetricsAdvisorAdministrationClientBuilder.
-     */
+    /** {@inheritDoc}. */
     @Generated
+    @Override
     public MetricsAdvisorAdministrationClientBuilder addPolicy(HttpPipelinePolicy customPolicy) {
         pipelinePolicies.add(customPolicy);
         return this;
@@ -315,5 +287,18 @@ public final class MetricsAdvisorAdministrationClientBuilder {
     public MetricsAdvisorAdministrationClient buildClient() {
         return new MetricsAdvisorAdministrationClient(
                 new MetricsAdvisorAdministrationAsyncClient(buildInnerClient().getMetricsAdvisorAdministrations()));
+    }
+
+    /*
+     * The retry options to configure retry policy for failed requests.
+     */
+    @Generated private RetryOptions retryOptions;
+
+    /** {@inheritDoc}. */
+    @Generated
+    @Override
+    public MetricsAdvisorAdministrationClientBuilder retryOptions(RetryOptions retryOptions) {
+        this.retryOptions = retryOptions;
+        return this;
     }
 }

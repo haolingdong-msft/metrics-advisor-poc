@@ -12,16 +12,16 @@ import com.azure.identity.DefaultAzureCredentialBuilder;
 
 public class DeleteADataFeed {
     public static void main(String[] args) {
-        // BEGIN: com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationdeletedatafeed.deleteadatafeed
         MetricsAdvisorAdministrationClient metricsAdvisorAdministrationClient =
                 new MetricsAdvisorAdministrationClientBuilder()
                         .credential(new DefaultAzureCredentialBuilder().build())
                         .endpoint("{endpoint}")
                         .buildClient();
+        // BEGIN:com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationdeletedatafeed.deleteadatafeed
         RequestOptions requestOptions = new RequestOptions();
         Response<Void> response =
                 metricsAdvisorAdministrationClient.deleteDataFeedWithResponse(
                         "01234567-8901-2345-6789-012345678901", requestOptions);
-        // END: com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationdeletedatafeed.deleteadatafeed
+        // END:com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationdeletedatafeed.deleteadatafeed
     }
 }

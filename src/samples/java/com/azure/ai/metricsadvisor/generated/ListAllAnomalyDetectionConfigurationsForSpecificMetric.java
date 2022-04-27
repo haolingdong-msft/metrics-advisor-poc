@@ -13,18 +13,16 @@ import com.azure.identity.DefaultAzureCredentialBuilder;
 
 public class ListAllAnomalyDetectionConfigurationsForSpecificMetric {
     public static void main(String[] args) {
-        // BEGIN:
-        // com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationgetanomalydetectionconfigurationsbymetric.listallanomalydetectionconfigurationsforspecificmetric
         MetricsAdvisorAdministrationClient metricsAdvisorAdministrationClient =
                 new MetricsAdvisorAdministrationClientBuilder()
                         .credential(new DefaultAzureCredentialBuilder().build())
                         .endpoint("{endpoint}")
                         .buildClient();
+        // BEGIN:com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationgetanomalydetectionconfigurationsbymetric.listallanomalydetectionconfigurationsforspecificmetric
         RequestOptions requestOptions = new RequestOptions();
         PagedIterable<BinaryData> response =
                 metricsAdvisorAdministrationClient.getAnomalyDetectionConfigurationsByMetric(
                         "22222222-2222-2222-2222-000000000001", requestOptions);
-        // END:
-        // com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationgetanomalydetectionconfigurationsbymetric.listallanomalydetectionconfigurationsforspecificmetric
+        // END:com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationgetanomalydetectionconfigurationsbymetric.listallanomalydetectionconfigurationsforspecificmetric
     }
 }

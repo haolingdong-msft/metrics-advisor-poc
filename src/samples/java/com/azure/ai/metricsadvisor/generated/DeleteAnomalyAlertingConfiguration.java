@@ -12,18 +12,16 @@ import com.azure.identity.DefaultAzureCredentialBuilder;
 
 public class DeleteAnomalyAlertingConfiguration {
     public static void main(String[] args) {
-        // BEGIN:
-        // com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationdeleteanomalyalertingconfiguration.deleteanomalyalertingconfiguration
         MetricsAdvisorAdministrationClient metricsAdvisorAdministrationClient =
                 new MetricsAdvisorAdministrationClientBuilder()
                         .credential(new DefaultAzureCredentialBuilder().build())
                         .endpoint("{endpoint}")
                         .buildClient();
+        // BEGIN:com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationdeleteanomalyalertingconfiguration.deleteanomalyalertingconfiguration
         RequestOptions requestOptions = new RequestOptions();
         Response<Void> response =
                 metricsAdvisorAdministrationClient.deleteAnomalyAlertingConfigurationWithResponse(
                         "44444444-4444-4444-4444-000000000001", requestOptions);
-        // END:
-        // com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationdeleteanomalyalertingconfiguration.deleteanomalyalertingconfiguration
+        // END:com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationdeleteanomalyalertingconfiguration.deleteanomalyalertingconfiguration
     }
 }

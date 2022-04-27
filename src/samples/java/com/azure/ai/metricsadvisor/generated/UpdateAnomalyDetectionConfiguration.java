@@ -13,13 +13,12 @@ import com.azure.identity.DefaultAzureCredentialBuilder;
 
 public class UpdateAnomalyDetectionConfiguration {
     public static void main(String[] args) {
-        // BEGIN:
-        // com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationupdateanomalydetectionconfiguration.updateanomalydetectionconfiguration
         MetricsAdvisorAdministrationClient metricsAdvisorAdministrationClient =
                 new MetricsAdvisorAdministrationClientBuilder()
                         .credential(new DefaultAzureCredentialBuilder().build())
                         .endpoint("{endpoint}")
                         .buildClient();
+        // BEGIN:com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationupdateanomalydetectionconfiguration.updateanomalydetectionconfiguration
         BinaryData body =
                 BinaryData.fromString(
                         "{\"wholeMetricConfiguration\":{\"smartDetectionCondition\":{\"sensitivity\":91}}}");
@@ -27,7 +26,6 @@ public class UpdateAnomalyDetectionConfiguration {
         Response<BinaryData> response =
                 metricsAdvisorAdministrationClient.updateAnomalyDetectionConfigurationWithResponse(
                         "33333333-3333-3333-3333-000000000001", body, requestOptions);
-        // END:
-        // com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationupdateanomalydetectionconfiguration.updateanomalydetectionconfiguration
+        // END:com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationupdateanomalydetectionconfiguration.updateanomalydetectionconfiguration
     }
 }

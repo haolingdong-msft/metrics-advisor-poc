@@ -13,19 +13,17 @@ import com.azure.identity.DefaultAzureCredentialBuilder;
 
 public class CreateANewDataSourceCredential {
     public static void main(String[] args) {
-        // BEGIN:
-        // com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationcreatecredential.createanewdatasourcecredential
         MetricsAdvisorAdministrationClient metricsAdvisorAdministrationClient =
                 new MetricsAdvisorAdministrationClientBuilder()
                         .credential(new DefaultAzureCredentialBuilder().build())
                         .endpoint("{endpoint}")
                         .buildClient();
+        // BEGIN:com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationcreatecredential.createanewdatasourcecredential
         BinaryData body =
                 BinaryData.fromString(
                         "{\"dataSourceCredentialDescription\":\"This is a data source credential\",\"dataSourceCredentialName\":\"A data source credential\",\"dataSourceCredentialType\":\"ServicePrincipal\",\"parameters\":{\"clientId\":\"88888888-8888-8888-8888-888888888888\",\"clientSecret\":\"fake-client-secret\",\"tenantId\":\"12345678-1234-1234-1234-123456788888\"}}");
         RequestOptions requestOptions = new RequestOptions();
         Response<Void> response = metricsAdvisorAdministrationClient.createCredentialWithResponse(body, requestOptions);
-        // END:
-        // com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationcreatecredential.createanewdatasourcecredential
+        // END:com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationcreatecredential.createanewdatasourcecredential
     }
 }

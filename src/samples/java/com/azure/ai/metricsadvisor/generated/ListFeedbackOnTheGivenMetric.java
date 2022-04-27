@@ -13,17 +13,17 @@ import com.azure.identity.DefaultAzureCredentialBuilder;
 
 public class ListFeedbackOnTheGivenMetric {
     public static void main(String[] args) {
-        // BEGIN: com.azure.ai.metricsadvisor.generated.metricsadvisorlistmetricfeedbacks.listfeedbackonthegivenmetric
         MetricsAdvisorClient metricsAdvisorClient =
                 new MetricsAdvisorClientBuilder()
                         .credential(new DefaultAzureCredentialBuilder().build())
                         .endpoint("{endpoint}")
                         .buildClient();
+        // BEGIN:com.azure.ai.metricsadvisor.generated.metricsadvisorlistmetricfeedbacks.listfeedbackonthegivenmetric
         BinaryData body =
                 BinaryData.fromString(
                         "{\"endTime\":\"2020-01-01T00:00:00.000Z\",\"feedbackType\":\"Anomaly\",\"metricId\":\"22222222-2222-2222-2222-000000000001\",\"startTime\":\"2020-01-01T00:00:00.000Z\",\"timeMode\":\"MetricTimestamp\"}");
         RequestOptions requestOptions = new RequestOptions();
         PagedIterable<BinaryData> response = metricsAdvisorClient.listMetricFeedbacks(body, requestOptions);
-        // END: com.azure.ai.metricsadvisor.generated.metricsadvisorlistmetricfeedbacks.listfeedbackonthegivenmetric
+        // END:com.azure.ai.metricsadvisor.generated.metricsadvisorlistmetricfeedbacks.listfeedbackonthegivenmetric
     }
 }

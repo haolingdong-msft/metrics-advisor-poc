@@ -13,16 +13,16 @@ import com.azure.identity.DefaultAzureCredentialBuilder;
 
 public class GetAMetricFeedbackByItsId {
     public static void main(String[] args) {
-        // BEGIN: com.azure.ai.metricsadvisor.generated.metricsadvisorgetmetricfeedback.getametricfeedbackbyitsid
         MetricsAdvisorClient metricsAdvisorClient =
                 new MetricsAdvisorClientBuilder()
                         .credential(new DefaultAzureCredentialBuilder().build())
                         .endpoint("{endpoint}")
                         .buildClient();
+        // BEGIN:com.azure.ai.metricsadvisor.generated.metricsadvisorgetmetricfeedback.getametricfeedbackbyitsid
         RequestOptions requestOptions = new RequestOptions();
         Response<BinaryData> response =
                 metricsAdvisorClient.getMetricFeedbackWithResponse(
                         "99998888-7777-6666-5555-444433332222", requestOptions);
-        // END: com.azure.ai.metricsadvisor.generated.metricsadvisorgetmetricfeedback.getametricfeedbackbyitsid
+        // END:com.azure.ai.metricsadvisor.generated.metricsadvisorgetmetricfeedback.getametricfeedbackbyitsid
     }
 }

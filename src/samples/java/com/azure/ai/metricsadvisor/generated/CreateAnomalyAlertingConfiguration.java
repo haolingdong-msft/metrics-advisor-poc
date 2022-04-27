@@ -13,20 +13,18 @@ import com.azure.identity.DefaultAzureCredentialBuilder;
 
 public class CreateAnomalyAlertingConfiguration {
     public static void main(String[] args) {
-        // BEGIN:
-        // com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationcreateanomalyalertingconfiguration.createanomalyalertingconfiguration
         MetricsAdvisorAdministrationClient metricsAdvisorAdministrationClient =
                 new MetricsAdvisorAdministrationClientBuilder()
                         .credential(new DefaultAzureCredentialBuilder().build())
                         .endpoint("{endpoint}")
                         .buildClient();
+        // BEGIN:com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationcreateanomalyalertingconfiguration.createanomalyalertingconfiguration
         BinaryData body =
                 BinaryData.fromString(
                         "{\"name\":\"alerting configuration name\",\"crossMetricsOperator\":\"AND\",\"hookIds\":[\"00000000-0000-0000-0000-000000000001\"],\"metricAlertingConfigurations\":[{\"anomalyDetectionConfigurationId\":\"33333333-3333-3333-3333-000000000001\",\"anomalyScopeType\":\"All\",\"negationOperation\":false,\"severityFilter\":{\"maxAlertSeverity\":\"High\",\"minAlertSeverity\":\"Medium\"},\"snoozeFilter\":{\"autoSnooze\":0,\"onlyForSuccessive\":true,\"snoozeScope\":\"Series\"}},{\"anomalyDetectionConfigurationId\":\"33333333-3333-3333-3333-000000000002\",\"anomalyScopeType\":\"Dimension\",\"dimensionAnomalyScope\":{\"dimension\":{\"city\":\"Beijing\"}},\"negationOperation\":false,\"severityFilter\":{\"maxAlertSeverity\":\"High\",\"minAlertSeverity\":\"Low\"},\"snoozeFilter\":{\"autoSnooze\":0,\"onlyForSuccessive\":true,\"snoozeScope\":\"Series\"},\"valueFilter\":{\"type\":\"Value\",\"direction\":\"Both\",\"lower\":0,\"upper\":1000}}]}");
         RequestOptions requestOptions = new RequestOptions();
         Response<Void> response =
                 metricsAdvisorAdministrationClient.createAnomalyAlertingConfigurationWithResponse(body, requestOptions);
-        // END:
-        // com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationcreateanomalyalertingconfiguration.createanomalyalertingconfiguration
+        // END:com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationcreateanomalyalertingconfiguration.createanomalyalertingconfiguration
     }
 }

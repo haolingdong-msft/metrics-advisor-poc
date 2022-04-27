@@ -12,16 +12,16 @@ import com.azure.identity.DefaultAzureCredentialBuilder;
 
 public class DeleteAHook {
     public static void main(String[] args) {
-        // BEGIN: com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationdeletehook.deleteahook
         MetricsAdvisorAdministrationClient metricsAdvisorAdministrationClient =
                 new MetricsAdvisorAdministrationClientBuilder()
                         .credential(new DefaultAzureCredentialBuilder().build())
                         .endpoint("{endpoint}")
                         .buildClient();
+        // BEGIN:com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationdeletehook.deleteahook
         RequestOptions requestOptions = new RequestOptions();
         Response<Void> response =
                 metricsAdvisorAdministrationClient.deleteHookWithResponse(
                         "01234567-8901-2345-6789-012345678901", requestOptions);
-        // END: com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationdeletehook.deleteahook
+        // END:com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationdeletehook.deleteahook
     }
 }

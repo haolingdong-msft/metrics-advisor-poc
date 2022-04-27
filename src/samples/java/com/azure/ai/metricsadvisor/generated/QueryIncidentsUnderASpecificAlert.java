@@ -13,18 +13,16 @@ import com.azure.identity.DefaultAzureCredentialBuilder;
 
 public class QueryIncidentsUnderASpecificAlert {
     public static void main(String[] args) {
-        // BEGIN:
-        // com.azure.ai.metricsadvisor.generated.metricsadvisorgetincidentsfromalertbyanomalyalertingconfiguration.queryincidentsunderaspecificalert
         MetricsAdvisorClient metricsAdvisorClient =
                 new MetricsAdvisorClientBuilder()
                         .credential(new DefaultAzureCredentialBuilder().build())
                         .endpoint("{endpoint}")
                         .buildClient();
+        // BEGIN:com.azure.ai.metricsadvisor.generated.metricsadvisorgetincidentsfromalertbyanomalyalertingconfiguration.queryincidentsunderaspecificalert
         RequestOptions requestOptions = new RequestOptions();
         PagedIterable<BinaryData> response =
                 metricsAdvisorClient.getIncidentsFromAlertByAnomalyAlertingConfiguration(
                         "44444444-4444-4444-4444-000000000001", "aaaaaaaaaaaa", requestOptions);
-        // END:
-        // com.azure.ai.metricsadvisor.generated.metricsadvisorgetincidentsfromalertbyanomalyalertingconfiguration.queryincidentsunderaspecificalert
+        // END:com.azure.ai.metricsadvisor.generated.metricsadvisorgetincidentsfromalertbyanomalyalertingconfiguration.queryincidentsunderaspecificalert
     }
 }

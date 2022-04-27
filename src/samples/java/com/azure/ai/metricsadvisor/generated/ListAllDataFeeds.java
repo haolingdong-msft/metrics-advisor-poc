@@ -13,12 +13,12 @@ import com.azure.identity.DefaultAzureCredentialBuilder;
 
 public class ListAllDataFeeds {
     public static void main(String[] args) {
-        // BEGIN: com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationlistdatafeeds.listalldatafeeds
         MetricsAdvisorAdministrationClient metricsAdvisorAdministrationClient =
                 new MetricsAdvisorAdministrationClientBuilder()
                         .credential(new DefaultAzureCredentialBuilder().build())
                         .endpoint("{endpoint}")
                         .buildClient();
+        // BEGIN:com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationlistdatafeeds.listalldatafeeds
         RequestOptions requestOptions = new RequestOptions();
         requestOptions.addQueryParam("creator", "demo@microsoft.com");
         requestOptions.addQueryParam("dataFeedName", "name_prefix");
@@ -26,6 +26,6 @@ public class ListAllDataFeeds {
         requestOptions.addQueryParam("granularityName", "Daily");
         requestOptions.addQueryParam("status", "Active");
         PagedIterable<BinaryData> response = metricsAdvisorAdministrationClient.listDataFeeds(requestOptions);
-        // END: com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationlistdatafeeds.listalldatafeeds
+        // END:com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationlistdatafeeds.listalldatafeeds
     }
 }

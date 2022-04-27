@@ -13,14 +13,14 @@ import com.azure.identity.DefaultAzureCredentialBuilder;
 
 public class GetLatestUsageStats {
     public static void main(String[] args) {
-        // BEGIN: com.azure.ai.metricsadvisor.generated.metricsadvisorgetactiveseriescount.getlatestusagestats
         MetricsAdvisorClient metricsAdvisorClient =
                 new MetricsAdvisorClientBuilder()
                         .credential(new DefaultAzureCredentialBuilder().build())
                         .endpoint("{endpoint}")
                         .buildClient();
+        // BEGIN:com.azure.ai.metricsadvisor.generated.metricsadvisorgetactiveseriescount.getlatestusagestats
         RequestOptions requestOptions = new RequestOptions();
         Response<BinaryData> response = metricsAdvisorClient.getActiveSeriesCountWithResponse(requestOptions);
-        // END: com.azure.ai.metricsadvisor.generated.metricsadvisorgetactiveseriescount.getlatestusagestats
+        // END:com.azure.ai.metricsadvisor.generated.metricsadvisorgetactiveseriescount.getlatestusagestats
     }
 }

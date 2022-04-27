@@ -13,15 +13,15 @@ import com.azure.identity.DefaultAzureCredentialBuilder;
 
 public class ListAllHooks {
     public static void main(String[] args) {
-        // BEGIN: com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationlisthooks.listallhooks
         MetricsAdvisorAdministrationClient metricsAdvisorAdministrationClient =
                 new MetricsAdvisorAdministrationClientBuilder()
                         .credential(new DefaultAzureCredentialBuilder().build())
                         .endpoint("{endpoint}")
                         .buildClient();
+        // BEGIN:com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationlisthooks.listallhooks
         RequestOptions requestOptions = new RequestOptions();
         requestOptions.addQueryParam("hookName", "name_prefix");
         PagedIterable<BinaryData> response = metricsAdvisorAdministrationClient.listHooks(requestOptions);
-        // END: com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationlisthooks.listallhooks
+        // END:com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationlisthooks.listallhooks
     }
 }

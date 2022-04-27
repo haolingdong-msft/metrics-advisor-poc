@@ -13,18 +13,16 @@ import com.azure.identity.DefaultAzureCredentialBuilder;
 
 public class QueryASingleAnomalyAlertingConfiguration {
     public static void main(String[] args) {
-        // BEGIN:
-        // com.azure.ai.metricsadvisor.generated.metricsadvisorgetanomalyalertingconfiguration.queryasingleanomalyalertingconfiguration
         MetricsAdvisorClient metricsAdvisorClient =
                 new MetricsAdvisorClientBuilder()
                         .credential(new DefaultAzureCredentialBuilder().build())
                         .endpoint("{endpoint}")
                         .buildClient();
+        // BEGIN:com.azure.ai.metricsadvisor.generated.metricsadvisorgetanomalyalertingconfiguration.queryasingleanomalyalertingconfiguration
         RequestOptions requestOptions = new RequestOptions();
         Response<BinaryData> response =
                 metricsAdvisorClient.getAnomalyAlertingConfigurationWithResponse(
                         "44444444-4444-4444-4444-000000000001", requestOptions);
-        // END:
-        // com.azure.ai.metricsadvisor.generated.metricsadvisorgetanomalyalertingconfiguration.queryasingleanomalyalertingconfiguration
+        // END:com.azure.ai.metricsadvisor.generated.metricsadvisorgetanomalyalertingconfiguration.queryasingleanomalyalertingconfiguration
     }
 }

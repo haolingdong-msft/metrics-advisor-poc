@@ -13,13 +13,12 @@ import com.azure.identity.DefaultAzureCredentialBuilder;
 
 public class QueryAnomaliesUnderAnomalyDetectionConfiguration {
     public static void main(String[] args) {
-        // BEGIN:
-        // com.azure.ai.metricsadvisor.generated.metricsadvisorgetanomaliesbyanomalydetectionconfiguration.queryanomaliesunderanomalydetectionconfiguration
         MetricsAdvisorClient metricsAdvisorClient =
                 new MetricsAdvisorClientBuilder()
                         .credential(new DefaultAzureCredentialBuilder().build())
                         .endpoint("{endpoint}")
                         .buildClient();
+        // BEGIN:com.azure.ai.metricsadvisor.generated.metricsadvisorgetanomaliesbyanomalydetectionconfiguration.queryanomaliesunderanomalydetectionconfiguration
         BinaryData body =
                 BinaryData.fromString(
                         "{\"endTime\":\"2020-02-01T00:00:00.000Z\",\"filter\":{\"dimensionFilter\":[{\"dimension\":{\"city\":\"Beijing\"}}],\"severityFilter\":{\"max\":\"High\",\"min\":\"Low\"}},\"startTime\":\"2020-01-01T00:00:00.000Z\"}");
@@ -27,7 +26,6 @@ public class QueryAnomaliesUnderAnomalyDetectionConfiguration {
         PagedIterable<BinaryData> response =
                 metricsAdvisorClient.getAnomaliesByAnomalyDetectionConfiguration(
                         "33333333-3333-3333-3333-000000000001", body, requestOptions);
-        // END:
-        // com.azure.ai.metricsadvisor.generated.metricsadvisorgetanomaliesbyanomalydetectionconfiguration.queryanomaliesunderanomalydetectionconfiguration
+        // END:com.azure.ai.metricsadvisor.generated.metricsadvisorgetanomaliesbyanomalydetectionconfiguration.queryanomaliesunderanomalydetectionconfiguration
     }
 }

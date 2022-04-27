@@ -13,13 +13,12 @@ import com.azure.identity.DefaultAzureCredentialBuilder;
 
 public class QueryAnomalyDetectionStatus {
     public static void main(String[] args) {
-        // BEGIN:
-        // com.azure.ai.metricsadvisor.generated.metricsadvisorgetenrichmentstatusbymetric.queryanomalydetectionstatus
         MetricsAdvisorClient metricsAdvisorClient =
                 new MetricsAdvisorClientBuilder()
                         .credential(new DefaultAzureCredentialBuilder().build())
                         .endpoint("{endpoint}")
                         .buildClient();
+        // BEGIN:com.azure.ai.metricsadvisor.generated.metricsadvisorgetenrichmentstatusbymetric.queryanomalydetectionstatus
         BinaryData body =
                 BinaryData.fromString(
                         "{\"endTime\":\"2020-02-01T00:00:00.000Z\",\"startTime\":\"2020-01-01T00:00:00.000Z\"}");
@@ -27,7 +26,6 @@ public class QueryAnomalyDetectionStatus {
         PagedIterable<BinaryData> response =
                 metricsAdvisorClient.getEnrichmentStatusByMetric(
                         "22222222-2222-2222-2222-000000000001", body, requestOptions);
-        // END:
-        // com.azure.ai.metricsadvisor.generated.metricsadvisorgetenrichmentstatusbymetric.queryanomalydetectionstatus
+        // END:com.azure.ai.metricsadvisor.generated.metricsadvisorgetenrichmentstatusbymetric.queryanomalydetectionstatus
     }
 }

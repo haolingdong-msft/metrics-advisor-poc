@@ -54,11 +54,11 @@ public final class MetricsAdvisorsImpl {
     }
 
     /**
-     * The interface defining all the services for MetricsAdvisorClientMetricsAdvisors to be used by the proxy service
-     * to perform REST calls.
+     * The interface defining all the services for MetricsAdvisorMetricsAdvisors to be used by the proxy service to
+     * perform REST calls.
      */
     @Host("{endpoint}/metricsadvisor/v1.0")
-    @ServiceInterface(name = "MetricsAdvisorClient")
+    @ServiceInterface(name = "MetricsAdvisorMetric")
     private interface MetricsAdvisorsService {
         @Get("/stats/latest")
         @ExpectedResponses({200})

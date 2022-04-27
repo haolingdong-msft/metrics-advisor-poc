@@ -13,13 +13,12 @@ import com.azure.identity.DefaultAzureCredentialBuilder;
 
 public class CreateAnomalyDetectionConfiguration {
     public static void main(String[] args) {
-        // BEGIN:
-        // com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationcreateanomalydetectionconfiguration.createanomalydetectionconfiguration
         MetricsAdvisorAdministrationClient metricsAdvisorAdministrationClient =
                 new MetricsAdvisorAdministrationClientBuilder()
                         .credential(new DefaultAzureCredentialBuilder().build())
                         .endpoint("{endpoint}")
                         .buildClient();
+        // BEGIN:com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationcreateanomalydetectionconfiguration.createanomalydetectionconfiguration
         BinaryData body =
                 BinaryData.fromString(
                         "{\"name\":\"Anomaly detection configuration name\",\"description\":\"Anomaly detection configuration description\",\"dimensionGroupOverrideConfigurations\":[{\"changeThresholdCondition\":{\"anomalyDetectorDirection\":\"Both\",\"changePercentage\":5,\"shiftPoint\":1,\"suppressCondition\":{\"minNumber\":1,\"minRatio\":100},\"withinRange\":false},\"conditionOperator\":\"AND\",\"group\":{\"dimension\":{\"city\":\"Beijing\"}},\"hardThresholdCondition\":{\"anomalyDetectorDirection\":\"Both\",\"lowerBound\":1,\"suppressCondition\":{\"minNumber\":1,\"minRatio\":100},\"upperBound\":100},\"smartDetectionCondition\":{\"anomalyDetectorDirection\":\"Both\",\"sensitivity\":91,\"suppressCondition\":{\"minNumber\":1,\"minRatio\":100}}}],\"metricId\":\"22222222-2222-2222-2222-000000000001\",\"seriesOverrideConfigurations\":[{\"changeThresholdCondition\":{\"anomalyDetectorDirection\":\"Both\",\"changePercentage\":5,\"shiftPoint\":1,\"suppressCondition\":{\"minNumber\":1,\"minRatio\":100},\"withinRange\":false},\"conditionOperator\":\"AND\",\"hardThresholdCondition\":{\"anomalyDetectorDirection\":\"Both\",\"lowerBound\":1,\"suppressCondition\":{\"minNumber\":1,\"minRatio\":100},\"upperBound\":100},\"series\":{\"dimension\":{\"category\":\"Jewelry\",\"city\":\"Beijing\"}},\"smartDetectionCondition\":{\"anomalyDetectorDirection\":\"Both\",\"sensitivity\":91,\"suppressCondition\":{\"minNumber\":1,\"minRatio\":100}}}],\"wholeMetricConfiguration\":{\"changeThresholdCondition\":{\"anomalyDetectorDirection\":\"Both\",\"changePercentage\":5,\"shiftPoint\":1,\"suppressCondition\":{\"minNumber\":1,\"minRatio\":100},\"withinRange\":false},\"conditionOperator\":\"AND\",\"hardThresholdCondition\":{\"anomalyDetectorDirection\":\"Both\",\"lowerBound\":1,\"suppressCondition\":{\"minNumber\":1,\"minRatio\":100},\"upperBound\":100},\"smartDetectionCondition\":{\"anomalyDetectorDirection\":\"Both\",\"sensitivity\":91,\"suppressCondition\":{\"minNumber\":1,\"minRatio\":100}}}}");
@@ -27,7 +26,6 @@ public class CreateAnomalyDetectionConfiguration {
         Response<Void> response =
                 metricsAdvisorAdministrationClient.createAnomalyDetectionConfigurationWithResponse(
                         body, requestOptions);
-        // END:
-        // com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationcreateanomalydetectionconfiguration.createanomalydetectionconfiguration
+        // END:com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationcreateanomalydetectionconfiguration.createanomalydetectionconfiguration
     }
 }

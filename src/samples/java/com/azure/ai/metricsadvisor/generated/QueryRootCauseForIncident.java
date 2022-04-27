@@ -13,18 +13,16 @@ import com.azure.identity.DefaultAzureCredentialBuilder;
 
 public class QueryRootCauseForIncident {
     public static void main(String[] args) {
-        // BEGIN:
-        // com.azure.ai.metricsadvisor.generated.metricsadvisorgetrootcauseofincidentbyanomalydetectionconfiguration.queryrootcauseforincident
         MetricsAdvisorClient metricsAdvisorClient =
                 new MetricsAdvisorClientBuilder()
                         .credential(new DefaultAzureCredentialBuilder().build())
                         .endpoint("{endpoint}")
                         .buildClient();
+        // BEGIN:com.azure.ai.metricsadvisor.generated.metricsadvisorgetrootcauseofincidentbyanomalydetectionconfiguration.queryrootcauseforincident
         RequestOptions requestOptions = new RequestOptions();
         Response<BinaryData> response =
                 metricsAdvisorClient.getRootCauseOfIncidentByAnomalyDetectionConfigurationWithResponse(
                         "33333333-3333-3333-3333-000000000001", "iiiiiiiiiiii", requestOptions);
-        // END:
-        // com.azure.ai.metricsadvisor.generated.metricsadvisorgetrootcauseofincidentbyanomalydetectionconfiguration.queryrootcauseforincident
+        // END:com.azure.ai.metricsadvisor.generated.metricsadvisorgetrootcauseofincidentbyanomalydetectionconfiguration.queryrootcauseforincident
     }
 }

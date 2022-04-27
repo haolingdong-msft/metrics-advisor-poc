@@ -6,10 +6,10 @@ package com.azure.ai.metricsadvisor;
 
 import com.azure.core.util.ServiceVersion;
 
-/** Service version of MetricsAdvisor. */
+/** Service version of MetricsAdvisorClient. */
 public enum MetricsAdvisorServiceVersion implements ServiceVersion {
-    /** Enum value v1.0. */
-    VV1_0("v1.0");
+    /** Enum value 1.0. */
+    V1_0("1.0");
 
     private final String version;
 
@@ -28,6 +28,6 @@ public enum MetricsAdvisorServiceVersion implements ServiceVersion {
      * @return The latest {@link MetricsAdvisorServiceVersion}.
      */
     public static MetricsAdvisorServiceVersion getLatest() {
-        return VV1_0;
+        return V1_0;
     }
 }

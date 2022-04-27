@@ -13,13 +13,12 @@ import com.azure.identity.DefaultAzureCredentialBuilder;
 
 public class QueryIncidentsUnderAnomalyDetectionConfiguration {
     public static void main(String[] args) {
-        // BEGIN:
-        // com.azure.ai.metricsadvisor.generated.metricsadvisorgetincidentsbyanomalydetectionconfiguration.queryincidentsunderanomalydetectionconfiguration
         MetricsAdvisorClient metricsAdvisorClient =
                 new MetricsAdvisorClientBuilder()
                         .credential(new DefaultAzureCredentialBuilder().build())
                         .endpoint("{endpoint}")
                         .buildClient();
+        // BEGIN:com.azure.ai.metricsadvisor.generated.metricsadvisorgetincidentsbyanomalydetectionconfiguration.queryincidentsunderanomalydetectionconfiguration
         BinaryData body =
                 BinaryData.fromString(
                         "{\"endTime\":\"2020-02-01T00:00:00.000Z\",\"filter\":{\"dimensionFilter\":[{\"dimension\":{\"city\":\"Beijing\"}}]},\"startTime\":\"2020-01-01T00:00:00.000Z\"}");
@@ -27,7 +26,6 @@ public class QueryIncidentsUnderAnomalyDetectionConfiguration {
         PagedIterable<BinaryData> response =
                 metricsAdvisorClient.getIncidentsByAnomalyDetectionConfiguration(
                         "33333333-3333-3333-3333-000000000001", body, requestOptions);
-        // END:
-        // com.azure.ai.metricsadvisor.generated.metricsadvisorgetincidentsbyanomalydetectionconfiguration.queryincidentsunderanomalydetectionconfiguration
+        // END:com.azure.ai.metricsadvisor.generated.metricsadvisorgetincidentsbyanomalydetectionconfiguration.queryincidentsunderanomalydetectionconfiguration
     }
 }

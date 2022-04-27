@@ -13,17 +13,17 @@ import com.azure.identity.DefaultAzureCredentialBuilder;
 
 public class CreateANewDataFeed {
     public static void main(String[] args) {
-        // BEGIN: com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationcreatedatafeed.createanewdatafeed
         MetricsAdvisorAdministrationClient metricsAdvisorAdministrationClient =
                 new MetricsAdvisorAdministrationClientBuilder()
                         .credential(new DefaultAzureCredentialBuilder().build())
                         .endpoint("{endpoint}")
                         .buildClient();
+        // BEGIN:com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationcreatedatafeed.createanewdatafeed
         BinaryData body =
                 BinaryData.fromString(
                         "{\"allUpIdentification\":\"__SUM__\",\"authenticationType\":\"Basic\",\"dataFeedDescription\":\"This is a sample data feed.\",\"dataFeedName\":\"Sample - cost/revenue - city/category\",\"dataSourceParameter\":{\"connectionString\":\"Server=PlaceholderSqlServer,1433;Initial Catalog=PlaceholderDatabase;User ID=PlaceholderUserName;Password=PlaceholderPassword;\",\"query\":\"select * from your_table where timestamp = @StartTime\"},\"dataSourceType\":\"SqlServer\",\"dataStartFrom\":\"2020-01-01T00:00:00.000Z\",\"dimension\":[{\"dimensionDisplayName\":\"category\",\"dimensionName\":\"category\"},{\"dimensionDisplayName\":\"city\",\"dimensionName\":\"city\"}],\"fillMissingPointType\":\"SmartFilling\",\"granularityName\":\"Daily\",\"maxConcurrency\":5,\"metrics\":[{\"metricDisplayName\":\"cost\",\"metricName\":\"cost\"},{\"metricDisplayName\":\"revenue\",\"metricName\":\"revenue\"}],\"minRetryIntervalInSeconds\":3600,\"needRollup\":\"NeedRollup\",\"rollUpMethod\":\"Sum\",\"startOffsetInSeconds\":86400,\"stopRetryAfterInSeconds\":604800,\"timestampColumn\":\"timestamp\",\"viewMode\":\"Private\"}");
         RequestOptions requestOptions = new RequestOptions();
         Response<Void> response = metricsAdvisorAdministrationClient.createDataFeedWithResponse(body, requestOptions);
-        // END: com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationcreatedatafeed.createanewdatafeed
+        // END:com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationcreatedatafeed.createanewdatafeed
     }
 }

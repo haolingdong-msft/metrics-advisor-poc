@@ -13,13 +13,12 @@ import com.azure.identity.DefaultAzureCredentialBuilder;
 
 public class QueryAlertsUnderAnomalyAlertingConfiguration {
     public static void main(String[] args) {
-        // BEGIN:
-        // com.azure.ai.metricsadvisor.generated.metricsadvisorgetalertsbyanomalyalertingconfiguration.queryalertsunderanomalyalertingconfiguration
         MetricsAdvisorClient metricsAdvisorClient =
                 new MetricsAdvisorClientBuilder()
                         .credential(new DefaultAzureCredentialBuilder().build())
                         .endpoint("{endpoint}")
                         .buildClient();
+        // BEGIN:com.azure.ai.metricsadvisor.generated.metricsadvisorgetalertsbyanomalyalertingconfiguration.queryalertsunderanomalyalertingconfiguration
         BinaryData body =
                 BinaryData.fromString(
                         "{\"endTime\":\"2020-02-01T00:00:00.000Z\",\"startTime\":\"2020-01-01T00:00:00.000Z\",\"timeMode\":\"AnomalyTime\"}");
@@ -27,7 +26,6 @@ public class QueryAlertsUnderAnomalyAlertingConfiguration {
         PagedIterable<BinaryData> response =
                 metricsAdvisorClient.getAlertsByAnomalyAlertingConfiguration(
                         "44444444-4444-4444-4444-000000000001", body, requestOptions);
-        // END:
-        // com.azure.ai.metricsadvisor.generated.metricsadvisorgetalertsbyanomalyalertingconfiguration.queryalertsunderanomalyalertingconfiguration
+        // END:com.azure.ai.metricsadvisor.generated.metricsadvisorgetalertsbyanomalyalertingconfiguration.queryalertsunderanomalyalertingconfiguration
     }
 }

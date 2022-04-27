@@ -13,20 +13,18 @@ import com.azure.identity.DefaultAzureCredentialBuilder;
 
 public class ListSeriesDimensionCombinationsFromMetric {
     public static void main(String[] args) {
-        // BEGIN:
-        // com.azure.ai.metricsadvisor.generated.metricsadvisorgetmetricseries.listseriesdimensioncombinationsfrommetric
         MetricsAdvisorClient metricsAdvisorClient =
                 new MetricsAdvisorClientBuilder()
                         .credential(new DefaultAzureCredentialBuilder().build())
                         .endpoint("{endpoint}")
                         .buildClient();
+        // BEGIN:com.azure.ai.metricsadvisor.generated.metricsadvisorgetmetricseries.listseriesdimensioncombinationsfrommetric
         BinaryData body =
                 BinaryData.fromString(
                         "{\"activeSince\":\"2020-01-01T00:00:00.000Z\",\"dimensionFilter\":{\"city\":[\"Beijing\"]}}");
         RequestOptions requestOptions = new RequestOptions();
         PagedIterable<BinaryData> response =
                 metricsAdvisorClient.getMetricSeries("22222222-2222-2222-2222-000000000001", body, requestOptions);
-        // END:
-        // com.azure.ai.metricsadvisor.generated.metricsadvisorgetmetricseries.listseriesdimensioncombinationsfrommetric
+        // END:com.azure.ai.metricsadvisor.generated.metricsadvisorgetmetricseries.listseriesdimensioncombinationsfrommetric
     }
 }

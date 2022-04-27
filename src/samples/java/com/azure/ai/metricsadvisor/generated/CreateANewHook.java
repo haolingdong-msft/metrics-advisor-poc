@@ -13,17 +13,17 @@ import com.azure.identity.DefaultAzureCredentialBuilder;
 
 public class CreateANewHook {
     public static void main(String[] args) {
-        // BEGIN: com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationcreatehook.createanewhook
         MetricsAdvisorAdministrationClient metricsAdvisorAdministrationClient =
                 new MetricsAdvisorAdministrationClientBuilder()
                         .credential(new DefaultAzureCredentialBuilder().build())
                         .endpoint("{endpoint}")
                         .buildClient();
+        // BEGIN:com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationcreatehook.createanewhook
         BinaryData body =
                 BinaryData.fromString(
                         "{\"description\":\"This is a webhook.\",\"externalLink\":\"\",\"hookName\":\"A webhook\",\"hookParameter\":{\"endpoint\":\"https://localhost/demo/post\"},\"hookType\":\"Webhook\"}");
         RequestOptions requestOptions = new RequestOptions();
         Response<Void> response = metricsAdvisorAdministrationClient.createHookWithResponse(body, requestOptions);
-        // END: com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationcreatehook.createanewhook
+        // END:com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationcreatehook.createanewhook
     }
 }

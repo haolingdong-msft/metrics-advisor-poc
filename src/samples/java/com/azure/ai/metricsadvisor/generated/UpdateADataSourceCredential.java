@@ -13,20 +13,18 @@ import com.azure.identity.DefaultAzureCredentialBuilder;
 
 public class UpdateADataSourceCredential {
     public static void main(String[] args) {
-        // BEGIN:
-        // com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationupdatecredential.updateadatasourcecredential
         MetricsAdvisorAdministrationClient metricsAdvisorAdministrationClient =
                 new MetricsAdvisorAdministrationClientBuilder()
                         .credential(new DefaultAzureCredentialBuilder().build())
                         .endpoint("{endpoint}")
                         .buildClient();
+        // BEGIN:com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationupdatecredential.updateadatasourcecredential
         BinaryData body =
                 BinaryData.fromString("{\"dataSourceCredentialDescription\":\"This is a data source credential\"}");
         RequestOptions requestOptions = new RequestOptions();
         Response<BinaryData> response =
                 metricsAdvisorAdministrationClient.updateCredentialWithResponse(
                         "01234567-8901-2345-6789-012345678901", body, requestOptions);
-        // END:
-        // com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationupdatecredential.updateadatasourcecredential
+        // END:com.azure.ai.metricsadvisor.generated.metricsadvisoradministrationupdatecredential.updateadatasourcecredential
     }
 }
