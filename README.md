@@ -35,20 +35,20 @@ https://github.com/haolingdong-msft/metrics-advisor-poc/blob/master/src/main/jav
 
 We choose a set of APIs to add convenient methods. Below table shows the APIs we choose, and the corresponding convenient methods.
 
-| API                                     | Client                                  | Path                                                                          | Method | Return value | Code Reference in Async Client|
-|-----------------------------------------|-----------------------------------------|-------------------------------------------------------------------------------|--------|--------------|---------------|
-| getAlertsByAnomalyAlertingConfiguration | MetricsAdvisorAsyncClient               | /enrichment/anomalyDetection/configurations/{configurationId}/anomalies/query | POST   | PagedFlux    |[code](https://github.com/haolingdong-msft/metrics-advisor-poc/blob/master/src/main/java/com/azure/ai/metricsadvisor/MetricsAdvisorAsyncClient.java#L61-L85)|
-| getDataFeed                             | MetricsAdvisorAdministrationAsyncClient | /dataFeeds/{dataFeedId}                                                       | GET    | Mono         |[code](https://github.com/haolingdong-msft/metrics-advisor-poc/blob/master/src/main/java/com/azure/ai/metricsadvisor/MetricsAdvisorAdministrationAsyncClient.java#L1179-L1275)|
-| createDataFeed                          | MetricsAdvisorAdministrationAsyncClient | /dataFeeds                                                                    | POST   | Mono         |[code](https://github.com/haolingdong-msft/metrics-advisor-poc/blob/master/src/main/java/com/azure/ai/metricsadvisor/MetricsAdvisorAdministrationAsyncClient.java#L984-L1177)|
-| updateDataFeed                          | MetricsAdvisorAdministrationAsyncClient | /dataFeeds/{dataFeedId}                                                       | PATCH  | Mono         |[code](https://github.com/haolingdong-msft/metrics-advisor-poc/blob/master/src/main/java/com/azure/ai/metricsadvisor/MetricsAdvisorAdministrationAsyncClient.java#L1277-L1475)|
-| listDataFeed                            | MetricsAdvisorAdministrationAsyncClient | /dataFeeds                                                                    | GET    | PagedFlux    |[code](https://github.com/haolingdong-msft/metrics-advisor-poc/blob/master/src/main/java/com/azure/ai/metricsadvisor/MetricsAdvisorAdministrationAsyncClient.java#L849-L982)|
-| deleteDataFeed                          | MetricsAdvisorAdministrationAsyncClient | /dataFeeds/{dataFeedId}                                                       | DELETE | Mono         |[code](https://github.com/haolingdong-msft/metrics-advisor-poc/blob/master/src/main/java/com/azure/ai/metricsadvisor/MetricsAdvisorAdministrationAsyncClient.java#L1477-L1515)|
+| API                                     | Client                                  | Path                                                                          | Method | Return value |
+|-----------------------------------------|-----------------------------------------|-------------------------------------------------------------------------------|--------|--------------|
+| getAlertsByAnomalyAlertingConfiguration | MetricsAdvisorAsyncClient               | /enrichment/anomalyDetection/configurations/{configurationId}/anomalies/query | POST   | PagedFlux    |
+| getDataFeed                             | MetricsAdvisorAdministrationAsyncClient | /dataFeeds/{dataFeedId}                                                       | GET    | Mono         |
+| createDataFeed                          | MetricsAdvisorAdministrationAsyncClient | /dataFeeds                                                                    | POST   | Mono         |
+| updateDataFeed                          | MetricsAdvisorAdministrationAsyncClient | /dataFeeds/{dataFeedId}                                                       | PATCH  | Mono         |
+| listDataFeed                            | MetricsAdvisorAdministrationAsyncClient | /dataFeeds                                                                    | GET    | PagedFlux    |
+| deleteDataFeed                          | MetricsAdvisorAdministrationAsyncClient | /dataFeeds/{dataFeedId}                                                       | DELETE | Mono         |
 
 In convenient methods, basically you will need to add query parameters(if applicable), convert request body to `BinaryData`, call underline protocol methods and convert response to model.
 
 ### Request Model Convert:
 
-Client model needs to be converted to `BinaryData` to call underline protocol methods. We use `BinaryData.fromObject()` to convert model to `BinaryData`. Example code [here](https://github.com/haolingdong-msft/metrics-advisor-poc/blob/master/src/main/java/com/azure/ai/metricsadvisor/MetricsAdvisorAsyncClient.java#L85-L85)
+Client model needs to be converted to `BinaryData` to call underline protocol methods. We use `BinaryData.fromObject()` to convert model to `BinaryData`. Example code [here](https://github.com/haolingdong-msft/metrics-advisor-poc/blob/master/src/main/java/com/azure/ai/metricsadvisor/MetricsAdvisorAsyncClient.java#L81)
 
 ### Response Model Convert:
 

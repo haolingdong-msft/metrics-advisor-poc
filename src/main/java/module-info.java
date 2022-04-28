@@ -4,6 +4,7 @@
 
 module com.azure.ai.metricsadvisor {
     requires transitive com.azure.core;
+    requires transitive java.xml.crypto;
 
     exports com.azure.ai.metricsadvisor;
     exports com.azure.ai.metricsadvisor.models;
