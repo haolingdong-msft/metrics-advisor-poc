@@ -902,7 +902,7 @@ public final class MetricsAdvisorAdministrationClient {
 
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<DataFeed> listDataFeeds(ListDataFeedOptions options, Context context) {
-        return new PagedIterable<>(this.asyncClient.listDataFeeds(options, context));
+        return new PagedIterable<>(this.client.listDataFeeds(options, context));
     }
 
     /**
@@ -983,7 +983,7 @@ public final class MetricsAdvisorAdministrationClient {
 
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Response<DataFeed> createDataFeedWithResponse(DataFeed dataFeed, Context context) {
-        return this.asyncClient.createDataFeedWithResponse(dataFeed, context).block();
+        return this.client.createDataFeedWithResponse(dataFeed, context).block();
     }
 
     /**
@@ -1064,7 +1064,7 @@ public final class MetricsAdvisorAdministrationClient {
 
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Response<DataFeed> getDataFeedWithResponse(String dataFeedId, Context context) {
-        return this.asyncClient.getDataFeedWithResponse(dataFeedId, context).block();
+        return this.client.getDataFeedWithResponse(dataFeedId, context).block();
     }
 
     /**
@@ -1181,7 +1181,7 @@ public final class MetricsAdvisorAdministrationClient {
 
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Response<DataFeed> updateDataFeedWithResponse(DataFeed dataFeed, Context context) {
-        return this.asyncClient.updateDataFeedWithResponse(dataFeed, context).block();
+        return this.client.updateDataFeedWithResponse(dataFeed, context).block();
     }
 
     /**
@@ -1208,7 +1208,7 @@ public final class MetricsAdvisorAdministrationClient {
 
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Response<Void> deleteDataFeedWithResponse(String dataFeedId, Context context) {
-        return this.asyncClient.deleteDataFeedWithResponse(dataFeedId, context).block();
+        return this.client.deleteDataFeedWithResponse(dataFeedId, context).block();
     }
 
     /**
