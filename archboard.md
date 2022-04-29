@@ -20,7 +20,9 @@ generate-builder-per-client: true
 add-context-parameter: true
 generate-tests: true
 artifact-id: azure-ai-metricsadvisor
+```
 data-plane: true
+```
 sync-methods: all
 generate-samples: true
 license-header: MICROSOFT_MIT_SMALL
@@ -33,3 +35,5 @@ service-versions:
 security: AADToken
 security-scopes: https://cognitiveservices.azure.com/.default
 ```
+
+## 
