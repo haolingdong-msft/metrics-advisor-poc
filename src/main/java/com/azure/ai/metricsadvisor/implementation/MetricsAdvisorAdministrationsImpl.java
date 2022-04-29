@@ -2559,13 +2559,18 @@ public final class MetricsAdvisorAdministrationsImpl {
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedFlux<BinaryData> getAnomalyAlertingConfigurationsByAnomalyDetectionConfigurationAsync(
             String configurationId, RequestOptions requestOptions) {
+        RequestOptions requestOptionsForNextPage = new RequestOptions();
+        requestOptionsForNextPage.setContext(
+                requestOptions != null && requestOptions.getContext() != null
+                        ? requestOptions.getContext()
+                        : Context.NONE);
         return new PagedFlux<>(
                 () ->
                         getAnomalyAlertingConfigurationsByAnomalyDetectionConfigurationSinglePageAsync(
                                 configurationId, requestOptions),
                 nextLink ->
                         getAnomalyAlertingConfigurationsByAnomalyDetectionConfigurationNextSinglePageAsync(
-                                nextLink, null));
+                                nextLink, requestOptionsForNextPage));
     }
 
     /**
@@ -2648,13 +2653,18 @@ public final class MetricsAdvisorAdministrationsImpl {
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedFlux<BinaryData> getAnomalyAlertingConfigurationsByAnomalyDetectionConfigurationAsync(
             String configurationId, RequestOptions requestOptions, Context context) {
+        RequestOptions requestOptionsForNextPage = new RequestOptions();
+        requestOptionsForNextPage.setContext(
+                requestOptions != null && requestOptions.getContext() != null
+                        ? requestOptions.getContext()
+                        : Context.NONE);
         return new PagedFlux<>(
                 () ->
                         getAnomalyAlertingConfigurationsByAnomalyDetectionConfigurationSinglePageAsync(
                                 configurationId, requestOptions, context),
                 nextLink ->
                         getAnomalyAlertingConfigurationsByAnomalyDetectionConfigurationNextSinglePageAsync(
-                                nextLink, null, context));
+                                nextLink, requestOptionsForNextPage, context));
     }
 
     /**
@@ -2956,9 +2966,14 @@ public final class MetricsAdvisorAdministrationsImpl {
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedFlux<BinaryData> listCredentialsAsync(RequestOptions requestOptions) {
+        RequestOptions requestOptionsForNextPage = new RequestOptions();
+        requestOptionsForNextPage.setContext(
+                requestOptions != null && requestOptions.getContext() != null
+                        ? requestOptions.getContext()
+                        : Context.NONE);
         return new PagedFlux<>(
                 () -> listCredentialsSinglePageAsync(requestOptions),
-                nextLink -> listCredentialsNextSinglePageAsync(nextLink, null));
+                nextLink -> listCredentialsNextSinglePageAsync(nextLink, requestOptionsForNextPage));
     }
 
     /**
@@ -2998,9 +3013,14 @@ public final class MetricsAdvisorAdministrationsImpl {
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedFlux<BinaryData> listCredentialsAsync(RequestOptions requestOptions, Context context) {
+        RequestOptions requestOptionsForNextPage = new RequestOptions();
+        requestOptionsForNextPage.setContext(
+                requestOptions != null && requestOptions.getContext() != null
+                        ? requestOptions.getContext()
+                        : Context.NONE);
         return new PagedFlux<>(
                 () -> listCredentialsSinglePageAsync(requestOptions, context),
-                nextLink -> listCredentialsNextSinglePageAsync(nextLink, null, context));
+                nextLink -> listCredentialsNextSinglePageAsync(nextLink, requestOptionsForNextPage, context));
     }
 
     /**
@@ -3572,9 +3592,14 @@ public final class MetricsAdvisorAdministrationsImpl {
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedFlux<BinaryData> listDataFeedsAsync(RequestOptions requestOptions) {
+        RequestOptions requestOptionsForNextPage = new RequestOptions();
+        requestOptionsForNextPage.setContext(
+                requestOptions != null && requestOptions.getContext() != null
+                        ? requestOptions.getContext()
+                        : Context.NONE);
         return new PagedFlux<>(
                 () -> listDataFeedsSinglePageAsync(requestOptions),
-                nextLink -> listDataFeedsNextSinglePageAsync(nextLink, null));
+                nextLink -> listDataFeedsNextSinglePageAsync(nextLink, requestOptionsForNextPage));
     }
 
     /**
@@ -3663,9 +3688,14 @@ public final class MetricsAdvisorAdministrationsImpl {
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedFlux<BinaryData> listDataFeedsAsync(RequestOptions requestOptions, Context context) {
+        RequestOptions requestOptionsForNextPage = new RequestOptions();
+        requestOptionsForNextPage.setContext(
+                requestOptions != null && requestOptions.getContext() != null
+                        ? requestOptions.getContext()
+                        : Context.NONE);
         return new PagedFlux<>(
                 () -> listDataFeedsSinglePageAsync(requestOptions, context),
-                nextLink -> listDataFeedsNextSinglePageAsync(nextLink, null, context));
+                nextLink -> listDataFeedsNextSinglePageAsync(nextLink, requestOptionsForNextPage, context));
     }
 
     /**
@@ -4703,9 +4733,14 @@ public final class MetricsAdvisorAdministrationsImpl {
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedFlux<BinaryData> listHooksAsync(RequestOptions requestOptions) {
+        RequestOptions requestOptionsForNextPage = new RequestOptions();
+        requestOptionsForNextPage.setContext(
+                requestOptions != null && requestOptions.getContext() != null
+                        ? requestOptions.getContext()
+                        : Context.NONE);
         return new PagedFlux<>(
                 () -> listHooksSinglePageAsync(requestOptions),
-                nextLink -> listHooksNextSinglePageAsync(nextLink, null));
+                nextLink -> listHooksNextSinglePageAsync(nextLink, requestOptionsForNextPage));
     }
 
     /**
@@ -4750,9 +4785,14 @@ public final class MetricsAdvisorAdministrationsImpl {
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedFlux<BinaryData> listHooksAsync(RequestOptions requestOptions, Context context) {
+        RequestOptions requestOptionsForNextPage = new RequestOptions();
+        requestOptionsForNextPage.setContext(
+                requestOptions != null && requestOptions.getContext() != null
+                        ? requestOptions.getContext()
+                        : Context.NONE);
         return new PagedFlux<>(
                 () -> listHooksSinglePageAsync(requestOptions, context),
-                nextLink -> listHooksNextSinglePageAsync(nextLink, null, context));
+                nextLink -> listHooksNextSinglePageAsync(nextLink, requestOptionsForNextPage, context));
     }
 
     /**
@@ -5346,9 +5386,14 @@ public final class MetricsAdvisorAdministrationsImpl {
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedFlux<BinaryData> getDataFeedIngestionStatusAsync(
             String dataFeedId, BinaryData body, RequestOptions requestOptions) {
+        RequestOptions requestOptionsForNextPage = new RequestOptions();
+        requestOptionsForNextPage.setContext(
+                requestOptions != null && requestOptions.getContext() != null
+                        ? requestOptions.getContext()
+                        : Context.NONE);
         return new PagedFlux<>(
                 () -> getDataFeedIngestionStatusSinglePageAsync(dataFeedId, body, requestOptions),
-                nextLink -> getDataFeedIngestionStatusNextSinglePageAsync(nextLink, body, null));
+                nextLink -> getDataFeedIngestionStatusNextSinglePageAsync(nextLink, body, requestOptionsForNextPage));
     }
 
     /**
@@ -5400,9 +5445,16 @@ public final class MetricsAdvisorAdministrationsImpl {
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedFlux<BinaryData> getDataFeedIngestionStatusAsync(
             String dataFeedId, BinaryData body, RequestOptions requestOptions, Context context) {
+        RequestOptions requestOptionsForNextPage = new RequestOptions();
+        requestOptionsForNextPage.setContext(
+                requestOptions != null && requestOptions.getContext() != null
+                        ? requestOptions.getContext()
+                        : Context.NONE);
         return new PagedFlux<>(
                 () -> getDataFeedIngestionStatusSinglePageAsync(dataFeedId, body, requestOptions, context),
-                nextLink -> getDataFeedIngestionStatusNextSinglePageAsync(nextLink, body, null, context));
+                nextLink ->
+                        getDataFeedIngestionStatusNextSinglePageAsync(
+                                nextLink, body, requestOptionsForNextPage, context));
     }
 
     /**
@@ -5920,9 +5972,16 @@ public final class MetricsAdvisorAdministrationsImpl {
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedFlux<BinaryData> getAnomalyDetectionConfigurationsByMetricAsync(
             String metricId, RequestOptions requestOptions) {
+        RequestOptions requestOptionsForNextPage = new RequestOptions();
+        requestOptionsForNextPage.setContext(
+                requestOptions != null && requestOptions.getContext() != null
+                        ? requestOptions.getContext()
+                        : Context.NONE);
         return new PagedFlux<>(
                 () -> getAnomalyDetectionConfigurationsByMetricSinglePageAsync(metricId, requestOptions),
-                nextLink -> getAnomalyDetectionConfigurationsByMetricNextSinglePageAsync(nextLink, null));
+                nextLink ->
+                        getAnomalyDetectionConfigurationsByMetricNextSinglePageAsync(
+                                nextLink, requestOptionsForNextPage));
     }
 
     /**
@@ -6015,9 +6074,16 @@ public final class MetricsAdvisorAdministrationsImpl {
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedFlux<BinaryData> getAnomalyDetectionConfigurationsByMetricAsync(
             String metricId, RequestOptions requestOptions, Context context) {
+        RequestOptions requestOptionsForNextPage = new RequestOptions();
+        requestOptionsForNextPage.setContext(
+                requestOptions != null && requestOptions.getContext() != null
+                        ? requestOptions.getContext()
+                        : Context.NONE);
         return new PagedFlux<>(
                 () -> getAnomalyDetectionConfigurationsByMetricSinglePageAsync(metricId, requestOptions, context),
-                nextLink -> getAnomalyDetectionConfigurationsByMetricNextSinglePageAsync(nextLink, null, context));
+                nextLink ->
+                        getAnomalyDetectionConfigurationsByMetricNextSinglePageAsync(
+                                nextLink, requestOptionsForNextPage, context));
     }
 
     /**

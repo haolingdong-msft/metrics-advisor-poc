@@ -1,23 +1,8 @@
-# Azure Cognitive Service - Metric Advisor for Java
+# Arch Board Review
 
-> see https://aka.ms/autorest
+## Configuration to generate DPG code
 
-### Setup
-```ps
-Fork and clone https://github.com/Azure/autorest.java
-git checkout main
-git submodule update --init --recursive
-mvn package -Dlocal
-npm install
-npm install -g autorest
-```
-
-### Generation
-```ps
-autorest <your-path-to-swagger-readme> --version=3.6.1 --use=./
-```
-
-### Code generation settings
+Please refer to [`swagger/README.md`](https://github.com/haolingdong-msft/metrics-advisor-poc/blob/master/swagger/README.md) for the configuration
 
 ```yaml
 input-file: https://github.com/Azure/azure-rest-api-specs/blob/f9a5bf06925934b7841bdc95c14e9b70379b426b/specification/cognitiveservices/data-plane/MetricsAdvisor/stable/v1.0/MetricsAdvisor.json
@@ -48,6 +33,3 @@ service-versions:
 security: AADToken
 security-scopes: https://cognitiveservices.azure.com/.default
 ```
-
-
-### Generated types renamed and moved to model

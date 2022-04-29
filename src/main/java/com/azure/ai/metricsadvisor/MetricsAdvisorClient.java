@@ -52,7 +52,7 @@ public final class MetricsAdvisorClient {
     @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Response<BinaryData> getActiveSeriesCountWithResponse(RequestOptions requestOptions) {
-        return this.asyncClient.getActiveSeriesCountWithResponse(requestOptions).block();
+        return this.client.getActiveSeriesCountWithResponse(requestOptions).block();
     }
 
     @ServiceMethod(returns = ReturnType.COLLECTION)
@@ -160,7 +160,7 @@ public final class MetricsAdvisorClient {
     public PagedIterable<BinaryData> getAnomaliesByAnomalyDetectionConfiguration(
             String configurationId, BinaryData body, RequestOptions requestOptions) {
         return new PagedIterable<>(
-                this.asyncClient.getAnomaliesByAnomalyDetectionConfiguration(configurationId, body, requestOptions));
+                this.client.getAnomaliesByAnomalyDetectionConfiguration(configurationId, body, requestOptions));
     }
 
     /**
@@ -235,7 +235,7 @@ public final class MetricsAdvisorClient {
     public PagedIterable<BinaryData> getIncidentsByAnomalyDetectionConfiguration(
             String configurationId, BinaryData body, RequestOptions requestOptions) {
         return new PagedIterable<>(
-                this.asyncClient.getIncidentsByAnomalyDetectionConfiguration(configurationId, body, requestOptions));
+                this.client.getIncidentsByAnomalyDetectionConfiguration(configurationId, body, requestOptions));
     }
 
     /**
@@ -292,7 +292,7 @@ public final class MetricsAdvisorClient {
     public PagedIterable<BinaryData> getIncidentsByAnomalyDetectionConfigurationNextPages(
             String configurationId, RequestOptions requestOptions) {
         return new PagedIterable<>(
-                this.asyncClient.getIncidentsByAnomalyDetectionConfigurationNextPages(configurationId, requestOptions));
+                this.client.getIncidentsByAnomalyDetectionConfigurationNextPages(configurationId, requestOptions));
     }
 
     /**
@@ -348,7 +348,7 @@ public final class MetricsAdvisorClient {
     public PagedIterable<BinaryData> getAnomaliesFromAlertByAnomalyAlertingConfiguration(
             String configurationId, String alertId, RequestOptions requestOptions) {
         return new PagedIterable<>(
-                this.asyncClient.getAnomaliesFromAlertByAnomalyAlertingConfiguration(
+                this.client.getAnomaliesFromAlertByAnomalyAlertingConfiguration(
                         configurationId, alertId, requestOptions));
     }
 
@@ -407,7 +407,7 @@ public final class MetricsAdvisorClient {
     public PagedIterable<BinaryData> getIncidentsFromAlertByAnomalyAlertingConfiguration(
             String configurationId, String alertId, RequestOptions requestOptions) {
         return new PagedIterable<>(
-                this.asyncClient.getIncidentsFromAlertByAnomalyAlertingConfiguration(
+                this.client.getIncidentsFromAlertByAnomalyAlertingConfiguration(
                         configurationId, alertId, requestOptions));
     }
 
@@ -480,7 +480,7 @@ public final class MetricsAdvisorClient {
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Response<BinaryData> getSeriesByAnomalyDetectionConfigurationWithResponse(
             String configurationId, BinaryData body, RequestOptions requestOptions) {
-        return this.asyncClient
+        return this.client
                 .getSeriesByAnomalyDetectionConfigurationWithResponse(configurationId, body, requestOptions)
                 .block();
     }
@@ -537,7 +537,7 @@ public final class MetricsAdvisorClient {
     public PagedIterable<BinaryData> getDimensionOfAnomaliesByAnomalyDetectionConfiguration(
             String configurationId, BinaryData body, RequestOptions requestOptions) {
         return new PagedIterable<>(
-                this.asyncClient.getDimensionOfAnomaliesByAnomalyDetectionConfiguration(
+                this.client.getDimensionOfAnomaliesByAnomalyDetectionConfiguration(
                         configurationId, body, requestOptions));
     }
 
@@ -578,7 +578,7 @@ public final class MetricsAdvisorClient {
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Response<BinaryData> getRootCauseOfIncidentByAnomalyDetectionConfigurationWithResponse(
             String configurationId, String incidentId, RequestOptions requestOptions) {
-        return this.asyncClient
+        return this.client
                 .getRootCauseOfIncidentByAnomalyDetectionConfigurationWithResponse(
                         configurationId, incidentId, requestOptions)
                 .block();
@@ -614,7 +614,7 @@ public final class MetricsAdvisorClient {
     @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Response<BinaryData> getMetricFeedbackWithResponse(String feedbackId, RequestOptions requestOptions) {
-        return this.asyncClient.getMetricFeedbackWithResponse(feedbackId, requestOptions).block();
+        return this.client.getMetricFeedbackWithResponse(feedbackId, requestOptions).block();
     }
 
     /**
@@ -678,7 +678,7 @@ public final class MetricsAdvisorClient {
     @Generated
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<BinaryData> listMetricFeedbacks(BinaryData body, RequestOptions requestOptions) {
-        return new PagedIterable<>(this.asyncClient.listMetricFeedbacks(body, requestOptions));
+        return new PagedIterable<>(this.client.listMetricFeedbacks(body, requestOptions));
     }
 
     /**
@@ -711,7 +711,7 @@ public final class MetricsAdvisorClient {
     @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Response<Void> createMetricFeedbackWithResponse(BinaryData body, RequestOptions requestOptions) {
-        return this.asyncClient.createMetricFeedbackWithResponse(body, requestOptions).block();
+        return this.client.createMetricFeedbackWithResponse(body, requestOptions).block();
     }
 
     /**
@@ -767,7 +767,7 @@ public final class MetricsAdvisorClient {
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Response<BinaryData> getMetricDataWithResponse(
             String metricId, BinaryData body, RequestOptions requestOptions) {
-        return this.asyncClient.getMetricDataWithResponse(metricId, body, requestOptions).block();
+        return this.client.getMetricDataWithResponse(metricId, body, requestOptions).block();
     }
 
     /**
@@ -823,7 +823,7 @@ public final class MetricsAdvisorClient {
     @Generated
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<BinaryData> getMetricSeries(String metricId, BinaryData body, RequestOptions requestOptions) {
-        return new PagedIterable<>(this.asyncClient.getMetricSeries(metricId, body, requestOptions));
+        return new PagedIterable<>(this.client.getMetricSeries(metricId, body, requestOptions));
     }
 
     /**
@@ -871,7 +871,7 @@ public final class MetricsAdvisorClient {
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<BinaryData> getMetricDimension(
             String metricId, BinaryData body, RequestOptions requestOptions) {
-        return new PagedIterable<>(this.asyncClient.getMetricDimension(metricId, body, requestOptions));
+        return new PagedIterable<>(this.client.getMetricDimension(metricId, body, requestOptions));
     }
 
     /**
@@ -923,19 +923,17 @@ public final class MetricsAdvisorClient {
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<BinaryData> getEnrichmentStatusByMetric(
             String metricId, BinaryData body, RequestOptions requestOptions) {
-        return new PagedIterable<>(this.asyncClient.getEnrichmentStatusByMetric(metricId, body, requestOptions));
+        return new PagedIterable<>(this.client.getEnrichmentStatusByMetric(metricId, body, requestOptions));
     }
-
-    @Generated private final MetricsAdvisorAsyncClient asyncClient;
 
     /**
      * Initializes an instance of MetricsAdvisorClient class.
      *
-     * @param asyncClient the async client.
+     * @param client the async client.
      */
     @Generated
-    MetricsAdvisorClient(MetricsAdvisorAsyncClient asyncClient) {
-        this.asyncClient = asyncClient;
+    MetricsAdvisorClient(MetricsAdvisorAsyncClient client) {
+        this.client = client;
     }
 
     /**
@@ -990,7 +988,7 @@ public final class MetricsAdvisorClient {
     public PagedIterable<BinaryData> getAlertsByAnomalyAlertingConfiguration(
             String configurationId, BinaryData body, RequestOptions requestOptions) {
         return new PagedIterable<>(
-                this.asyncClient.getAlertsByAnomalyAlertingConfiguration(configurationId, body, requestOptions));
+                this.client.getAlertsByAnomalyAlertingConfiguration(configurationId, body, requestOptions));
     }
 
     /**
@@ -1059,6 +1057,8 @@ public final class MetricsAdvisorClient {
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Response<BinaryData> getAnomalyAlertingConfigurationWithResponse(
             String configurationId, RequestOptions requestOptions) {
-        return this.asyncClient.getAnomalyAlertingConfigurationWithResponse(configurationId, requestOptions).block();
+        return this.client.getAnomalyAlertingConfigurationWithResponse(configurationId, requestOptions).block();
     }
+
+    @Generated private final MetricsAdvisorAsyncClient client;
 }
