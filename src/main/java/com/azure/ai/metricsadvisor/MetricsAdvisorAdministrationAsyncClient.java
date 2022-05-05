@@ -999,6 +999,131 @@ public final class MetricsAdvisorAdministrationAsyncClient {
         return this.serviceClient.createDataFeedWithResponseAsync(body, requestOptions);
     }
 
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Mono<DataFeed> createDataFeed(DataFeed dataFeed) {
+        return createDataFeedWithResponse(dataFeed).flatMap(FluxUtil::toMono);
+    }
+
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Mono<Response<DataFeed>> createDataFeedWithResponse(DataFeed dataFeed) {
+        try {
+            return withContext(context -> createDataFeedWithResponse(dataFeed, context));
+        } catch (RuntimeException ex) {
+            return monoError(logger, ex);
+        }
+    }
+
+    Mono<Response<DataFeed>> createDataFeedWithResponse(DataFeed dataFeed, Context context) {
+        Objects.requireNonNull(dataFeed, "'dataFeed' is required and cannot be null.");
+        Objects.requireNonNull(dataFeed.getSource(), "'dataFeedSource' is required and cannot be null.");
+        Objects.requireNonNull(dataFeed.getName(), "'dataFeedName' cannot be null or empty.");
+        final DataFeedSchema dataFeedSchema = dataFeed.getSchema();
+        final DataFeedGranularity dataFeedGranularity = dataFeed.getGranularity();
+        final DataFeedIngestionSettings dataFeedIngestionSettings = dataFeed.getIngestionSettings();
+        if (dataFeedSchema == null) {
+            throw logger.logExceptionAsError(
+                    new NullPointerException("'dataFeedSchema.metrics' cannot be null or empty."));
+        } else {
+            Objects.requireNonNull(dataFeedSchema.getMetrics(), "'dataFeedSchema.metrics' cannot be null or empty.");
+        }
+        if (dataFeedGranularity == null) {
+            throw logger.logExceptionAsError(
+                    new NullPointerException("'dataFeedGranularity.granularityType' is required and cannot be null."));
+        } else {
+            Objects.requireNonNull(
+                    dataFeedGranularity.getGranularityType(), "'dataFeedGranularity.granularityType' is required.");
+            if (CUSTOM.equals(dataFeedGranularity.getGranularityType())) {
+                Objects.requireNonNull(
+                        dataFeedGranularity.getCustomGranularityValue(),
+                        "'dataFeedGranularity.customGranularityValue' is required when granularity type is CUSTOM");
+            }
+        }
+        if (dataFeedIngestionSettings == null) {
+            throw logger.logExceptionAsError(
+                    new NullPointerException(
+                            "'dataFeedIngestionSettings.ingestionStartTime' is required and cannot be null."));
+        } else {
+            Objects.requireNonNull(
+                    dataFeedIngestionSettings.getIngestionStartTime(),
+                    "'dataFeedIngestionSettings.ingestionStartTime' is required and cannot be null.");
+        }
+        final DataFeedOptions finalDataFeedOptions =
+                dataFeed.getOptions() == null ? new DataFeedOptions() : dataFeed.getOptions();
+        final DataFeedRollupSettings dataFeedRollupSettings =
+                finalDataFeedOptions.getRollupSettings() == null
+                        ? new DataFeedRollupSettings()
+                        : finalDataFeedOptions.getRollupSettings();
+        final DataFeedMissingDataPointFillSettings dataFeedMissingDataPointFillSettings =
+                finalDataFeedOptions.getMissingDataPointFillSettings() == null
+                        ? new DataFeedMissingDataPointFillSettings()
+                        : finalDataFeedOptions.getMissingDataPointFillSettings();
+//        final Context withTracing = context.addData(AZ_TRACING_NAMESPACE_KEY, METRICS_ADVISOR_TRACING_NAMESPACE_VALUE);
+        DataFeedDetail dataFeedDetail =
+                DataFeedTransforms.toDataFeedDetailSource(dataFeed.getSource())
+                        .setDataFeedName(dataFeed.getName())
+                        .setDataFeedDescription(finalDataFeedOptions.getDescription())
+                        .setGranularityName(
+                                Granularity.fromString(
+                                        dataFeedGranularity.getGranularityType() == null
+                                                ? null
+                                                : dataFeedGranularity.getGranularityType().toString()))
+                        .setGranularityAmount(dataFeedGranularity.getCustomGranularityValue())
+                        .setDimension(DataFeedTransforms.toInnerDimensionsListForCreate(dataFeedSchema.getDimensions()))
+                        .setMetrics(DataFeedTransforms.toInnerMetricsListForCreate(dataFeedSchema.getMetrics()))
+                        .setTimestampColumn(dataFeedSchema.getTimestampColumn())
+                        .setDataStartFrom(dataFeedIngestionSettings.getIngestionStartTime())
+                        .setStartOffsetInSeconds(
+                                dataFeedIngestionSettings.getIngestionStartOffset() == null
+                                        ? null
+                                        : dataFeedIngestionSettings.getIngestionStartOffset().getSeconds())
+                        .setMaxConcurrency(dataFeedIngestionSettings.getDataSourceRequestConcurrency())
+                        .setStopRetryAfterInSeconds(
+                                dataFeedIngestionSettings.getStopRetryAfter() == null
+                                        ? null
+                                        : dataFeedIngestionSettings.getStopRetryAfter().getSeconds())
+                        .setMinRetryIntervalInSeconds(
+                                dataFeedIngestionSettings.getIngestionRetryDelay() == null
+                                        ? null
+                                        : dataFeedIngestionSettings.getIngestionRetryDelay().getSeconds())
+                        .setRollUpColumns(dataFeedRollupSettings.getAutoRollupGroupByColumnNames())
+                        .setRollUpMethod(
+                                RollUpMethod.fromString(
+                                        dataFeedRollupSettings.getDataFeedAutoRollUpMethod() == null
+                                                ? null
+                                                : dataFeedRollupSettings.getDataFeedAutoRollUpMethod().toString()))
+                        .setNeedRollup(
+                                NeedRollupEnum.fromString(
+                                        dataFeedRollupSettings.getRollupType() == null
+                                                ? null
+                                                : dataFeedRollupSettings.getRollupType().toString()))
+                        .setAllUpIdentification(dataFeedRollupSettings.getRollupIdentificationValue())
+                        .setFillMissingPointType(
+                                FillMissingPointType.fromString(
+                                        dataFeedMissingDataPointFillSettings.getFillType() == null
+                                                ? null
+                                                : dataFeedMissingDataPointFillSettings.getFillType().toString()))
+                        .setFillMissingPointValue(dataFeedMissingDataPointFillSettings.getCustomFillValue())
+                        .setViewMode(
+                                ViewMode.fromString(
+                                        finalDataFeedOptions.getAccessMode() == null
+                                                ? null
+                                                : finalDataFeedOptions.getAccessMode().toString()))
+                        .setViewers(finalDataFeedOptions.getViewers())
+                        .setAdmins(finalDataFeedOptions.getAdmins())
+                        .setActionLinkTemplate(finalDataFeedOptions.getActionLinkTemplate());
+        BinaryData body = BinaryData.fromObject(dataFeedDetail);
+        RequestOptions requestOptions = new RequestOptions();
+        // requestOptions.setContext(withTracing);
+        return this.createDataFeedWithResponse(body, requestOptions)
+                .flatMap(
+                        createDataFeedResponse -> {
+                            final String dataFeedId =
+                                    parseOperationId(createDataFeedResponse.getHeaders().getValue("Location"));
+                            return getDataFeedWithResponse(dataFeedId);
+                        });
+    }
+
+
     /**
      * Get a data feed by its id.
      *
