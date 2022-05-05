@@ -4,7 +4,21 @@
 
 package com.azure.ai.metricsadvisor;
 
+import com.azure.ai.metricsadvisor.administration.models.DataFeed;
+import com.azure.ai.metricsadvisor.administration.models.DataFeedGranularity;
+import com.azure.ai.metricsadvisor.administration.models.DataFeedIngestionSettings;
+import com.azure.ai.metricsadvisor.administration.models.DataFeedMissingDataPointFillSettings;
+import com.azure.ai.metricsadvisor.administration.models.DataFeedOptions;
+import com.azure.ai.metricsadvisor.administration.models.DataFeedRollupSettings;
+import com.azure.ai.metricsadvisor.administration.models.DataFeedSchema;
 import com.azure.ai.metricsadvisor.implementation.MetricsAdvisorAdministrationsImpl;
+import com.azure.ai.metricsadvisor.implementation.models.DataFeedDetail;
+import com.azure.ai.metricsadvisor.implementation.models.FillMissingPointType;
+import com.azure.ai.metricsadvisor.implementation.models.Granularity;
+import com.azure.ai.metricsadvisor.implementation.models.NeedRollupEnum;
+import com.azure.ai.metricsadvisor.implementation.models.RollUpMethod;
+import com.azure.ai.metricsadvisor.implementation.models.ViewMode;
+import com.azure.ai.metricsadvisor.implementation.util.DataFeedTransforms;
 import com.azure.core.annotation.Generated;
 import com.azure.core.annotation.ReturnType;
 import com.azure.core.annotation.ServiceClient;
@@ -16,13 +30,29 @@ import com.azure.core.exception.ResourceNotFoundException;
 import com.azure.core.http.rest.PagedFlux;
 import com.azure.core.http.rest.RequestOptions;
 import com.azure.core.http.rest.Response;
+import com.azure.core.http.rest.SimpleResponse;
 import com.azure.core.util.BinaryData;
+import com.azure.core.util.Context;
+import com.azure.core.util.FluxUtil;
+import com.azure.core.util.logging.ClientLogger;
 import reactor.core.publisher.Mono;
+
+import java.util.Objects;
+import java.util.UUID;
+
+import static com.azure.ai.metricsadvisor.administration.models.DataFeedGranularityType.CUSTOM;
+import static com.azure.ai.metricsadvisor.implementation.util.Utility.parseOperationId;
+import static com.azure.core.util.FluxUtil.monoError;
+import static com.azure.core.util.FluxUtil.withContext;
+import static com.azure.core.util.tracing.Tracer.AZ_TRACING_NAMESPACE_KEY;
 
 /** Initializes a new instance of the asynchronous MetricsAdvisorClient type. */
 @ServiceClient(builder = MetricsAdvisorAdministrationClientBuilder.class, isAsync = true)
 public final class MetricsAdvisorAdministrationAsyncClient {
     @Generated private final MetricsAdvisorAdministrationsImpl serviceClient;
+
+    private final ClientLogger logger =
+            new ClientLogger(com.azure.ai.metricsadvisor.MetricsAdvisorAdministrationAsyncClient.class);
 
     /**
      * Initializes an instance of MetricsAdvisorAdministrationAsyncClient class.
@@ -1038,6 +1068,33 @@ public final class MetricsAdvisorAdministrationAsyncClient {
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Response<BinaryData>> getDataFeedByIdWithResponse(String dataFeedId, RequestOptions requestOptions) {
         return this.serviceClient.getDataFeedByIdWithResponseAsync(dataFeedId, requestOptions);
+    }
+
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Mono<Response<DataFeed>> getDataFeedWithResponse(String dataFeedId) {
+        try {
+            return withContext(context -> getDataFeedWithResponse(dataFeedId, context));
+        } catch (RuntimeException ex) {
+            return monoError(logger, ex);
+        }
+    }
+
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Mono<DataFeed> getDataFeed(String dataFeedId) {
+        return getDataFeedWithResponse(dataFeedId).flatMap(FluxUtil::toMono);
+    }
+
+    Mono<Response<DataFeed>> getDataFeedWithResponse(String dataFeedId, Context context) {
+        Objects.requireNonNull(dataFeedId, "'dataFeedId' cannot be null.");
+        RequestOptions requestOptions = new RequestOptions();
+        requestOptions.setContext(context);
+        UUID.fromString(dataFeedId);
+        return this.getDataFeedByIdWithResponse(dataFeedId, requestOptions)
+                .map(
+                        response -> {
+                            DataFeedDetail dataFeedDetail = response.getValue().toObject(DataFeedDetail.class);
+                            return new SimpleResponse<>(response, DataFeedTransforms.fromInner(dataFeedDetail));
+                        });
     }
 
     /**
