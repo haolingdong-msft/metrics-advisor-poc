@@ -11,6 +11,8 @@ import com.azure.ai.metricsadvisor.administration.models.DataFeedMissingDataPoin
 import com.azure.ai.metricsadvisor.administration.models.DataFeedOptions;
 import com.azure.ai.metricsadvisor.administration.models.DataFeedRollupSettings;
 import com.azure.ai.metricsadvisor.administration.models.DataFeedSchema;
+import com.azure.ai.metricsadvisor.administration.models.ListDataFeedFilter;
+import com.azure.ai.metricsadvisor.administration.models.ListDataFeedOptions;
 import com.azure.ai.metricsadvisor.implementation.MetricsAdvisorAdministrationsImpl;
 import com.azure.ai.metricsadvisor.implementation.models.DataFeedDetail;
 import com.azure.ai.metricsadvisor.implementation.models.FillMissingPointType;
@@ -19,6 +21,7 @@ import com.azure.ai.metricsadvisor.implementation.models.NeedRollupEnum;
 import com.azure.ai.metricsadvisor.implementation.models.RollUpMethod;
 import com.azure.ai.metricsadvisor.implementation.models.ViewMode;
 import com.azure.ai.metricsadvisor.implementation.util.DataFeedTransforms;
+import com.azure.ai.metricsadvisor.implementation.util.PagedConverter;
 import com.azure.core.annotation.Generated;
 import com.azure.core.annotation.ReturnType;
 import com.azure.core.annotation.ServiceClient;
@@ -928,6 +931,52 @@ public final class MetricsAdvisorAdministrationAsyncClient {
         return this.serviceClient.listDataFeedsAsync(requestOptions);
     }
 
+    @ServiceMethod(returns = ReturnType.COLLECTION)
+    public PagedFlux<DataFeed> listDataFeeds() {
+        return listDataFeeds(new ListDataFeedOptions());
+    }
+
+    @ServiceMethod(returns = ReturnType.COLLECTION)
+    public PagedFlux<DataFeed> listDataFeeds(ListDataFeedOptions listDataFeedOptions) {
+        return listDataFeeds(listDataFeedOptions, Context.NONE);
+    }
+
+    PagedFlux<DataFeed> listDataFeeds(ListDataFeedOptions options, Context context) {
+        options = options != null ? options : new ListDataFeedOptions();
+        final ListDataFeedFilter dataFeedFilter =
+                options.getListDataFeedFilter() != null ? options.getListDataFeedFilter() : new ListDataFeedFilter();
+//        final Context withTracing = context.addData(AZ_TRACING_NAMESPACE_KEY, METRICS_ADVISOR_TRACING_NAMESPACE_VALUE);
+        RequestOptions requestOptions = new RequestOptions();
+        // requestOptions.setContext(withTracing);
+        if (dataFeedFilter.getName() != null) {
+            requestOptions.addQueryParam("dataFeedName", dataFeedFilter.getName());
+        }
+        if (dataFeedFilter.getSourceType() != null) {
+            requestOptions.addQueryParam("dataSourceType", dataFeedFilter.getSourceType().toString());
+        }
+        if (dataFeedFilter.getGranularityType() != null) {
+            requestOptions.addQueryParam("granularityName", dataFeedFilter.getGranularityType().toString());
+        }
+        if (dataFeedFilter.getStatus() != null) {
+            requestOptions.addQueryParam("status", dataFeedFilter.getStatus().toString());
+        }
+        if (dataFeedFilter.getCreator() != null) {
+            requestOptions.addQueryParam("creator", dataFeedFilter.getCreator());
+        }
+        if (options.getSkip() != null) {
+            requestOptions.addQueryParam("$skip", options.getSkip().toString(), true);
+        }
+        if (options.getMaxPageSize() != null) {
+            requestOptions.addQueryParam("$maxpagesize", options.getMaxPageSize().toString(), true);
+        }
+        return PagedConverter.mapPage(
+                this.listDataFeeds(requestOptions),
+                response -> {
+                    DataFeedDetail dataFeedDetail = response.toObject(DataFeedDetail.class);
+                    return DataFeedTransforms.fromInner(dataFeedDetail);
+                });
+    }
+
     /**
      * Create a new data feed.
      *
@@ -1344,6 +1393,29 @@ public final class MetricsAdvisorAdministrationAsyncClient {
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Response<Void>> deleteDataFeedWithResponse(String dataFeedId, RequestOptions requestOptions) {
         return this.serviceClient.deleteDataFeedWithResponseAsync(dataFeedId, requestOptions);
+    }
+
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Mono<Void> deleteDataFeed(String dataFeedId) {
+        return deleteDataFeedWithResponse(dataFeedId).flatMap(FluxUtil::toMono);
+    }
+
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Mono<Response<Void>> deleteDataFeedWithResponse(String dataFeedId) {
+        try {
+            return withContext(context -> deleteDataFeedWithResponse(dataFeedId, context));
+        } catch (RuntimeException ex) {
+            return monoError(logger, ex);
+        }
+    }
+
+    Mono<Response<Void>> deleteDataFeedWithResponse(String dataFeedId, Context context) {
+        Objects.requireNonNull(dataFeedId, "'dataFeedId' cannot be null.");
+        UUID.fromString(dataFeedId);
+        RequestOptions requestOptions = new RequestOptions();
+        requestOptions.setContext(context);
+        return this.deleteDataFeedWithResponse(dataFeedId, requestOptions)
+                .map(response -> new SimpleResponse<>(response, null));
     }
 
     /**
