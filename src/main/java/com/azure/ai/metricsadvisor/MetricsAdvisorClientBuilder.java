@@ -5,6 +5,7 @@
 package com.azure.ai.metricsadvisor;
 
 import com.azure.ai.metricsadvisor.implementation.MetricsAdvisorClientImpl;
+import com.azure.ai.metricsadvisor.models.MetricsAdvisorKeyCredential;
 import com.azure.core.annotation.Generated;
 import com.azure.core.annotation.ServiceClientBuilder;
 import com.azure.core.client.traits.ConfigurationTrait;
@@ -38,6 +39,7 @@ import com.azure.core.util.serializer.JacksonAdapter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /** A builder for creating a new instance of the MetricsAdvisorClient type. */
@@ -53,6 +55,10 @@ public final class MetricsAdvisorClientBuilder
 
     @Generated
     private static final String[] DEFAULT_SCOPES = new String[] {"https://cognitiveservices.azure.com/.default"};
+
+    static final String OCP_APIM_SUBSCRIPTION_KEY = "Ocp-Apim-Subscription-Key";
+
+    static final String API_KEY = "x-api-key";
 
     @Generated
     private final Map<String, String> properties = CoreUtils.getProperties("azure-ai-metricsadvisor.properties");
@@ -166,6 +172,24 @@ public final class MetricsAdvisorClientBuilder
         return this;
     }
 
+    /** Key credential for MetricsAdvisor */
+    private MetricsAdvisorKeyCredential metricsAdvisorKeyCredential;
+
+    /**
+     * Sets the {@link MetricsAdvisorKeyCredential} to use when authenticating HTTP requests for this
+     * MetricsAdvisorAdministrationClientBuilder.
+     *
+     * @param metricsAdvisorKeyCredential {@link MetricsAdvisorKeyCredential} API key credential
+     * @return The updated MetricsAdvisorAdministrationClientBuilder object.
+     * @throws NullPointerException If {@code metricsAdvisorKeyCredential} is null.
+     */
+    public MetricsAdvisorClientBuilder credential(
+            MetricsAdvisorKeyCredential metricsAdvisorKeyCredential) {
+        this.metricsAdvisorKeyCredential =
+                Objects.requireNonNull(metricsAdvisorKeyCredential, "'metricsAdvisorKeyCredential' cannot be null.");
+        return this;
+    }
+
     /*
      * The service endpoint
      */
@@ -231,6 +255,13 @@ public final class MetricsAdvisorClientBuilder
         policies.add(new AddHeadersFromContextPolicy());
         HttpHeaders headers = new HttpHeaders();
         clientOptions.getHeaders().forEach(header -> headers.set(header.getName(), header.getValue()));
+        if (tokenCredential != null) {
+            policies.add(new BearerTokenAuthenticationPolicy(tokenCredential, DEFAULT_SCOPES));
+        } else if (!CoreUtils.isNullOrEmpty(metricsAdvisorKeyCredential.getKeys().getSubscriptionKey())
+                || !CoreUtils.isNullOrEmpty(metricsAdvisorKeyCredential.getKeys().getApiKey())) {
+            headers.set(OCP_APIM_SUBSCRIPTION_KEY, metricsAdvisorKeyCredential.getKeys().getSubscriptionKey());
+            headers.set(API_KEY, metricsAdvisorKeyCredential.getKeys().getApiKey());
+        }
         if (headers.getSize() > 0) {
             policies.add(new AddHeadersPolicy(headers));
         }
