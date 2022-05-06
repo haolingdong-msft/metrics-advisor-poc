@@ -1,0 +1,24 @@
+{
+  "networkCallRecords" : [ {
+    "Method" : "DELETE",
+    "Uri" : "https://REDACTED.cognitiveservices.azure.com//metricsadvisor/v1.0/dataFeeds/a0a3998a-4c4affe66b7",
+    "Headers" : {
+      "User-Agent" : "azsdk-java-UnknownName/UnknownVersion (17.0.1; Windows 10; 10.0)"
+    },
+    "Response" : {
+      "x-request-id" : "c1b55251-c8b1-4fb4-a1a7-53da061d3ad6",
+      "content-length" : "56",
+      "x-envoy-upstream-service-time" : "376",
+      "Strict-Transport-Security" : "max-age=31536000; includeSubDomains; preload",
+      "x-content-type-options" : "nosniff",
+      "apim-request-id" : "c1b55251-c8b1-4fb4-a1a7-53da061d3ad6",
+      "retry-after" : "0",
+      "StatusCode" : "404",
+      "Body" : "{\"code\":\"404 NOT_FOUND\",\"message\":\"Not found the path.\"}",
+      "Date" : "Fri, 18 Feb 2022 05:24:46 GMT",
+      "Content-Type" : "application/json; charset=utf-8"
+    },
+    "Exception" : null
+  } ],
+  "variables" : [ ]
+}

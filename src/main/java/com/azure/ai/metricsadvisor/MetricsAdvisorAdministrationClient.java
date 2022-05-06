@@ -1181,6 +1181,16 @@ public final class MetricsAdvisorAdministrationClient {
         return this.client.updateDataFeedWithResponse(dataFeedId, body, requestOptions).block();
     }
 
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public DataFeed updateDataFeed(DataFeed dataFeed) {
+        return updateDataFeedWithResponse(dataFeed, Context.NONE).getValue();
+    }
+
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<DataFeed> updateDataFeedWithResponse(DataFeed dataFeed, Context context) {
+        return this.client.updateDataFeedWithResponse(dataFeed, context).block();
+    }
+
     /**
      * Delete a data feed.
      *

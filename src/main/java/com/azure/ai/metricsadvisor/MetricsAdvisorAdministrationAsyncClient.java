@@ -8,6 +8,7 @@ import com.azure.ai.metricsadvisor.administration.models.DataFeed;
 import com.azure.ai.metricsadvisor.administration.models.DataFeedGranularity;
 import com.azure.ai.metricsadvisor.administration.models.DataFeedIngestionSettings;
 import com.azure.ai.metricsadvisor.administration.models.DataFeedMissingDataPointFillSettings;
+import com.azure.ai.metricsadvisor.administration.models.DataFeedMissingDataPointFillType;
 import com.azure.ai.metricsadvisor.administration.models.DataFeedOptions;
 import com.azure.ai.metricsadvisor.administration.models.DataFeedRollupSettings;
 import com.azure.ai.metricsadvisor.administration.models.DataFeedSchema;
@@ -15,6 +16,8 @@ import com.azure.ai.metricsadvisor.administration.models.ListDataFeedFilter;
 import com.azure.ai.metricsadvisor.administration.models.ListDataFeedOptions;
 import com.azure.ai.metricsadvisor.implementation.MetricsAdvisorAdministrationsImpl;
 import com.azure.ai.metricsadvisor.implementation.models.DataFeedDetail;
+import com.azure.ai.metricsadvisor.implementation.models.DataFeedDetailPatch;
+import com.azure.ai.metricsadvisor.implementation.models.EntityStatus;
 import com.azure.ai.metricsadvisor.implementation.models.FillMissingPointType;
 import com.azure.ai.metricsadvisor.implementation.models.Granularity;
 import com.azure.ai.metricsadvisor.implementation.models.NeedRollupEnum;
@@ -1377,6 +1380,100 @@ public final class MetricsAdvisorAdministrationAsyncClient {
             String dataFeedId, BinaryData body, RequestOptions requestOptions) {
         return this.serviceClient.updateDataFeedWithResponseAsync(dataFeedId, body, requestOptions);
     }
+
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Mono<DataFeed> updateDataFeed(DataFeed dataFeed) {
+        return updateDataFeedWithResponse(dataFeed).flatMap(FluxUtil::toMono);
+    }
+
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Mono<Response<DataFeed>> updateDataFeedWithResponse(DataFeed dataFeed) {
+        try {
+            return withContext(context -> updateDataFeedWithResponse(dataFeed, context));
+        } catch (RuntimeException ex) {
+            return monoError(logger, ex);
+        }
+    }
+
+    Mono<Response<DataFeed>> updateDataFeedWithResponse(DataFeed dataFeed, Context context) {
+        final DataFeedIngestionSettings dataFeedIngestionSettings = dataFeed.getIngestionSettings();
+        final DataFeedOptions dataFeedOptions =
+                dataFeed.getOptions() == null ? new DataFeedOptions() : dataFeed.getOptions();
+        final DataFeedRollupSettings dataFeedRollupSettings =
+                dataFeedOptions.getRollupSettings() == null
+                        ? new DataFeedRollupSettings()
+                        : dataFeedOptions.getRollupSettings();
+        final DataFeedMissingDataPointFillSettings dataFeedMissingDataPointFillSettings =
+                dataFeedOptions.getMissingDataPointFillSettings() == null
+                        ? new DataFeedMissingDataPointFillSettings()
+                        : dataFeedOptions.getMissingDataPointFillSettings();
+//        final Context withTracing = context.addData(AZ_TRACING_NAMESPACE_KEY, METRICS_ADVISOR_TRACING_NAMESPACE_VALUE);
+        DataFeedDetailPatch dataFeedDetailPatch =
+                DataFeedTransforms.toInnerForUpdate(dataFeed.getSource())
+                        .setDataFeedName(dataFeed.getName())
+                        .setDataFeedDescription(dataFeedOptions.getDescription())
+                        .setTimestampColumn(
+                                dataFeed.getSchema() == null ? null : dataFeed.getSchema().getTimestampColumn())
+                        .setDataStartFrom(dataFeed.getIngestionSettings().getIngestionStartTime())
+                        .setStartOffsetInSeconds(
+                                dataFeedIngestionSettings.getIngestionStartOffset() == null
+                                        ? null
+                                        : dataFeedIngestionSettings.getIngestionStartOffset().getSeconds())
+                        .setMaxConcurrency(dataFeedIngestionSettings.getDataSourceRequestConcurrency())
+                        .setStopRetryAfterInSeconds(
+                                dataFeedIngestionSettings.getStopRetryAfter() == null
+                                        ? null
+                                        : dataFeedIngestionSettings.getStopRetryAfter().getSeconds())
+                        .setMinRetryIntervalInSeconds(
+                                dataFeedIngestionSettings.getIngestionRetryDelay() == null
+                                        ? null
+                                        : dataFeedIngestionSettings.getIngestionRetryDelay().getSeconds())
+                        .setNeedRollup(
+                                dataFeedRollupSettings.getRollupType() != null
+                                        ? NeedRollupEnum.fromString(dataFeedRollupSettings.getRollupType().toString())
+                                        : null)
+                        .setRollUpColumns(dataFeedRollupSettings.getAutoRollupGroupByColumnNames())
+                        .setRollUpMethod(
+                                dataFeedRollupSettings.getDataFeedAutoRollUpMethod() != null
+                                        ? RollUpMethod.fromString(
+                                        dataFeedRollupSettings.getDataFeedAutoRollUpMethod().toString())
+                                        : null)
+                        .setAllUpIdentification(dataFeedRollupSettings.getRollupIdentificationValue())
+                        .setFillMissingPointType(
+                                dataFeedMissingDataPointFillSettings.getFillType() != null
+                                        ? FillMissingPointType.fromString(
+                                        dataFeedMissingDataPointFillSettings.getFillType().toString())
+                                        : null)
+                        . // For PATCH send 'fill-custom-value' over wire only for
+                        // 'fill-custom-type'.
+                                setFillMissingPointValue(
+                                dataFeedMissingDataPointFillSettings.getFillType()
+                                        == DataFeedMissingDataPointFillType.CUSTOM_VALUE
+                                        ? dataFeedMissingDataPointFillSettings.getCustomFillValue()
+                                        : null)
+                        .setViewMode(
+                                dataFeedOptions.getAccessMode() != null
+                                        ? ViewMode.fromString(dataFeedOptions.getAccessMode().toString())
+                                        : null)
+                        .setViewers(dataFeedOptions.getViewers())
+                        .setAdmins(dataFeedOptions.getAdmins())
+                        .setStatus(
+                                dataFeed.getStatus() != null
+                                        ? EntityStatus.fromString(dataFeed.getStatus().toString())
+                                        : null)
+                        .setActionLinkTemplate(dataFeedOptions.getActionLinkTemplate());
+        BinaryData body = BinaryData.fromObject(dataFeedDetailPatch);
+        RequestOptions requestOptions = new RequestOptions();
+        // requestOptions.setContext(withTracing);
+        return this.updateDataFeedWithResponse(dataFeed.getId(), body, requestOptions)
+                .flatMap(
+                        updateDataFeedResponse -> {
+                            final String dataFeedId = dataFeed.getId();
+                            return getDataFeedWithResponse(dataFeedId);
+                        })
+                .map(test -> test);
+    }
+
 
     /**
      * Delete a data feed.
