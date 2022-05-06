@@ -4,6 +4,8 @@
 
 package com.azure.ai.metricsadvisor;
 
+import com.azure.ai.metricsadvisor.administration.models.DataFeed;
+import com.azure.ai.metricsadvisor.administration.models.ListDataFeedOptions;
 import com.azure.core.annotation.Generated;
 import com.azure.core.annotation.ReturnType;
 import com.azure.core.annotation.ServiceClient;
@@ -16,6 +18,7 @@ import com.azure.core.http.rest.PagedIterable;
 import com.azure.core.http.rest.RequestOptions;
 import com.azure.core.http.rest.Response;
 import com.azure.core.util.BinaryData;
+import com.azure.core.util.Context;
 
 /** Initializes a new instance of the synchronous MetricsAdvisorClient type. */
 @ServiceClient(builder = MetricsAdvisorAdministrationClientBuilder.class)
@@ -899,6 +902,16 @@ public final class MetricsAdvisorAdministrationClient {
         return new PagedIterable<>(this.client.listDataFeeds(requestOptions));
     }
 
+    @ServiceMethod(returns = ReturnType.COLLECTION)
+    public PagedIterable<DataFeed> listDataFeeds() {
+        return listDataFeeds(null, Context.NONE);
+    }
+
+    @ServiceMethod(returns = ReturnType.COLLECTION)
+    public PagedIterable<DataFeed> listDataFeeds(ListDataFeedOptions options, Context context) {
+        return new PagedIterable<>(this.client.listDataFeeds(options, context));
+    }
+
     /**
      * Create a new data feed.
      *
@@ -970,6 +983,16 @@ public final class MetricsAdvisorAdministrationClient {
         return this.client.createDataFeedWithResponse(body, requestOptions).block();
     }
 
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public DataFeed createDataFeed(DataFeed dataFeed) {
+        return createDataFeedWithResponse(dataFeed, Context.NONE).getValue();
+    }
+
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<DataFeed> createDataFeedWithResponse(DataFeed dataFeed, Context context) {
+        return this.client.createDataFeedWithResponse(dataFeed, context).block();
+    }
+
     /**
      * Get a data feed by its id.
      *
@@ -1039,6 +1062,16 @@ public final class MetricsAdvisorAdministrationClient {
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Response<BinaryData> getDataFeedByIdWithResponse(String dataFeedId, RequestOptions requestOptions) {
         return this.client.getDataFeedByIdWithResponse(dataFeedId, requestOptions).block();
+    }
+
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public DataFeed getDataFeed(String dataFeedId) {
+        return getDataFeedWithResponse(dataFeedId, Context.NONE).getValue();
+    }
+
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<DataFeed> getDataFeedWithResponse(String dataFeedId, Context context) {
+        return this.client.getDataFeedWithResponse(dataFeedId, context).block();
     }
 
     /**
@@ -1163,6 +1196,16 @@ public final class MetricsAdvisorAdministrationClient {
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Response<Void> deleteDataFeedWithResponse(String dataFeedId, RequestOptions requestOptions) {
         return this.client.deleteDataFeedWithResponse(dataFeedId, requestOptions).block();
+    }
+
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public void deleteDataFeed(String dataFeedId) {
+        deleteDataFeedWithResponse(dataFeedId, Context.NONE);
+    }
+
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<Void> deleteDataFeedWithResponse(String dataFeedId, Context context) {
+        return this.client.deleteDataFeedWithResponse(dataFeedId, context).block();
     }
 
     /**
