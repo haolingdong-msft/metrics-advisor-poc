@@ -3,8 +3,7 @@
 ## Configuration for generating DPG code
 
 Please refer
-to [`swagger/README.md`](https://github.com/haolingdong-msft/metrics-advisor-poc/blob/master/swagger/README.md) for the
-configuration
+to [`swagger/README.md`](https://github.com/haolingdong-msft/metrics-advisor-poc/blob/master/swagger/README.md) for the detailed configuration.
 
 ```yaml
 input-file: https://github.com/Azure/azure-rest-api-specs/blob/f9a5bf06925934b7841bdc95c14e9b70379b426b/specification/cognitiveservices/data-plane/MetricsAdvisor/stable/v1.0/MetricsAdvisor.json
@@ -29,7 +28,7 @@ code: https://github.com/haolingdong-msft/metrics-advisor-poc/commit/6b602c187bb
 
 ## Add models/utils/other manual codes to the project
 
-Developers can add customized manual codes to the project, e.g. models and utils. Those manual codes need to pass arch board review.  For this experiment, for convenient purpose. I put all the manual classes from existing released code (target grow up codes) to this POC using the same namespace with the
+Developers can add customized manual codes to the project, e.g. models and utils. Those manual codes need to pass arch board review. In this experiment, as MA is released and we already have our target SDK. For convenient purpose. I put all the manual classes from existing released code (target grow up codes) to this POC using the same namespace with the
 existing code. I did not change any of those code.
 
 Git commit for manual codes:
@@ -59,7 +58,7 @@ We add a set of APIs to DPG code. Those methods are convenient to users, e.g. it
   
   **Code**: https://github.com/haolingdong-msft/metrics-advisor-poc/commit/b86c9353a90c3cbf5709cb3c982b2ff175dc59d9
 
-* Example of convenient method that takes a customized model and returns a customized model (createDataFeed): 
+* Example of convenient method that takes a customized model and returns a customized model (createDataFeed):
 
   **API View**: https://apiview.dev/Assemblies/Review/250323618f12485eaadcc4822c880f46?diffRevisionId=11c5d413369e4f099e6e8db7157bebd5&doc=False&diffOnly=False&revisionId=6a47cc424fd842539135795a8f6c9863
   
