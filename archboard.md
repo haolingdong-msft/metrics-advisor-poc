@@ -109,7 +109,7 @@ DataFeed dataFeed = response.getValue();
   **Code**: https://github.com/haolingdong-msft/metrics-advisor-poc/commit/acb4235e8c2f62bf497130cce7fc147818551565
   
   
-  With pure DPG code, we will create datafeed like below, we need to create a `BinaryData` object first like using `BinaryData.fromString()` and pass it to the method, if we want to get the datafeed being created, we also need to call `getDataFeed()` to get the datafeed.
+With pure DPG code, we will create datafeed like below, we need to create a `BinaryData` object first like using `BinaryData.fromString()` and pass it to the method, if we want to get the datafeed being created, we also need to call `getDataFeed()` to get the datafeed.
   
   ```
   BinaryData body =
@@ -158,7 +158,7 @@ DataFeed dataFeed = DataFeedTransforms.fromInner(dataFeedDetail);
  // use dataFeed
 ```
  
- With conveniment methods, users don't need to know details about how to add query parameters into `RequestOptions`, they just need to build ListDataFeedOptions model. They also don't need to convert the response to `DataFeed`.
+With conveniment methods, users don't need to know details about how to add query parameters into `RequestOptions`, they just need to build ListDataFeedOptions model. They also don't need to convert the response to `DataFeed`.
  
  ```
  ListDataFeedOptions listDataFeedOptions = new ListDataFeedOptions();
