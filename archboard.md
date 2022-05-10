@@ -65,7 +65,7 @@ We add a set of APIs to DPG code. Those methods are convenient to users, e.g. it
   
   **Code**: https://github.com/haolingdong-msft/metrics-advisor-poc/commit/b86c9353a90c3cbf5709cb3c982b2ff175dc59d9
 
-With pure DPG code, getting datafeed is like below, we need to pass in requestOptions even we don't need it, in the response, we also need to convert `BinaryData` to `DataFeed` by ourselves:
+With pure DPG code, getting data feed is like below, we need to pass in requestOptions even we don't need it, in the response, we also need to convert `BinaryData` to `DataFeed` by ourselves:
 
 ```
 RequestOptions requestOptions = new RequestOptions();
@@ -80,7 +80,7 @@ DataFeed dataFeed = DataFeedTransforms.fromInner(dataFeedDetail);
 ```
 
 
-With convenient method, getting datafeed is like below, we only need to pass in the datafeed ID, and we can get datafeed directly from response:
+With convenient method, getting data feed is like below, we only need to pass in the data feed ID, and we can get data feed directly from response:
 
 ```
 metricsAdvisorAdministrationClient = metricsAdvisorAdministrationClientbuilder.buildClient();
@@ -98,7 +98,7 @@ DataFeed dataFeed = response.getValue();
   **Code**: https://github.com/haolingdong-msft/metrics-advisor-poc/commit/acb4235e8c2f62bf497130cce7fc147818551565
   
   
-With pure DPG code, we will create datafeed like below, we need to create a `BinaryData` object first like using `BinaryData.fromString()` and pass it to the method, if we want to get the datafeed being created, we also need to call `getDataFeed()` to get the datafeed.
+With pure DPG code, when creating data feed, we need to create a `BinaryData` object first like using `BinaryData.fromString()` and pass it to the method, if we want to get the data feed being created, we also need to call `getDataFeed()` to get the data feed.
   
   ```
   BinaryData body =
@@ -116,7 +116,7 @@ DataFeed dataFeed = response.getValue();
 // use datafeed 
 ```
   
-With concvenient method, we can create a DataFeed object directly, instead of creating it from JSON string. We can also get the created DataFeed directly from response.
+With concvenient method, we can create a `DataFeed` object directly, instead of creating it from JSON string. We can also get the created data feed directly from response.
 ```
 DataFeed dataFeed = new DataFeed();
 // set the properties of the dataFeed
@@ -133,7 +133,7 @@ DataFeed dataFeed = response.getValue();
   
   **Code**: https://github.com/haolingdong-msft/metrics-advisor-poc/commit/effbe61a64dde133d47779b4787f17d91809e495
 
-With pure DPG code, we need to add query parameters to `RequestOptions` by ourselves. In the `PagedIterable` response, when iterating each page, we get the `BinaryData` object.
+With pure DPG code, we need to add query parameters to `RequestOptions` by ourselves. In the `PagedIterable` response, when iterating each page, we get the `BinaryData` object, we need to tranform it to `DataFeed` object by ourselves.
  
 ```
  RequestOptions requestOptions = new RequestOptions();
