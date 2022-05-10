@@ -68,12 +68,6 @@ We add a set of APIs to DPG code. Those methods are convenient to users, e.g. it
 With pure DPG code, getting datafeed is like below, we need to pass in requestOptions even we don't need it, in the response, we also need to convert `BinaryData` to `DataFeed` by ourselves:
 
 ```
-MetricsAdvisorAdministrationClientBuilder metricsAdvisorAdministrationClientbuilder =
-        new MetricsAdvisorAdministrationClientBuilder()
-        .endpoint(Configuration.getGlobalConfiguration().get("ENDPOINT", "endpoint"))
-        .httpClient(HttpClient.createDefault());
-
-metricsAdvisorAdministrationClient = metricsAdvisorAdministrationClientbuilder.buildClient();
 RequestOptions requestOptions = new RequestOptions();
 Response<BinaryData> response =
         metricsAdvisorAdministrationClient.getDataFeedByIdWithResponse(
@@ -89,11 +83,6 @@ DataFeed dataFeed = DataFeedTransforms.fromInner(dataFeedDetail);
 With convenient method, getting datafeed is like below, we only need to pass in the datafeed ID, and we can get datafeed directly from response:
 
 ```
-MetricsAdvisorAdministrationClientBuilder metricsAdvisorAdministrationClientbuilder =
-        new MetricsAdvisorAdministrationClientBuilder()
-        .endpoint(Configuration.getGlobalConfiguration().get("ENDPOINT", "endpoint"))
-        .httpClient(HttpClient.createDefault());
-
 metricsAdvisorAdministrationClient = metricsAdvisorAdministrationClientbuilder.buildClient();
 Response<DataFeed> response =
         metricsAdvisorAdministrationClient.getDataFeedWithResponse(
@@ -127,7 +116,7 @@ DataFeed dataFeed = response.getValue();
 // use datafeed 
 ```
   
-With concvenient method, we can create a DataFeed object directly, instead of creating it from JSON string, we can also get the created DataFeed directly from response.
+With concvenient method, we can create a DataFeed object directly, instead of creating it from JSON string. We can also get the created DataFeed directly from response.
 ```
 DataFeed dataFeed = new DataFeed();
 // set the properties of the dataFeed
