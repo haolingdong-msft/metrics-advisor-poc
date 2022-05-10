@@ -65,7 +65,7 @@ We add a set of APIs to DPG code. Those methods are convenient to users, e.g. it
   
   **Code**: https://github.com/haolingdong-msft/metrics-advisor-poc/commit/b86c9353a90c3cbf5709cb3c982b2ff175dc59d9
 
-With pure DPG code, we will get datafeed like this:
+With pure DPG code, we will get datafeed like below, we need to pass in requestOptions even we don't need it, in the response, we also need to convert `BinaryData` to `DataFeed` by ourselves:
 
 ```
 MetricsAdvisorAdministrationClientBuilder metricsAdvisorAdministrationClientbuilder =
@@ -84,10 +84,9 @@ DataFeedDetail dataFeedDeetail = data.toObject(DataFeedDetail.class);
 DataFeed dataFeed = DataFeedTransforms.fromInner(dataFeedDetail);
 // use datafeed
 ```
-The returned value is `BinaryData`, users need to convert the response to `DataFeed` by themselves.
 
 
-With convenient method, we will get datafeed like this:
+With convenient method, we will get datafeed like below, we only need to pass in the datafeed ID, and we can get datafeed directly from response:
 
 ```
 MetricsAdvisorAdministrationClientBuilder metricsAdvisorAdministrationClientbuilder =
@@ -108,13 +107,70 @@ DataFeed dataFeed = response.getValue();
   **API View**: https://apiview.dev/Assemblies/Review/250323618f12485eaadcc4822c880f46?diffRevisionId=11c5d413369e4f099e6e8db7157bebd5&doc=False&diffOnly=False&revisionId=6a47cc424fd842539135795a8f6c9863
   
   **Code**: https://github.com/haolingdong-msft/metrics-advisor-poc/commit/acb4235e8c2f62bf497130cce7fc147818551565
+  
+  
+  With pure DPG code, we will create datafeed like below, we need to create a `BinaryData` object first like using `BinaryData.fromString()` and pass it to the method, if we want to get the datafeed being created, we also need to call `getDataFeed()` to get the datafeed.
+  
+  ```
+  BinaryData body =
+                BinaryData.fromString(
+                        "{\"allUpIdentification\":\"__SUM__\",\"authenticationType\":\"Basic\",\"dataFeedDescription\":\"This is a sample data feed.\",\"dataFeedName\":\"Sample - cost/revenue - city/category\",\"dataSourceParameter\":{\"connectionString\":\"Server=PlaceholderSqlServer,1433;Initial Catalog=PlaceholderDatabase;User ID=PlaceholderUserName;Password=PlaceholderPassword;\",\"query\":\"select * from your_table where timestamp = @StartTime\"},\"dataSourceType\":\"SqlServer\",\"dataStartFrom\":\"2020-01-01T00:00:00.000Z\",\"dimension\":[{\"dimensionDisplayName\":\"category\",\"dimensionName\":\"category\"},{\"dimensionDisplayName\":\"city\",\"dimensionName\":\"city\"}],\"fillMissingPointType\":\"SmartFilling\",\"granularityName\":\"Daily\",\"maxConcurrency\":5,\"metrics\":[{\"metricDisplayName\":\"cost\",\"metricName\":\"cost\"},{\"metricDisplayName\":\"revenue\",\"metricName\":\"revenue\"}],\"minRetryIntervalInSeconds\":3600,\"needRollup\":\"NeedRollup\",\"rollUpMethod\":\"Sum\",\"startOffsetInSeconds\":86400,\"stopRetryAfterInSeconds\":604800,\"timestampColumn\":\"timestamp\",\"viewMode\":\"Private\"}");
+        
+RequestOptions requestOptions = new RequestOptions();
 
-* Example of convenient method that takes query parameter (listDataFeeds):
+Response<Void> response = metricsAdvisorAdministrationClient.createDataFeedWithResponse(body, requestOptions);
+
+Response<DataFeed> response =
+        metricsAdvisorAdministrationClient.getDataFeedWithResponse(
+                "01234567-8901-2345-6789-012345678901");
+DataFeed dataFeed = response.getValue();
+// use datafeed 
+```
+  
+With concvenient method, we can create a DataFeed object directly, instead of creating it from JSON string, we can also get the created DataFeed directly from response.
+```
+DataFeed dataFeed = new DataFeed();
+// set the properties of the dataFeed
+dataFeed.dataFeedDescription("This is a sample data feed.");
+
+Response<DataFeed> response = metricsAdvisorAdministrationClient.createDataFeedWithResponse(dataFeed);
+DataFeed dataFeed = response.getValue();
+//use datafeed
+```
+
+* Example of convenient method that returns pageble object (listDataFeeds):
 
   **API View**: https://apiview.dev/Assemblies/Review/250323618f12485eaadcc4822c880f46?diffRevisionId=6a47cc424fd842539135795a8f6c9863&doc=False&diffOnly=False&revisionId=7384d93fddd84ffd86645da221a54392
   
   **Code**: https://github.com/haolingdong-msft/metrics-advisor-poc/commit/effbe61a64dde133d47779b4787f17d91809e495
 
+With pure DPG code, we need to add query parameters to `RequestOptions` by ourselves. In the `PagedIterable` response, when iterating each page, we get the `BinaryData` object.
+ 
+```
+ RequestOptions requestOptions = new RequestOptions();
+ requestOptions.addQueryParam("creator", "demo@microsoft.com");
+ requestOptions.addQueryParam("dataFeedName", "name_prefix");
+ PagedIterable<BinaryData> response = metricsAdvisorAdministrationClient.listDataFeeds(requestOptions);
+ BinaryData data = response.iterator().next();
+// Transformations to convert BinaryData to DataFeed object
+DataFeedDetail dataFeedDeetail = data.toObject(DataFeedDetail.class);
+DataFeed dataFeed = DataFeedTransforms.fromInner(dataFeedDetail);
+ // use dataFeed
+```
+ 
+ With conveniment methods, users don't need to know details about how to add query parameters into `RequestOptions`, they just need to build ListDataFeedOptions model. They also don't need to convert the response to `DataFeed`.
+ 
+ ```
+ ListDataFeedOptions listDataFeedOptions = new ListDataFeedOptions();
+ ListDataFeedFilter listDataFeedFilter = new ListDataFeedFilter();
+ listDataFeedFilter.setDataFeedName("name_prefix");
+ listDataFeedFilter.setCreator("demo@microsoft.com");
+ listDataFeedOptions.setListDataFeedFilter()
+ PagedIterable<DataFeed> response = metricsAdvisorAdministrationClient.listDataFeeds();
+ DataFeed dataFeed = response.iterator().next();
+ //use dataFeed
+ ```
+ 
 ### Add Query Parameters
 
 Use `requestOptions.addQueryParam()` to add query parameters.
