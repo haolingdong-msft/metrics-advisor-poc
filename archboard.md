@@ -65,6 +65,44 @@ We add a set of APIs to DPG code. Those methods are convenient to users, e.g. it
   
   **Code**: https://github.com/haolingdong-msft/metrics-advisor-poc/commit/b86c9353a90c3cbf5709cb3c982b2ff175dc59d9
 
+With pure DPG code, we will get datafeed like this:
+
+```
+MetricsAdvisorAdministrationClientBuilder metricsAdvisorAdministrationClientbuilder =
+        new MetricsAdvisorAdministrationClientBuilder()
+        .endpoint(Configuration.getGlobalConfiguration().get("ENDPOINT", "endpoint"))
+        .httpClient(HttpClient.createDefault());
+
+metricsAdvisorAdministrationClient = metricsAdvisorAdministrationClientbuilder.buildClient();
+RequestOptions requestOptions = new RequestOptions();
+Response<BinaryData> response =
+        metricsAdvisorAdministrationClient.getDataFeedByIdWithResponse(
+                "01234567-8901-2345-6789-012345678901", requestOptions);
+BinaryData data = response.getValue();
+// Transformations to convert BinaryData to DataFeed object
+DataFeedDetail dataFeedDeetail = data.toObject(DataFeedDetail.class);
+DataFeed dataFeed = DataFeedTransforms.fromInner(dataFeedDetail);
+// use datafeed
+```
+The returned value is `BinaryData`, users need to convert the response to `DataFeed` by themselves.
+
+
+With convenient method, we will get datafeed like this:
+
+```
+MetricsAdvisorAdministrationClientBuilder metricsAdvisorAdministrationClientbuilder =
+        new MetricsAdvisorAdministrationClientBuilder()
+        .endpoint(Configuration.getGlobalConfiguration().get("ENDPOINT", "endpoint"))
+        .httpClient(HttpClient.createDefault());
+
+metricsAdvisorAdministrationClient = metricsAdvisorAdministrationClientbuilder.buildClient();
+Response<DataFeed> response =
+        metricsAdvisorAdministrationClient.getDataFeedWithResponse(
+                "01234567-8901-2345-6789-012345678901");
+DataFeed dataFeed = response.getValue();
+//use datafeed
+```
+
 * Example of convenient method that takes a customized model and returns a customized model (createDataFeed):
 
   **API View**: https://apiview.dev/Assemblies/Review/250323618f12485eaadcc4822c880f46?diffRevisionId=11c5d413369e4f099e6e8db7157bebd5&doc=False&diffOnly=False&revisionId=6a47cc424fd842539135795a8f6c9863
