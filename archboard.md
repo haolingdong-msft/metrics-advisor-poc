@@ -65,7 +65,7 @@ We add a set of APIs to DPG code. Those methods are convenient to users, e.g. it
   
   **Code**: https://github.com/haolingdong-msft/metrics-advisor-poc/commit/b86c9353a90c3cbf5709cb3c982b2ff175dc59d9
 
-With pure DPG code, we will get datafeed like below, we need to pass in requestOptions even we don't need it, in the response, we also need to convert `BinaryData` to `DataFeed` by ourselves:
+With pure DPG code, getting datafeed is like below, we need to pass in requestOptions even we don't need it, in the response, we also need to convert `BinaryData` to `DataFeed` by ourselves:
 
 ```
 MetricsAdvisorAdministrationClientBuilder metricsAdvisorAdministrationClientbuilder =
@@ -86,7 +86,7 @@ DataFeed dataFeed = DataFeedTransforms.fromInner(dataFeedDetail);
 ```
 
 
-With convenient method, we will get datafeed like below, we only need to pass in the datafeed ID, and we can get datafeed directly from response:
+With convenient method, getting datafeed is like below, we only need to pass in the datafeed ID, and we can get datafeed directly from response:
 
 ```
 MetricsAdvisorAdministrationClientBuilder metricsAdvisorAdministrationClientbuilder =
