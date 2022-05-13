@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"m":"com.azure.ai.metricsadvisor","l":"com.azure.ai.metricsadvisor"}];updateSearchResults();
